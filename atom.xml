@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-05T00:59:52.000Z</updated>
+  <updated>2016-09-05T02:06:30.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -16,11 +16,436 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Linux 卸载Linux系统</title>
-    <link href="http://yoursite.com/2016/09/05/Linux-%E5%8D%B8%E8%BD%BDLinux%E7%B3%BB%E7%BB%9F/"/>
-    <id>http://yoursite.com/2016/09/05/Linux-卸载Linux系统/</id>
-    <published>2016-09-05T00:56:48.000Z</published>
-    <updated>2016-09-05T00:59:52.000Z</updated>
+    <title>Linux 磁盘分区</title>
+    <link href="http://yoursite.com/2016/09/05/Linux-%E7%A3%81%E7%9B%98%E5%88%86%E5%8C%BA/"/>
+    <id>http://yoursite.com/2016/09/05/Linux-磁盘分区/</id>
+    <published>2016-09-05T02:03:55.000Z</published>
+    <updated>2016-09-05T02:06:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<!--
+## <a name="index">Index</a>
+* <a href="#ch1"> Linux与硬件</a>
+  * <a href="#ch1.1"> 各硬件设备在Linux中的文件名</a>
+* <a href="#ch2"> 磁盘分区</a>
+  * <a href="#ch2.1"> 磁盘的物理结构</a>
+  * <a href="#ch2.2"> 磁盘分区表</a>
+  * <a href="#ch2.3"> 开机流程与主引导分区(MBR)</a>
+  * <a href="#ch2.4"> 文件系统与目录树</a>
+* <a href="#ch3"> 主机硬盘的规划</a>
+  * <a href="#ch3.1"> 基本硬盘分区模式</a>
+-->
+<h2 id="Linux与硬件"><a href="#Linux与硬件" class="headerlink" title=" Linux与硬件"></a><a name="ch1"> Linux与硬件</a></h2><h3 id="各硬件设备在Linux中的文件名"><a href="#各硬件设备在Linux中的文件名" class="headerlink" title=" 各硬件设备在Linux中的文件名"></a><a name="ch1.1"> 各硬件设备在Linux中的文件名</a></h3><p>在Linux系统中，每个设备都被当成一个文件来对待。举例说，IDE接口连接的硬盘的文件名即为/dev/hd[a-d],其中，括号内的字母为a-d当中的任意一个。</p>
+<p>下面列出几个常见设备与其在Linux当中的文件名，更多Linux内核支持的硬件与文件名，可以参考<a href="https://www.kernel.org/pub/linux/docs/lanana/device-list/devices-2.6.txt" target="_blank" rel="external">Linux内核支持硬件列表</a>。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">设备</th>
+<th style="text-align:center">Liunx中的文件名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IDE硬盘</td>
+<td style="text-align:center">/dev/hd[a-d]</td>
+</tr>
+<tr>
+<td style="text-align:center">SCSI/SATA/USB硬盘</td>
+<td style="text-align:center">/dev/sd[a-p]</td>
+</tr>
+<tr>
+<td style="text-align:center">U盘</td>
+<td style="text-align:center">/dev/sd[a-p](与SATA相同)</td>
+</tr>
+<tr>
+<td style="text-align:center">软驱</td>
+<td style="text-align:center">/dev/fd[0-1]</td>
+</tr>
+<tr>
+<td style="text-align:center">打印机</td>
+<td style="text-align:center">25针:/dev/lp[0-2]  ;  USB:/dev/usb/lp[0-15]</td>
+</tr>
+<tr>
+<td style="text-align:center">鼠标</td>
+<td style="text-align:center">USB:/dev/usb/mouse[0-15] ;  PS2:/de/pxaux</td>
+</tr>
+<tr>
+<td style="text-align:center">当前CD ROM/DVD ROM</td>
+<td style="text-align:center">/dev/cdrom</td>
+</tr>
+<tr>
+<td style="text-align:center">当前鼠标</td>
+<td style="text-align:center">/dev/mouse</td>
+</tr>
+<tr>
+<td style="text-align:center">磁带机</td>
+<td style="text-align:center">IDE:/dev/ht0  ;  SCSI:/dev/st0</td>
+</tr>
+</tbody>
+</table>
+<p>需要特别留意的是硬盘(IDE,SCSI,USB,SATA都一样)，每个磁盘驱动器的磁盘分区不同时,其磁盘文件名还会改变。以SATA/USB接口的磁盘为例，Linux内核会根据检测到磁盘的顺序来决定磁盘的设备文件名。</p>
+<p>比如:<br>如果你的PC上面有两个SATA磁盘以及一个USB磁盘，而主板上面有六个SATA的插槽，这两个SATA磁盘分别安插在主板上的SATA1,SATA5插槽上，请问这三个磁盘在Linux中的设备文件名是什么？</p>
+<ol>
+<li>SATA1插槽上的文件名是:/dev/sda</li>
+<li>SATA5插槽上的文件名是:/dev/sdb</li>
+<li>USB磁盘(开机完成后才被系统识别):/dev/sdc</li>
+</ol>
+<h2 id="磁盘分区"><a href="#磁盘分区" class="headerlink" title=" 磁盘分区"></a><a name="ch2"> 磁盘分区</a></h2><h3 id="磁盘的物理结构"><a href="#磁盘的物理结构" class="headerlink" title=" 磁盘的物理结构"></a><a name="ch2.1"> 磁盘的物理结构</a></h3><p>磁盘主要由盘片、机械手臂、磁头与主轴马达所组成。</p>
+<ul>
+<li>盘片：数据存储的物理结构,可以理解成光盘,磁盘由多个盘片叠加而成。</li>
+<li>磁道：磁盘旋转时，磁头保持不动，在磁盘上划出的圆形轨道。</li>
+<li>柱面：不同盘片的面，处于同一半径源的多个磁道组成的一个圆柱面。</li>
+<li>扇区：将每个磁道等分为若干个弧段，这些弧段为扇区。每个扇区占512字节。<strong>其中磁盘的第一个扇区主要记录了两个重要的信息:</strong><ul>
+<li>主引导分区(Master Boot Recode,MBR):可以安装引导加载程序的地方,有446字节。</li>
+<li>分区表(Partition table):记录整块磁盘的分区状况，有64字节。</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://github.com/HiKumho/blog/blob/master/img/blog_10_1.png?raw=true" alt=""></p>
+<hr>
+<h3 id="磁盘分区表"><a href="#磁盘分区表" class="headerlink" title=" 磁盘分区表"></a><a name="ch2.2"> 磁盘分区表</a></h3><p>所谓“分区”是指对分区表进行设置，在分区表所在的64字节容量中,最多只能容纳4个分区，这4个分区被称为主或扩展分区，每个分区以其的起始、结束的柱面号码为划分，一组的分区柱面号码占16字节，即<strong>一个分区信息用16字节表示</strong>，所在分区表最多只能容纳4个分区。而分区的最小单位是柱面。总结下：</p>
+<ul>
+<li>其实所谓的“”分区”只是针对那个64字节的分区表进行设置</li>
+<li>磁盘的默认分区表最多能写入4组分区信息</li>
+<li>这4组分区信息称为主或扩展分区</li>
+<li>分区的最小单位是柱面</li>
+</ul>
+<p>为了记录更多的分区信息，我们可以利用扩展分区来建立逻辑分区，扩展分区的目的是使用额外的扇区来记录分区信息。注意<strong>逻辑分区的设备名称号码由5号开始</strong>，前面4个号码保留给主分区或扩展分区使用。总结下：</p>
+<ul>
+<li>主分区与扩展分区最多可以有4个(磁盘的限制)</li>
+<li>扩展分区最多只能有一个(操作系统的限制)</li>
+<li>逻辑分区是由扩展分区连续切割出来的分区</li>
+<li>能够被格式化后作为数据访问的分区为主分区与逻辑分区，扩展分区无法格式化</li>
+<li>逻辑分区的数量依操作系统而不同,Linux下，IDE硬盘最多有59个逻辑分区(5号到63号)，SATA硬盘则有11个逻辑分区(5号到15号)</li>
+</ul>
+<hr>
+<h3 id="开机流程与主引导分区-MBR"><a href="#开机流程与主引导分区-MBR" class="headerlink" title=" 开机流程与主引导分区(MBR)"></a><a name="ch2.3"> 开机流程与主引导分区(MBR)</a></h3><p>整个开机流程到操作系统之前的动作如下：</p>
+<ol>
+<li>BIOS：开机主动执行的固件,会到硬盘中读取第一扇区的MBR。(硬件支持)</li>
+<li>MBR：MBR包含引导加载程序。（硬件支持，安装操作系统时，操作系统会修改MBR）</li>
+<li>引导加载程序(Boot loader)：一个读取操作系统内核文件来执行的软件。（操作系统在安装时提供）</li>
+<li>内核文件：开始操作系统的功能。</li>
+</ol>
+<p>引导加载程序主要任务有以下：</p>
+<ul>
+<li>提供菜单：用户可以选择不同的开机选项，这也是多重引导的重要功能。</li>
+<li>载入内核文件：直接指向可开机的程序区段来开始操作系统。</li>
+<li>转交其他loader：将引导加载功能转交给其他loader负责。</li>
+</ul>
+<p>当你的计算机系统有两个以上的引导加载程序，我们可以使用多重引导。引导加载程序除了可以安装在MBR之外，还可以安装在每个分区的引导扇区。</p>
+<p>举个例子：<br>假设你的计算机只有一块硬盘,里面分成4个分区，其中第1,2分区分别安装了Windows及Linux，你要如何在开机的时候选择用Windows还是Linux开机呢？假设MBR内安装的是同时识别Windows/Linux操作系统的引导加载程序，那么整个流程如下:</p>
+<p><img src="https://github.com/HiKumho/blog/blob/master/img/blog_10_2.gif?raw=true" alt=""></p>
+<hr>
+<h3 id="文件系统与目录树"><a href="#文件系统与目录树" class="headerlink" title=" 文件系统与目录树"></a><a name="ch2.4"> 文件系统与目录树</a></h3><ul>
+<li>目录树结构<br>Linux所有数据都是以文件形态来呈现的，整个Linux系统重要的地方就是在于目录树结构，所谓目录树结构就是以根目录(表示方法为‘’/‘’)为主，然后向下呈现分支状的目录结构的一种文件结构。整个系统只有一个目录树。<br><strong>我们文件数据其实是放置在磁盘分区当中的</strong>，现在的问题是如何结合目录树的架构与磁盘内数据，这就是<strong>挂载</strong>的概念了</li>
+<li>文件系统与目录树的关系(挂载)<br>挂载就是利用一个目录当成进入点，将磁盘分区的数据放置在该目录下。进入点的目录我们称为<strong>挂载点</strong>。Linux最重要的是根目录，因此根目录一定要挂载到某个分区。</li>
+</ul>
+<h2 id="主机硬盘的规划"><a href="#主机硬盘的规划" class="headerlink" title=" 主机硬盘的规划"></a><a name="ch3"> 主机硬盘的规划</a></h2><h3 id="基本硬盘分区模式"><a href="#基本硬盘分区模式" class="headerlink" title=" 基本硬盘分区模式"></a><a name="ch3.1"> 基本硬盘分区模式</a></h3><ul>
+<li>最简单的分区方法<br>仅分出根目录与内存交换空间(Swap)，然后再预留一些剩余磁盘以供后续练习之用。</li>
+<li>稍微麻烦一点的方式<ul>
+<li>/</li>
+<li>/usr (程序安装)</li>
+<li>/home (用户主目录基点)</li>
+<li>/var (经常变动的数据)</li>
+<li>Swap</li>
+</ul>
+</li>
+</ul>
+<p>详细请查看<a href="https://github.com/HiKumho/blog/blob/master/Liunx%E5%90%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9A%84%E4%BD%9C%E7%94%A8(%E8%BD%AC%E8%BD%BD" target="_blank" rel="external">Liunx各目录作用</a>.md)</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--
+## &lt;a name=&quot;index&quot;&gt;Index&lt;/a&gt;
+* &lt;a href=&quot;#ch1&quot;&gt; Linux与硬件&lt;/a&gt;
+  * &lt;a href=&quot;#ch1.1&quot;&gt; 各硬件设备在Linux中的文件名&lt;/a&gt;
+* &lt;a href=&quot;#ch2&quot;&gt; 磁盘分区&lt;/a&gt;
+  * &lt;
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 安装JDK</title>
+    <link href="http://yoursite.com/2016/09/05/Linux-%E5%AE%89%E8%A3%85JDK/"/>
+    <id>http://yoursite.com/2016/09/05/Linux-安装JDK/</id>
+    <published>2016-09-05T01:56:30.000Z</published>
+    <updated>2016-09-05T01:59:05.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="直接下载jdk压缩包方式安装"><a href="#直接下载jdk压缩包方式安装" class="headerlink" title="直接下载jdk压缩包方式安装"></a>直接下载jdk压缩包方式安装</h2><p>分为下面5个步骤</p>
+<ol>
+<li>官网下载JDK</li>
+<li>解压缩,放到指定目录</li>
+<li>配置环境变量</li>
+<li>设置系统默认JDK</li>
+<li>测试JDK</li>
+</ol>
+<h3 id="官网下载JDK"><a href="#官网下载JDK" class="headerlink" title="官网下载JDK"></a>官网下载JDK</h3><p>网址: <a href="http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html</a><br>选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)</p>
+<h3 id="解压缩-放到指定目录-以jdk-8u92-linux-i586-tar-gz为例"><a href="#解压缩-放到指定目录-以jdk-8u92-linux-i586-tar-gz为例" class="headerlink" title="解压缩,放到指定目录(以jdk-8u92-linux-i586.tar.gz为例)"></a>解压缩,放到指定目录(以jdk-8u92-linux-i586.tar.gz为例)</h3><ol>
+<li><p>创建目录<br><code>sudo mkdir /home/kumho/usr/lib/jvm</code>    </p>
+</li>
+<li><p>解压文件至目录<br><code>sudo tar -zxvf jdk-8u92-linux-i586.tar.gz -C  /home/kumho/usr/lib/jvm</code>      </p>
+</li>
+</ol>
+<h3 id="修改环境变量"><a href="#修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h3><p><code>sudo vim ~/.bashrc</code><br>文件的末尾追加下面内容:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#set oracle jdk environment </div><div class="line">export JAVA_HOME=/home/kumho/usr/lib/jvm/jdk1.8.0_92  ##这里要注意目录要换成自己解压的jdk 目录</div><div class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre </div><div class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</div><div class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure></p>
+<p>使环境变量马上生效<code>source ~/.bashrc</code>    </p>
+<h3 id="设置系统默认jdk-版本"><a href="#设置系统默认jdk-版本" class="headerlink" title="设置系统默认jdk 版本"></a>设置系统默认jdk 版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo update-alternatives --install /usr/bin/java java /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/java 300</div><div class="line">sudo update-alternatives --install /usr/bin/javac javac /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/javac 300</div><div class="line">sudo update-alternatives --install /usr/bin/jar jar /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/jar 300</div><div class="line">sudo update-alternatives --install /usr/bin/javah javah /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/javah 300</div><div class="line">sudo update-alternatives --install /usr/bin/javap javap /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/javap 300</div></pre></td></tr></table></figure>
+<p>然后执行:<br><code>sudo update-alternatives --config java</code><br>若是初次安装jdk,会有下面的提示<br> There is only one alternative in link group java (providing /usr/bin/java):<br> /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/java<br>否则,选择合适的jdk</p>
+<h3 id="测试jdk"><a href="#测试jdk" class="headerlink" title="测试jdk"></a>测试jdk</h3><p><img src="https://github.com/HiKumho/blog/blob/master/img/blog_9_1.png?raw=true" alt=""></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;直接下载jdk压缩包方式安装&quot;&gt;&lt;a href=&quot;#直接下载jdk压缩包方式安装&quot; class=&quot;headerlink&quot; title=&quot;直接下载jdk压缩包方式安装&quot;&gt;&lt;/a&gt;直接下载jdk压缩包方式安装&lt;/h2&gt;&lt;p&gt;分为下面5个步骤&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Android FQA</title>
+    <link href="http://yoursite.com/2016/09/05/Android-FQA/"/>
+    <id>http://yoursite.com/2016/09/05/Android-FQA/</id>
+    <published>2016-09-05T01:41:14.000Z</published>
+    <updated>2016-09-05T01:55:55.000Z</updated>
+    
+    <content type="html"><![CDATA[<!--
+## Index
+- <a href="#q1"> Android:id设置的三种方式区别?</a>
+- <a href="#q2"> Android程序级权限与组件级权限的区别</a>
+- <a href="#q3"> Activity、Window、View的关系</a>
+- <a href="#q4"> 关于9-patch的使用</a>
+- <a href="#q5"> ListView怎么隐藏滚动条?</a>
+- <a href="#q6"> 关于同区域两个组件设置了类似的监听器,哪个作用?</a>
+- <a href="#q7"> 怎么引用当前主题的属性值</a>
+-->
+<h3 id="Android-id设置的三种方式区别"><a href="#Android-id设置的三种方式区别" class="headerlink" title=" Android:id设置的三种方式区别?"></a><a name="q1"> Android:id设置的三种方式区别?</a></h3><p>对Android控制设置id,通常有以下三种方式:</p>
+<blockquote>
+<ul>
+<li>android:id=”@+id/btn”</li>
+<li>android:id=”@id/btn”</li>
+<li>android:id=”@android:id/button1”         </li>
+</ul>
+</blockquote>
+<h4 id="android-id-”-id-btn”"><a href="#android-id-”-id-btn”" class="headerlink" title="android:id=”@+id/btn”"></a>android:id=”@+id/btn”</h4><p>表示在R.java资源文件中新增一个id为btn的控件索引</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">id</span> </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> btn =<span class="number">0x7f0b0056</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>代码获取方式:findViewById(R.id.btn);</p>
+<h4 id="android-id-”-id-btn”-1"><a href="#android-id-”-id-btn”-1" class="headerlink" title="android:id=”@id/btn”"></a>android:id=”@id/btn”</h4><p>表示使用R.java资源文件中已存在的id为btn的索引<br>代码获取方式:跟1一样</p>
+<h4 id="android-id-”-android-id-button1”"><a href="#android-id-”-android-id-button1”" class="headerlink" title="android:id=”@android:id/button1”"></a>android:id=”@android:id/button1”</h4><p>表示使用的是系统已有的ID，在对应的sdk目录下的ids.xml里面(如Sdk/platforms/android-21/data/res/values/ids.xml) ,一般只去引用其ID,不直接使用其ID作为自己App控件索引<br>代码中获取方式:android.R.id.button1</p>
+<h4 id="在ids-xml中添加自己的Id组"><a href="#在ids-xml中添加自己的Id组" class="headerlink" title="在ids.xml中添加自己的Id组"></a>在ids.xml中添加自己的Id组</h4><p> 我们可以在values下新建ids.xml,然后写入id项,便于方式2使用.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;resources&gt;</div><div class="line">    &lt;item name=&quot;btn_1&quot; type=&quot;id&quot;&gt;&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;btn_2&quot; type=&quot;id&quot;&gt;&lt;/item&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
+<h4 id="当同个layout布局文件中-多个组件使用同一个id的问题"><a href="#当同个layout布局文件中-多个组件使用同一个id的问题" class="headerlink" title="当同个layout布局文件中,多个组件使用同一个id的问题"></a>当同个layout布局文件中,多个组件使用同一个id的问题</h4><p>当我们调用<code>findViewById(int id)</code>被引用的是第一个使用此id的控件</p>
+<h3 id="Android程序级权限与组件级权限的区别"><a href="#Android程序级权限与组件级权限的区别" class="headerlink" title=" Android程序级权限与组件级权限的区别"></a><a name="q2"> Android程序级权限与组件级权限的区别</a></h3><h4 id="程序组权限"><a href="#程序组权限" class="headerlink" title="程序组权限"></a>程序组权限</h4><p>程序运行时所需要的权限 通过在<code>&lt;manifest&gt;</code>元素下添加<code>&lt;usespermission&gt;</code>为程序本身声明权限       </p>
+<h4 id="组件级权限"><a href="#组件级权限" class="headerlink" title="组件级权限"></a>组件级权限</h4><p>程序各组件可以被其他程序调用,此时该组件声明所需的权限.通过在<code>&lt;activity&gt;``&lt;service&gt;</code>等元素下添加<code>&lt;usespermission&gt;</code>为组件声明权限.</p>
+<h3 id="Activity、Window、View的关系"><a href="#Activity、Window、View的关系" class="headerlink" title=" Activity、Window、View的关系"></a><a name="q3"> Activity、Window、View的关系</a></h3><p>详细问题描述:<a href="http://www.cnblogs.com/loulijun/archive/2012/02/09/2344681.html" target="_blank" rel="external">原文链接</a>        </p>
+<h4 id="View和ViewGroup"><a href="#View和ViewGroup" class="headerlink" title="View和ViewGroup"></a>View和ViewGroup</h4><p>Android系统中的所有UI类都是建立在View和ViewGroup这两个类的基础上的。所有View的子类成为”Widget”，所有ViewGroup的子类成为”Layout”。View和ViewGroup之间采用了组合设计模式，可以使得“部分-整体”同等对待。ViewGroup作为布局容器类的最上层，布局容器里面又可以有View和ViewGroup。         </p>
+<h4 id="LayoutInflater，LayoutInflater-inflate"><a href="#LayoutInflater，LayoutInflater-inflate" class="headerlink" title="LayoutInflater，LayoutInflater.inflate()"></a>LayoutInflater，LayoutInflater.inflate()</h4><p>LayoutInflater是一个用来实例化XML布局文件为View对象的类</p>
+<p>LayoutInflater.infalte(R.layout.test,null)用来从指定的XML资源中填充一个新的View</p>
+<h4 id="Activity、Window、View之间的关系"><a href="#Activity、Window、View之间的关系" class="headerlink" title="Activity、Window、View之间的关系"></a>Activity、Window、View之间的关系</h4><p>而当我们运行程序的时候，有一个setContentView()方法，Activity其实不是显示视图（直观上感觉是它），实际上Activity调用了PhoneWindow的setContentView()方法，然后加载视图，将视图放到这个Window上，而Activity其实构造的时候初始化的是Window（PhoneWindow），Activity其实是个控制单元，即可视的人机交互界面。</p>
+<p>打个比喻：</p>
+<p>Activity是一个工人，它来控制Window；Window是一面显示屏，用来显示信息；View就是要显示在显示屏上的信息，这些View都是层层重叠在一起（通过infalte()和addView()）放到Window显示屏上的。而LayoutInfalter就是用来生成View的一个工具，XML布局文件就是用来生成View的原料</p>
+<p>再来说说代码中具体的执行流程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">setContentView(R.layout.main)其实就是下面内容。</div><div class="line">getWindow().setContentView(LayoutInflater.from(this).inflate(R.layout.main, null))</div></pre></td></tr></table></figure>
+<p>即运行程序后，Activity会调用PhoneWindow的setContentView()来生成一个Window，而此时的setContentView就是那个最底层的View。然后通过LayoutInflater.infalte()方法加载布局生成View对象并通过addView()方法添加到Window上，（一层一层的叠加到Window上）</p>
+<p>所以，Activity其实不是显示视图，View才是真正的显示视图</p>
+<p>注：一个Activity构造的时候只能初始化一个Window(PhoneWindow)，另外这个PhoneWindow有一个”ViewRoot”，这个”ViewRoot”是一个ViewGroup，是最初始的根视图，然后通过addView方法将View一个个层叠到ViewRoot上，这些层叠的View最终放在Window这个载体上面</p>
+<h3 id="关于9-patch的使用"><a href="#关于9-patch的使用" class="headerlink" title=" 关于9-patch的使用"></a><a name="q4"> 关于9-patch的使用</a></h3><p>学习<a href="http://leoray.leanote.com/post/android-9-patch" target="_blank" rel="external">9-pathch笔记</a><br>从上面的文章,我们可以知道Android显示9-patch的内容区域是在图片上设置padding,如果我们在引用这张图片的组件上再设置padding的话,9-patch的padding就会失效,达不到需要的效果.</p>
+<p>注意:Android Studio使用minmap代替drawable目录,9-patch图片在minmap目录,引用9-patch图片时会报错(AS支持问题)<br>解决方法1:9-patch图片放在drawable<br>解决方法2:修复9-patch的bad-patches区域(show bad patches出来的红色线区)</p>
+<h3 id="ListView怎么隐藏滚动条"><a href="#ListView怎么隐藏滚动条" class="headerlink" title=" ListView怎么隐藏滚动条?"></a><a name="q5"> ListView怎么隐藏滚动条?</a></h3><p>设置andriod:scrollbars=”none”即可</p>
+<h3 id="关于同区域两个组件设置了类似的监听器-哪个作用"><a href="#关于同区域两个组件设置了类似的监听器-哪个作用" class="headerlink" title=" 关于同区域两个组件设置了类似的监听器,哪个作用?"></a><a name="q6"> 关于同区域两个组件设置了类似的监听器,哪个作用?</a></h3><p>是最上层的组件的监听器响应.<br>比方说,父组件设置点击监听,子组件也设置了点击监听,在子组件的区域里,点击是子组件响应,在子组件外的区域里,点击是父组件响应</p>
+<h3 id="怎么引用当前主题的属性值"><a href="#怎么引用当前主题的属性值" class="headerlink" title=" 怎么引用当前主题的属性值"></a><a name="q7"> 怎么引用当前主题的属性值</a></h3><p>要引用样式属性，名称语法几乎与普通资源格式完全相同，只不过将 at 符号 (@) 改为问号 (?)，资源类型部分为可选项。比如,下面例子中,Android将会使用当前主题的android:textColorSecondary的属性值设置组件的textColor</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android:textColor=&quot;?android:textColorSecondary&quot;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--
+## Index
+- &lt;a href=&quot;#q1&quot;&gt; Android:id设置的三种方式区别?&lt;/a&gt;
+- &lt;a href=&quot;#q2&quot;&gt; Android程序级权限与组件级权限的区别&lt;/a&gt;
+- &lt;a href=&quot;#q3&quot;&gt; Activity、Window、View的关系&lt;
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="android" scheme="http://yoursite.com/tags/android/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux FQA</title>
+    <link href="http://yoursite.com/2016/09/05/Linux-FQA/"/>
+    <id>http://yoursite.com/2016/09/05/Linux-FQA/</id>
+    <published>2016-09-05T01:35:26.000Z</published>
+    <updated>2016-09-05T01:45:23.000Z</updated>
+    
+    <content type="html"><![CDATA[<!--
+### Index
+1. <a href="#q1">查看主机内核版本</a>
+2. <a href="#q2">进入root文件夹</a>
+3. <a href="#q3">终端显示乱码</a>
+4. <a href="#q4">重启X Window的方法</a>
+5. <a href="#q5">图形界面与终端界面切换</a>
+6. <a href="#q6">命令基本格式</a>
+7. <a href="#q7">nano文本编辑器</a>
+8. <a href="#q8">shutdown</a>
+9. <a href="#q9">修改终端模式欢迎信息</a>
+10. <a href="#q10">设置环境变量LANG</a>
+11. <a href="#q11"> 关于cp的一个疑问?(待解决)</a>
+12. <a href="#q12">删除了用户的主目录,进入不了该用户的图形界面环境</a>
+13. <a href="#q13">Vim解决中文乱码的问题</a>
+14. <a href="#q14">Shell 中判断符号[]使用的问题</a>
+15. <a href="#q15">grub > unknow filesystem的解决方法</a>
+16. <a href="#q16">忘记root密码的解决方法</a>
+17. <a href="#q17">init的配置文件错误,无法启动系统</a>
+18. <a href="#q18">如何切换操作系统(不能重启)</a>
+19. <a href="#q19">查看打印机是否支持Linux</a>
+20. <a href="#q20">修改主机名</a>
+21. <a href="#q21">Ubuntu14.04下SublimeText3不能输中文</a>
+-->
+<h3 id="查看主机内核版本"><a href="#查看主机内核版本" class="headerlink" title=" 查看主机内核版本"></a><a name="q1"> 查看主机内核版本</a></h3><p>使用命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">cat  /proc/version</div></pre></td></tr></table></figure></p>
+<h3 id="进入root文件夹"><a href="#进入root文件夹" class="headerlink" title=" 进入root文件夹"></a><a name="q2"> 进入root文件夹</a></h3><p>使用命令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo nautilus</div></pre></td></tr></table></figure></p>
+<h3 id="终端显示乱码"><a href="#终端显示乱码" class="headerlink" title=" 终端显示乱码"></a><a name="q3"> 终端显示乱码</a></h3><p>终端默认情况下不能显示中文,刚好我们终端最优先是显示zh.CN的话,那么显示英文也会乱码,解决方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1. 查看目前支持的语言</div><div class="line">$ echo &amp;LANG</div><div class="line">zh_CN.UTF-8</div><div class="line"></div><div class="line">2. 修改语言为UTF-8和en_US</div><div class="line">$ LANG=UTF-8.en_US</div></pre></td></tr></table></figure></p>
+<h3 id="重启X-Window的方法"><a href="#重启X-Window的方法" class="headerlink" title=" 重启X Window的方法"></a><a name="q4"> 重启X Window的方法</a></h3><ul>
+<li>直接注销,然后再重新登陆</li>
+<li>X Window界面中按下[Ctrl]+[Alt]+[Backspace]</li>
+</ul>
+<h3 id="图形界面与终端界面切换"><a href="#图形界面与终端界面切换" class="headerlink" title=" 图形界面与终端界面切换"></a><a name="q5"> 图形界面与终端界面切换</a></h3><p>终端可以理解成独立设备,Linux会提供5到6个的虚拟终端界面给用户.其与图形界面的切换方式如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">[Ctrl]+[Alt]+[F1]~[F6]:登录tty1~tty6终端;(通常情况下是F1~F6,可是我的CentOS6.8是F2~F6)</div><div class="line">[Ctrl]+[Alt]+[F7]:登录图形界面(我的CentOS6.8是F1)</div></pre></td></tr></table></figure></p>
+<h3 id="命令基本格式"><a href="#命令基本格式" class="headerlink" title=" 命令基本格式"></a><a name="q6"> 命令基本格式</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$      command      [-opt|--options]    parmeter1   parameter2 ...</div><div class="line"> 命令/可执行文件         -选项|--完整选项名       参数1       参数2</div></pre></td></tr></table></figure>
+<ul>
+<li>如果命令太长,可以用\来转义[Enter]</li>
+<li>[TAB]:补齐命令或文件名</li>
+<li>[Ctrl]+C:命令执行中断(通常中断程序级命令)</li>
+<li>[Ctrl]+D:键盘输入结束/退出程序/命令行模式注销用户~exit</li>
+<li>[TAB][TAB]:可以查看系统所有命令</li>
+</ul>
+<h3 id="nano文本编辑器"><a href="#nano文本编辑器" class="headerlink" title=" nano文本编辑器"></a><a name="q7"> nano文本编辑器</a></h3><p>nano编辑器可以用在命令行模式下,执行命令<code>$ nano</code>启动nano,根据提示操作</p>
+<h3 id="shutdown"><a href="#shutdown" class="headerlink" title=" shutdown"></a><a name="q8"> shutdown</a></h3><p>通常我们关机前会使用多次<code>sync</code>命令将数据同步写入硬盘中(Linux<br>为了加速数据读取,某些已加载内存中的数据不直接写会硬盘,而是暂存内存中)</p>
+<p><strong>关机命令:shutdown</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ shutdown [-arkhncfF] 时间 [警告信息]</div></pre></td></tr></table></figure></p>
+<blockquote>
+<ul>
+<li>-k:只发送警告信息,不是真关机</li>
+<li>-r:在将系统服务停掉后重启(常用)</li>
+<li>-h:将系统服务停掉后关机(常用)</li>
+<li>-n:不经过init程序,直接以shutdown功能来关机</li>
+<li>-f:关机并开机后,强制略过fsck的磁盘检查</li>
+<li>-F:系统重启之后,强制你行fsck磁盘检查</li>
+<li>-c:取消计划</li>
+</ul>
+</blockquote>
+<p>例子:</p>
+<blockquote>
+<ul>
+<li>shutdown -h 0                      //立刻关机</li>
+<li>shutdown -h 20:25              //今天的20:25会关机</li>
+<li>shutdown -h 10                   //10分钟后关机</li>
+<li>shutdown -r 30 ‘The system will reboot’   //30分钟后重启</li>
+</ul>
+</blockquote>
+<h3 id="修改终端模式欢迎信息"><a href="#修改终端模式欢迎信息" class="headerlink" title=" 修改终端模式欢迎信息"></a><a name="q9"> 修改终端模式欢迎信息</a></h3><p>1.  打开终端欢迎信息文件<code>/etc/issue</code><br>在终端模式下可以使用nano/vim文本编辑器打开<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># nano /etc/issue</div></pre></td></tr></table></figure></p>
+<p>2. /etc/issue中的占位符<br>如果需要使用占位符,可以man查询下agetty的<code>ISSUE ESCAPES</code>项的各参数</p>
+<h3 id="设置环境变量LANG"><a href="#设置环境变量LANG" class="headerlink" title="  设置环境变量LANG"></a><a name="q10">  设置环境变量LANG</a></h3><p>在终端上使用<code>ls -al</code>,发现中文目录都出现”???”,参考<a href="#q3">问题3. 终端显示乱码</a>还是没有解决,而且设置的LANG还是一关机后或者切换到其他终端就不用作用的,于是设置环境变量LANG</p>
+<p>1.  设置环境变量LANG<br>在/etc/sysconfig/i18n上修改或添加LANG=“UTF-8.en_US”<br>注:上面是CentOS的locale环境变量设置,Ubuntu在/etc/default/locale中设置</p>
+<p>2.  设置环境变量LANG=“UTF-8.en_US”时<br>遇到以下错误：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">warning: setlocale: LC_CTYPE: cannot change locale (UTF-8.en_US) </div><div class="line">warning: Setting locale failed.</div></pre></td></tr></table></figure>
+<p>解决方法：这里我将环境变量LANG中的UTF-8去掉了。</p>
+<p>3. 之后修改系统语系为English,并将中文目录更新为英文</p>
+<h3 id="关于cp的一个疑问-待解决"><a href="#关于cp的一个疑问-待解决" class="headerlink" title=" 关于cp的一个疑问?(待解决)"></a><a name="q11"> 关于cp的一个疑问?(待解决)</a></h3><p>遇到的问题:<br>今天将<code>/root/AndroidStudioProjects/TextProject</code>项目复制到 <code>/media/kumho/文档/Github/</code><br>root使用命令<code>cp -a ~/AndroidStudioProjects/TextProject /media/kumho/文档/Github/</code>,发现目标目录的用户/用户组全部更改成kumho,权限也被修改成700,这里好奇怪原目录的用户/用户组是root,权限是755</p>
+<p>明明 <code>cp -a</code>会将目录及子文件的属性都进行复制,为什么目标目录会被修改?</p>
+<p>这里查看了<code>/media/kumho</code>的文件属性<code>drwxr-x---+ 4 root root 4096  7月 19 17:27 /media/kumho</code> 发现文件权限后有个<code>+</code>,表示不解(貌似是ACL权限控制)</p>
+<h3 id="删除了用户的主目录-进入不了该用户的图形界面环境"><a href="#删除了用户的主目录-进入不了该用户的图形界面环境" class="headerlink" title=" 删除了用户的主目录,进入不了该用户的图形界面环境"></a><a name="q12"> 删除了用户的主目录,进入不了该用户的图形界面环境</a></h3><p>今天不小心将/home目录删除了(自打100下…..),之后发觉进入不了相关用户的图形界面环境<br>解决方法:进入终端,使用root,创建用户的主目录/home/用户名,并修改此文件的所有者与用户组为该用户</p>
+<h3 id="Vim解决中文乱码的问题"><a href="#Vim解决中文乱码的问题" class="headerlink" title=" Vim解决中文乱码的问题"></a><a name="q13"> Vim解决中文乱码的问题</a></h3><p>我将vim的编码都设置成utf8,可以解决中文乱码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">set encoding=utf-8             &quot;Vim内部使用的字符编码,比如脚本中的字符串,buffer,寄存器等</div><div class="line">set termencoding=utf-8     &quot;Vim用于屏幕显示的编码,显示时Vim将内部编码转出屏幕编码</div><div class="line">set fileencoding=utf-8     &quot;Vim保存文件时的编码格式</div><div class="line">set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1 &quot;Vim识别文件编码格式的识别序列，应当按照从严格到宽松的角度来摆放</div></pre></td></tr></table></figure></p>
+<p>参考学习<br><a href="http://edyfox.codecarver.org/html/vim_fileencodings_detection.html" target="_blank" rel="external">Vim文件编码识别与乱码处理</a></p>
+<h3 id="Shell-中判断符号-使用的问题"><a href="#Shell-中判断符号-使用的问题" class="headerlink" title=" Shell 中判断符号[]使用的问题"></a><a name="q14"> Shell 中判断符号[]使用的问题</a></h3><p>判断符号[]使用有些麻烦,必须在几个地方插入空格(□)才行,比如下面的例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[□&quot;Hello World&quot;□==□&quot;Hello&quot;□-o□&quot;$Test&quot;□!=□&quot;Test&quot;□]</div></pre></td></tr></table></figure></p>
+<p>就是要在变量/常量/判断符两边加上空格(□)<br>如果确认编写无误后,还报出”unexpected operator” 可能是shell的原因<br>比如 ubuntu中的sh -&gt; /bin/dash ,其中 /bin/dash不支持 <code>==</code><br>解决方法:</p>
+<ol>
+<li>将sh -&gt; /bin/bash : sudo dpkg-reconfigure dash   选NO</li>
+<li>使用/bin/dash : 用<code>=</code>代替<code>==</code></li>
+</ol>
+<h3 id="grub-gt-unknow-filesystem的解决方法"><a href="#grub-gt-unknow-filesystem的解决方法" class="headerlink" title=" grub &gt; unknow filesystem的解决方法"></a><a name="q15"> grub &gt; unknow filesystem的解决方法</a></h3><p>Linux安装时分配的空间过少,而且还乱分区,所以今天想整合下分区,把没弄的分区删去.</p>
+<p>我的根目录挂载了/dev/sda9,前面还有个/dev/sda8没有使用(df -hl 中并没有挂载/dev/sda8).于是将其删除,<br>但重启系统时,遇到 <code>grub &gt; unknow filesystem</code> 的问题</p>
+<p>我想是系统找不到/boot了(我的/boot没有独立分区),可能是因为根目录挂载变成/dev/sda8的原因.</p>
+<p>这样查到了网上的解决方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">grub rescue &gt; ls   # 查看系统分区情况</div><div class="line">我这里列出了(hd0,msdos9),(hd0,msdos8)等</div><div class="line"></div><div class="line">grub rescue &gt; set root=(hd0,msdos8)  # 指向根目录</div><div class="line"></div><div class="line">grub rescue &gt; set prefix=(hd0,msdos8)/boot/grub  # 指定boot位置</div><div class="line"></div><div class="line">grub rescue &gt; insmod normal # 这命令不太懂</div><div class="line"></div><div class="line">grub rrescue &gt; normal #进入了平常的grub</div></pre></td></tr></table></figure></p>
+<p>这里进入系统后, 下次重启时还会出现这种情况(治标不治本),于是用了boot-repair工具修复<br>下面是安装并启动boot-repair<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">add-apt-repository ppa:yannubuntu/boot-repair &amp;&amp; apt-get update</div><div class="line">apt-get install -y boot-repair &amp;&amp; boot-repair</div></pre></td></tr></table></figure></p>
+<p>问题解决.<br>其实也可以直接用LIVE-CD启动系统,再用boot-repair解决(今天U盘刚好找不到了)</p>
+<h3 id="忘记root密码的解决方法"><a href="#忘记root密码的解决方法" class="headerlink" title=" 忘记root密码的解决方法"></a><a name="q16"> 忘记root密码的解决方法</a></h3><ol>
+<li>启动系统,进入boot loader启动菜单编辑,在内核项最后添加single</li>
+<li>进入单用户维护模式,取得了root的shell</li>
+<li>利用passwd修改密码</li>
+</ol>
+<p>或者用启动盘启动系统,再挂载其原系统,利用chroot来改变工作中的系统,切换到原系统,利用passwd修改</p>
+<h3 id="init的配置文件错误-无法启动系统"><a href="#init的配置文件错误-无法启动系统" class="headerlink" title=" init的配置文件错误,无法启动系统"></a><a name="q17"> init的配置文件错误,无法启动系统</a></h3><ol>
+<li>启动系统,进入boot loader启动菜单编辑,在内核项最后添加init=/bin/bash</li>
+<li>启动root的shell后再去修改init的配置文件(可能要重新挂载根目录,使其成可读写状态)</li>
+</ol>
+<h3 id="如何切换操作系统-不能重启"><a href="#如何切换操作系统-不能重启" class="headerlink" title=" 如何切换操作系统(不能重启)"></a><a name="q18"> 如何切换操作系统(不能重启)</a></h3><ol>
+<li>先在原先的操作系统中新建一个目录,比如/croot</li>
+<li>将目标操作系统的各个分区先挂载起来,需要建立各分区对应的文件,如/croot/usr /croot/home等</li>
+<li>使用chroot切换操作系统 <code>chroot /croot</code></li>
+</ol>
+<h3 id="查看打印机是否支持Linux"><a href="#查看打印机是否支持Linux" class="headerlink" title=" 查看打印机是否支持Linux"></a><a name="q19"> 查看打印机是否支持Linux</a></h3><p><a href="https://wiki.linuxfoundation.org/" target="_blank" rel="external">https://wiki.linuxfoundation.org/</a> 下的openprinting条目</p>
+<h3 id="修改主机名"><a href="#修改主机名" class="headerlink" title=" 修改主机名"></a><a name="q20"> 修改主机名</a></h3><p>修改<code>/etc/hostname(Ubuntu)</code>或<code>/etc/sysconfig/network</code> 之后还有修改<code>/etc/hosts</code>相应的条目</p>
+<h3 id="Ubuntu14-04下SublimeText3不能输中文"><a href="#Ubuntu14-04下SublimeText3不能输中文" class="headerlink" title=" Ubuntu14.04下SublimeText3不能输中文"></a><a name="q21"> Ubuntu14.04下SublimeText3不能输中文</a></h3><p>我是查找了此网友的方法<a href="http://www.jianshu.com/p/bf05fb3a4709" target="_blank" rel="external">解决Ubuntu下Sublime Text 3无法输入中文</a></p>
+<p>但是不能解决,继续折腾后</p>
+<p>解决方法：</p>
+<ol>
+<li>在sublimeText3官网下*.deb包,源码编译出来的sublimeText解决有点绕</li>
+<li>下载此网友的github库<a href="https://github.com/lyfeyaj/sublime-text-imfix" target="_blank" rel="external">sublime-text-imfix</a>,安装其步骤来</li>
+<li>最后遇到问题<code>ERROR: ld.so: object &#39;/opt/sublime_text/libsublime-imfix.so&#39; from LD_PRELOAD cannot be preloaded (wrong ELF class: ELFCLASS64): ignored.</code></li>
+<li>这里要重新编译出<code>libsublime-imfix.so</code>库,放到<code>/opt/sublime_text/</code>下,编译步骤<ol>
+<li>先在下好的github库目录下找到<code>src/sublime-imfix.c</code>,对其进行编译</li>
+<li>确认安装了C/C++ 的编译环境和 gtk libgtk2.0-dev,<code>sudo apt-get install build-essential&amp;&amp;sudo apt-get install libgtk2.0-dev</code><ul>
+<li>发现<code>libgtk2.0-dev</code>依赖有问题(啊！！你还玩我) 解决方法是用<code>aptitude install ibgtk2.0-dev</code>,其会提供依赖解决方法,我选择的是将依赖包降级安装</li>
+</ul>
+</li>
+<li><code>gcc -shared -o libsublime-imfix.so sublime_imfix.c</code>pkg-config –libs –cflags gtk+-2.0<code>-fPIC</code> 编译出<code>libsublime-imfix.so</code></li>
+</ol>
+</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;!--
+### Index
+1. &lt;a href=&quot;#q1&quot;&gt;查看主机内核版本&lt;/a&gt;
+2. &lt;a href=&quot;#q2&quot;&gt;进入root文件夹&lt;/a&gt;
+3. &lt;a href=&quot;#q3&quot;&gt;终端显示乱码&lt;/a&gt;
+4. &lt;a href=&quot;#q4&quot;&gt;重启X Window的方法&lt;/a&gt;
+5
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Linux 卸载多系统中的linux</title>
+    <link href="http://yoursite.com/2016/09/05/Linux-%E5%8D%B8%E8%BD%BD%E5%A4%9A%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84linux/"/>
+    <id>http://yoursite.com/2016/09/05/Linux-卸载多系统中的linux/</id>
+    <published>2016-09-05T01:13:43.000Z</published>
+    <updated>2016-09-05T01:14:21.000Z</updated>
     
     <content type="html"><![CDATA[<p>前段时间决定要系统学习Linux，于是想把很久前安装在电脑上的ubuntu卸装再安装linux mint(这也是ubuntu冏rz)，当安装完linux mint 17的64位系统时它将原本的ubuntu覆盖掉了，在编译C程序时发觉少了库文件，再安装发觉问题没有解决，于是再安装了mint的32位系统，于是产生mint 32位、64位系统和win7共存的情况，最后决定卸装mint 64位系统。<br>教程<a href="http://www.cnblogs.com/woshijpf/p/3835659.html" target="_blank" rel="external">一台电脑上含有多个ubuntu系统的卸载方法</a><br><a id="more"></a></p>
 <h2 id="查看linux系统的分区情况"><a href="#查看linux系统的分区情况" class="headerlink" title="查看linux系统的分区情况"></a>查看linux系统的分区情况</h2><p>分别进入两个linux系统，进入控制台，输入命令“sudo df -hl”查看文件系统的挂在情况，之前我操作时没有截图，现在使用教程中的截图。<br>例如：原作者的32位系统的文件系统的挂载情况是这样的：<br><img src="https://raw.githubusercontent.com/HiKumho/blog/master/img/blog_5_1.jpg" alt=""></p>
@@ -78,7 +503,7 @@
     <link href="http://yoursite.com/2016/09/05/Linux-%E6%9F%A5%E7%9C%8B%E4%B8%BB%E6%9C%BA%E7%A1%AC%E4%BB%B6%E4%BF%A1%E6%81%AF/"/>
     <id>http://yoursite.com/2016/09/05/Linux-查看主机硬件信息/</id>
     <published>2016-09-05T00:48:51.000Z</published>
-    <updated>2016-09-05T00:55:11.000Z</updated>
+    <updated>2016-09-05T01:07:32.000Z</updated>
     
     <content type="html"><![CDATA[<p>最近在学习Linux,看的资料是鸟哥的.书上有道习题是查看自己主机的硬件信息,现在在这里总结下.<br><a id="more"></a></p>
 <h3 id="查看CPU的厂商-型号-最高频率"><a href="#查看CPU的厂商-型号-最高频率" class="headerlink" title="查看CPU的厂商/型号/最高频率"></a>查看CPU的厂商/型号/最高频率</h3><ul>
