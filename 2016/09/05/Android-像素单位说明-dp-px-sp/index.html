@@ -1,0 +1,857 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="android," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="pxpx,pixels（像素）  屏幕上的点，不同设备不同的显示屏显示效果相同，这是绝对像素，是多少就永远是多少不会改变。一般我们HVGA代表320×480像素
+spsp,scaled pixels — best for text size (放大像素)（与刻度无关的像素）：主要处理字体的大小。可以根据用户的字体大小进行缩放。主要用于字体显示best for textsize。
+dp(dip)1.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 像素单位说明(dp/px/sp)">
+<meta property="og:url" content="http://yoursite.com/2016/09/05/Android-像素单位说明-dp-px-sp/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="pxpx,pixels（像素）  屏幕上的点，不同设备不同的显示屏显示效果相同，这是绝对像素，是多少就永远是多少不会改变。一般我们HVGA代表320×480像素
+spsp,scaled pixels — best for text size (放大像素)（与刻度无关的像素）：主要处理字体的大小。可以根据用户的字体大小进行缩放。主要用于字体显示best for textsize。
+dp(dip)1.">
+<meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/d30ee099bd8351610c8746eeb1128aba5e786b86">
+<meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/58a3efb685b5e6d0fa5be00ba01cf4e30a5641ce">
+<meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/084eacf2cbc45853ac169255e6233f7988ae9160">
+<meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/0bfca0659973ce00bd30199829099f3332e580d6">
+<meta property="og:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/abe3154db7d4f92fb42dd1f80f52f528c6312e4a">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_13_1.jpg?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_13_2.jpg?raw=true">
+<meta property="og:updated_time" content="2016-09-05T04:44:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 像素单位说明(dp/px/sp)">
+<meta name="twitter:description" content="pxpx,pixels（像素）  屏幕上的点，不同设备不同的显示屏显示效果相同，这是绝对像素，是多少就永远是多少不会改变。一般我们HVGA代表320×480像素
+spsp,scaled pixels — best for text size (放大像素)（与刻度无关的像素）：主要处理字体的大小。可以根据用户的字体大小进行缩放。主要用于字体显示best for textsize。
+dp(dip)1.">
+<meta name="twitter:image" content="https://wikimedia.org/api/rest_v1/media/math/render/svg/d30ee099bd8351610c8746eeb1128aba5e786b86">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/05/Android-像素单位说明-dp-px-sp/"/>
+
+  <title> Android 像素单位说明(dp/px/sp) | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Android 像素单位说明(dp/px/sp)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-05T12:43:59+08:00" content="2016-09-05">
+              2016-09-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/05/Android-像素单位说明-dp-px-sp/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/05/Android-像素单位说明-dp-px-sp/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="px"><a href="#px" class="headerlink" title="px"></a>px</h2><p>px,pixels（像素）  屏幕上的点，不同设备不同的显示屏显示效果相同，这是绝对像素，是多少就永远是多少不会改变。一般我们HVGA代表320×480像素</p>
+<h2 id="sp"><a href="#sp" class="headerlink" title="sp"></a>sp</h2><p>sp,scaled pixels — best for text size (放大像素)（与刻度无关的像素）：主要处理字体的大小。可以根据用户的字体大小进行缩放。主要用于字体显示best for textsize。</p>
+<h2 id="dp-dip"><a href="#dp-dip" class="headerlink" title="dp(dip)"></a>dp(dip)</h2><p>1.  什么是屏幕点密度(每英寸像素值)及计算公式?
+概念:ppi是 Pixel per inch，每英寸像素数,用来表示显示设备的点密度.除此之外还有用来表示印刷品点密度(dpi,每英寸多少点)
+计算公式:要计算屏幕点密度首先要确定屏幕的尺寸和分辨率
+<img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/d30ee099bd8351610c8746eeb1128aba5e786b86" alt="">
+其中</p>
+<ul>
+<li><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/58a3efb685b5e6d0fa5be00ba01cf4e30a5641ce" alt="">为屏幕对角线的分辨率</li>
+<li><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/084eacf2cbc45853ac169255e6233f7988ae9160" alt="">为屏幕横向分辨率</li>
+<li><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/0bfca0659973ce00bd30199829099f3332e580d6" alt="">为屏幕纵向分辨率</li>
+<li><img src="https://wikimedia.org/api/rest_v1/media/math/render/svg/abe3154db7d4f92fb42dd1f80f52f528c6312e4a" alt="">为屏幕对角线的长度(单位为英寸)</li>
+</ul>
+<p>以屏幕尺寸为4寸的iPhone 5为例，分辨率为1136x640，像素密度为326PPI。而分辨率为1920x1080的家用21.5寸显示器，像素密度为103PP</p>
+<p>2. 什么是dp及计算公式?
+概念:dp一种基于屏幕密度的抽象单位。在每英寸160点(即屏幕点密度为160ppi)的显示器上，1dp = 1px。 是安卓为了方便适配不同屏幕而设置的单位.
+计算公式:要计算某设备1dp等于多少px,需要知道设备的ppi
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">px=1dp*(ppi/160)</div></pre></td></tr></table></figure></p>
+<p>以一4.3寸屏幕手机为例,其分辨率480x800,那么其ppi=217,1dp=217/160=1.4px
+以一4.3寸屏幕手机为例,其分辨率720x1280,那么其ppi=342,1dp=2.1px
+以一5.5寸屏幕手机为例,其分辨率720x1280,那么其ppi=267,1dp=1.7px</p>
+<p>如果同一张的图片,在上面3部手机上显示,其效果是这样的.</p>
+<p><img src="https://github.com/HiKumho/blog/blob/master/img/blog_13_1.jpg?raw=true" alt="">
+可以想象一下我们不同的手机打开同一个应用，按钮的尺寸相差很大。
+图片显示大小是由什么决定的呢，屏幕尺寸？上图第1和第2个屏都是4.3英寸。像素数？第2和第3个屏都是720x1280的像素。其实是由ppi决定的,对比上图可以知道，ppi越低图片显示的越大，ppi越高图片显示的越小。</p>
+<p>要让不同屏幕显示图片的大小相同，就需要对图片进行缩放，给高ppi屏提供更大的图片。(<b>也就是说在低ppi屏我用10像素显示的线,在高ppi屏可能用20像素来显示这条线,才使这条线在两个屏幕看起来一样</b>)
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_13_2.jpg?raw=true" alt=""></p>
+<p>高ppi屏幕需要更大的图片才能得到同样的显示效果，反之亦然。ppi和图片px的关系如下
+px1/px2=ppi1/ppi2
+选定一个ppi值作为基础绘制图片，用ppi的比值计算出图片缩放比例就可以适配各种屏幕,安卓选定的这个基础值就是160ppi
+我们需要一个统一的单位来描述这个比值,这就是dp,高ppi下1dp表示的像素也越大</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="http://www.zhihu.com/question/21220154/answer/18584739" target="_blank" rel="external">DPI、PPI、DP、PX 的详细计算方法及算法来源是什么？</a></li>
+<li><a href="http://www.imyukin.com/?p=277" target="_blank" rel="external">Android上dip、dp、px、sp等单位说明</a></li>
+<li><a href="https://zh.wikipedia.org/wiki/%E6%AF%8F%E8%8B%B1%E5%AF%B8%E5%83%8F%E7%B4%A0" target="_blank" rel="external">每英寸像素</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/android/" rel="tag">#android</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/05/Linux-帮助手册-man-info-doc/" rel="next" title="Linux 帮助手册(man/info/doc)">
+                <i class="fa fa-chevron-left"></i> Linux 帮助手册(man/info/doc)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/05/Linux-文件权限与目录配置/" rel="prev" title="Linux 文件权限与目录配置">
+                Linux 文件权限与目录配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/05/Android-像素单位说明-dp-px-sp/"
+           data-title="Android 像素单位说明(dp/px/sp)" data-url="http://yoursite.com/2016/09/05/Android-像素单位说明-dp-px-sp/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#px"><span class="nav-number">1.</span> <span class="nav-text">px</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#sp"><span class="nav-number">2.</span> <span class="nav-text">sp</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dp-dip"><span class="nav-number">3.</span> <span class="nav-text">dp(dip)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

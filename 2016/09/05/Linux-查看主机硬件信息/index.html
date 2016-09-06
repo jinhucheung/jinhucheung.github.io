@@ -347,46 +347,68 @@
       
 
       
-        <p>最近在学习Linux,看的资料是鸟哥的.书上有道习题是查看自己主机的硬件信息,现在在这里总结下.<br><a id="more"></a></p>
+        <p>最近在学习Linux,看的资料是鸟哥的.书上有道习题是查看自己主机的硬件信息,现在在这里总结下.
+<a id="more"></a></p>
 <h3 id="查看CPU的厂商-型号-最高频率"><a href="#查看CPU的厂商-型号-最高频率" class="headerlink" title="查看CPU的厂商/型号/最高频率"></a>查看CPU的厂商/型号/最高频率</h3><ul>
-<li>查看CPU信息  使用命令   <code>cat  /proc/cpuinfo</code><br>MyCpu 厂商:Intel  型号:Celeron 1017U 最高频率:1.60GHz(准确的是1587.625MHz)<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_1.png?raw=true" alt=""></li>
+<li>查看CPU信息  使用命令   <code>cat  /proc/cpuinfo</code><br>MyCpu 厂商:Intel  型号:Celeron 1017U 最高频率:1.60GHz(准确的是1587.625MHz)
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_1.png?raw=true" alt=""></li>
 </ul>
 <h3 id="查看内存的容量-接口-DDR-DDRII等"><a href="#查看内存的容量-接口-DDR-DDRII等" class="headerlink" title="查看内存的容量/接口(DDR/DDRII等)"></a>查看内存的容量/接口(DDR/DDRII等)</h3><ul>
-<li><p>查看内存容量   使用命令   <code>cat  /proc/meminfo</code><br>My 内存总容量:5.79GB(6075060KB)<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_2.png?raw=true" alt=""></p>
+<li><p>查看内存容量   使用命令   <code>cat  /proc/meminfo</code>
+My 内存总容量:5.79GB(6075060KB)
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_2.png?raw=true" alt=""></p>
 </li>
-<li><p>查看内存接口   使用命令   <code>dmidecode | grep -A16 &quot;Memory Device$&quot;</code><br>My 内存接口:DDR3<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_3.png?raw=true" alt=""></p>
+<li><p>查看内存接口   使用命令   <code>dmidecode | grep -A16 &quot;Memory Device$&quot;</code>
+My 内存接口:DDR3
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_3.png?raw=true" alt=""></p>
 </li>
 </ul>
 <h3 id="查看显卡的接口-AGP-PCIe内置-与容量"><a href="#查看显卡的接口-AGP-PCIe内置-与容量" class="headerlink" title="查看显卡的接口(AGP/PCIe内置)与容量"></a>查看显卡的接口(AGP/PCIe内置)与容量</h3><ul>
-<li><p>查看显卡型号  使用命令   <code>lshw -C display</code><br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_4.png?raw=true" alt=""></p>
+<li><p>查看显卡型号  使用命令   <code>lshw -C display</code>
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_4.png?raw=true" alt=""></p>
 </li>
-<li><p>查看显存     使用命令   <code>lspci -vnn | grep VGA -A 12</code><br>观察memory at d0000000<br>My 显存:256MB<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_5.png?raw=true" alt=""></p>
+<li><p>查看显存     使用命令   <code>lspci -vnn | grep VGA -A 12</code>
+观察memory at d0000000
+My 显存:256MB
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_5.png?raw=true" alt=""></p>
 </li>
 </ul>
 <h3 id="查看主板的型号-南北桥的芯片型号-BIOS的版本-网卡声卡的型号"><a href="#查看主板的型号-南北桥的芯片型号-BIOS的版本-网卡声卡的型号" class="headerlink" title="查看主板的型号/南北桥的芯片型号/BIOS的版本/网卡声卡的型号"></a>查看主板的型号/南北桥的芯片型号/BIOS的版本/网卡声卡的型号</h3><ul>
-<li><p>查看主板型号  使用命令 <code>dmidecode | grep -A16 &quot;System Information$&quot;</code><br>My 主板型号 03N858<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_6.png?raw=true" alt=""></p>
+<li><p>查看主板型号  使用命令 <code>dmidecode | grep -A16 &quot;System Information$&quot;</code>
+My 主板型号 03N858
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_6.png?raw=true" alt=""></p>
 </li>
 <li><p>查看南北桥芯片型号</p>
 <ul>
-<li>北桥芯片型号  使用命令  <code>dmesg | grep Chipset</code><br>My 北桥芯片型号 GF117<br><code>[   15.436587] nouveau  [  DEVICE][0000:02:00.0] Chipset: GF117 (NVD7)</code></li>
+<li>北桥芯片型号  使用命令  <code>dmesg | grep Chipset</code><br>My 北桥芯片型号 GF117
+<code>[   15.436587] nouveau  [  DEVICE][0000:02:00.0] Chipset: GF117 (NVD7)</code></li>
 <li>南桥芯片型号  没有查到</li>
 </ul>
 </li>
 </ul>
 <ul>
-<li><p>查看BIOS版本   使用命令 <code>dmidecode --type Bios</code><br>My BIOS版本: A05</p>
+<li><p>查看BIOS版本   使用命令 <code>dmidecode --type Bios</code>
+My BIOS版本: A05</p>
 </li>
-<li><p>查看声卡  使用命令 <code>lspci |grep -i audio</code><br>My 声卡: Inter 7 Series /C210</p>
+<li><p>查看声卡  使用命令 <code>lspci |grep -i audio</code>
+My 声卡: Inter 7 Series /C210</p>
 </li>
-<li><p>查看网卡  使用命令  <code>lspci | grep - i eth</code><br>My 网卡:Realtek RTL8101/2/6E</p>
+<li><p>查看网卡  使用命令  <code>lspci | grep - i eth</code>
+My 网卡:Realtek RTL8101/2/6E</p>
 </li>
 </ul>
 <h3 id="查看硬盘的连接接口-IDE-SATA等-硬盘容量-转速-缓冲存储器容量等"><a href="#查看硬盘的连接接口-IDE-SATA等-硬盘容量-转速-缓冲存储器容量等" class="headerlink" title="查看硬盘的连接接口(IDE/SATA等)/硬盘容量/转速/缓冲存储器容量等"></a>查看硬盘的连接接口(IDE/SATA等)/硬盘容量/转速/缓冲存储器容量等</h3><ul>
-<li><p>查看硬盘的连接接口 使用命令 <code>lspci | grep 00:1f.2</code><br>My的硬盘连接接口:SATA<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_8.png?raw=true" alt=""></p>
+<li><p>查看硬盘的连接接口 使用命令 <code>lspci | grep 00:1f.2</code>
+My的硬盘连接接口:SATA
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_8.png?raw=true" alt=""></p>
 </li>
-<li><p>查看硬盘容量 使用命令 <code>lsblk</code><br>My硬盘容量:465.8G<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_9.png?raw=true" alt=""></p>
+<li><p>查看硬盘容量 使用命令 <code>lsblk</code> 
+My硬盘容量:465.8G
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_9.png?raw=true" alt=""></p>
 </li>
-<li><p>查看硬盘转速 使用命令 <code>hdparm -I /dev/sda</code>  观察Nominal Media Rotation Rate行<br>My硬盘转速:5400<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_10.png?raw=true" alt=""></p>
+<li><p>查看硬盘转速 使用命令 <code>hdparm -I /dev/sda</code>  观察Nominal Media Rotation Rate行
+My硬盘转速:5400
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_6_10.png?raw=true" alt=""></p>
 </li>
 <li>查看缓冲存储器容量  没有找到命令</li>
 </ul>
@@ -503,7 +525,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

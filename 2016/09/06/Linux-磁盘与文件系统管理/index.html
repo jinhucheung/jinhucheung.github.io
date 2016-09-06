@@ -1,0 +1,1154 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Linux的文件系统与VFS Linux支持的文件系统
+目前Linux的标准文件系统是ext4,它支持1EB(=1024^6B)的最大分区以及16TB的最大文件系统容量,向下兼容ext3(增加日志功能),ext2.
+Linux常见的支持文件系统有:
+传统文件系统:ext2/minix/MS-DOS/FAT(Windows使用)/iso9660(光盘)等
+日志文件系统:ext3/ext4/Reis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 磁盘与文件系统管理">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-磁盘与文件系统管理/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="Linux的文件系统与VFS Linux支持的文件系统
+目前Linux的标准文件系统是ext4,它支持1EB(=1024^6B)的最大分区以及16TB的最大文件系统容量,向下兼容ext3(增加日志功能),ext2.
+Linux常见的支持文件系统有:
+传统文件系统:ext2/minix/MS-DOS/FAT(Windows使用)/iso9660(光盘)等
+日志文件系统:ext3/ext4/Reis">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_18_1.gif?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_18_2.jpg?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_18_3.jpg?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_18_4.gif?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_18_5.gif?raw=true">
+<meta property="og:updated_time" content="2016-09-06T05:11:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 磁盘与文件系统管理">
+<meta name="twitter:description" content="Linux的文件系统与VFS Linux支持的文件系统
+目前Linux的标准文件系统是ext4,它支持1EB(=1024^6B)的最大分区以及16TB的最大文件系统容量,向下兼容ext3(增加日志功能),ext2.
+Linux常见的支持文件系统有:
+传统文件系统:ext2/minix/MS-DOS/FAT(Windows使用)/iso9660(光盘)等
+日志文件系统:ext3/ext4/Reis">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_18_1.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-磁盘与文件系统管理/"/>
+
+  <title> Linux 磁盘与文件系统管理 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 磁盘与文件系统管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T13:03:56+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-磁盘与文件系统管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-磁盘与文件系统管理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Linux的文件系统与VFS"><a href="#Linux的文件系统与VFS" class="headerlink" title=" Linux的文件系统与VFS"></a><a name="ch1"> Linux的文件系统与VFS</a></h2><h3 id="Linux支持的文件系统"><a href="#Linux支持的文件系统" class="headerlink" title=" Linux支持的文件系统"></a><a name="ch1.1"> Linux支持的文件系统</a></h3><ul>
+<li>目前Linux的标准文件系统是ext4,它支持1EB(=1024^6B)的最大分区以及16TB的最大文件系统容量,向下兼容ext3(增加日志功能),ext2.</li>
+<li>Linux常见的支持文件系统有:<ul>
+<li>传统文件系统:ext2/minix/MS-DOS/FAT(Windows使用)/iso9660(光盘)等</li>
+<li>日志文件系统:ext3/ext4/ReiserFS/Windows’NTFS/IBM’s JFS/SGI’s XFS</li>
+<li>网络文件系统:NFS/SMBFS</li>
+</ul>
+</li>
+<li>查看自己的Linux系统支持的文件系统以及目前已加载到内存中的文件系统       <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">ls <span class="_">-l</span> /lib/modules/$(uname -r)/kernel/fs</div><div class="line"><span class="comment">#查看系统支持的文件系统</span></div><div class="line"><span class="comment">#$(uname -r):查看系统的内核版本号</span></div><div class="line"></div><div class="line">cat /proc/filesystems </div><div class="line"><span class="comment">#查看目前已加载到内存中的文件系统</span></div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="Linux-VFS"><a href="#Linux-VFS" class="headerlink" title=" Linux VFS"></a><a name="ch1.2"> Linux VFS</a></h3><p>虚拟文件系统(Virtual FileSystem Switch,VFS),管理Liunx所支持的各种文件系统,对上提供给系统调用封装好的接口,对下调用各文件系统模块.整个VFS缩略图如下:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_18_1.gif?raw=true" alt=""></p>
+<h3 id="Linux的Ext2文件系统"><a href="#Linux的Ext2文件系统" class="headerlink" title="  Linux的Ext2文件系统"></a><a name="ch1.3">  Linux的Ext2文件系统</a></h3><ul>
+<li>Ext2文件系统<ul>
+<li>将文件的属性(权限,所有者等)以及文件实际数据存放在不同的块中</li>
+<li>文件属性存放在inode中,一个文件对应一个inode,并记录此文件数据所用的block块号</li>
+<li>实际数据存放在block块中,一个文件可以有多个block,一个block块只能放一个文件的数据</li>
+<li>此外用superblock块来记录整个文件系统的整体信息(如inode,block总量,使用量,剩余量等,<b>这些信息在格式化时就规划好</b>)</li>
+<li>其是索引式文件系统,通过先访问文件的inode节点,再一次性从其所指的block中取出数据</li>
+<li>而FAT文件系统没有inode存在,每个block都记录着其下一个block号码,需依次访问block</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>Ext2文件系统示意图<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_18_2.jpg?raw=true" alt=""></li>
+</ul>
+<p><br></p>
+<ul>
+<li>块组(block group)  <br> Ext2文件系统格式化时规划好多个块组,每个块组都有独立的superblock/block/inode系统,这样便于管理</li>
+</ul>
+<p><br></p>
+<ul>
+<li>超级块(superblock)<ul>
+<li>superblock记录整个文件系统相关信息,没有superblock就没有文件系统,记录的信息:<ul>
+<li>block与inode的总量与使用情况</li>
+<li>block与inode的大小</li>
+<li>文件系统的挂载时间/最近写入数据时间等</li>
+<li>除了第一个block group含superblock外,其他的block group可以不含</li>
+<li>superblock大小为1024bytes</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>超级块与启动扇区(boot sector)<ul>
+<li>superblock与boot sector都是占1024bytes</li>
+<li>boot sector后存放superblock的信息</li>
+<li>如果一个block块&gt; bytes(2k,4k)时,文件系统第一个block块存放boot sector与superblock,否则分两个block来存放</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>文件系统描述说明<ul>
+<li>描述每个block group开始与结束的block号</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>块对应表(block bitmap)与inode对应表(inode bitmap)<ul>
+<li>使用位示图记录block与inode的使用情况</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>数据块(data block)<ul>
+<li>Ext2所支持block大小有1KB,2KB,4KB,其对应的最大单一文件容量与最大文件系统容量都不同</li>
+<li>block大小与数量在格式化完就不能够再改变(除非重新格式化)</li>
+<li>每个block内最多只能够放置<b>一个文件</b>的数据</li>
+<li>如果一个block不足以容纳一个文件,会使用多个block</li>
+<li>如文件小于block大小,则此block剩下空间不再使用(硬盘空间浪费)</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>inode table<ul>
+<li>inode记录了文件属性及权限</li>
+<li>每个inode固定大小128bytes</li>
+<li>每个文件仅会使用一个inode</li>
+<li>文件系统能创建的文件数量与inode数量有关(在格式化时已规划好inode数量)</li>
+<li>系统读取文件时需要先查找indoe,并分析inode所记录的权限是否跟用户符合,满足才会去读取block的内容</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>数据存放区与中间数据(metadata)<ul>
+<li>数据存放区:inode table与data block</li>
+<li>中间数据:super block,block bitmap,inode bitmap</li>
+<li>中间数据经常变动</li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>inode怎么记录block号?<br>inode记录一个block号码用4bytes,为了让一个inode能记录下更多的block号,其记录block的区域分为12个直接连接,1个间接连接,1个双间接连接,1个三间接连接,inode结构图如下:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_18_3.jpg?raw=true" alt=""></li>
+</ul>
+<p><br></p>
+<ul>
+<li>inode能记录下多少个block,1KB的block最大单一文件容量?<ul>
+<li>12个直接连接:12个block</li>
+<li>1个间接连接:以1KB的block为例,其能存放256个block(1KB/4B)</li>
+<li>1个双间接连接:256x256个block</li>
+<li>1个三间接连接:256^3个block</li>
+<li>1KB的block,一个inode能记录的block号数n=12+256+256^2+256^3,最大单一文件容量=nx1KB</li>
+</ul>
+</li>
+</ul>
+<h3 id="Ext2文件系统与目录树的关系"><a href="#Ext2文件系统与目录树的关系" class="headerlink" title=" Ext2文件系统与目录树的关系"></a><a name="ch1.4"> Ext2文件系统与目录树的关系</a></h3><ul>
+<li>目录<ul>
+<li>Ext2会分配一个inode与至少一块的block记录目录</li>
+<li>inode记录目录的相关属性与权限,还有对应的block号码</li>
+<li>block记录目录下的子文件的文件名与其inode号码</li>
+</ul>
+</li>
+<li>文件<ul>
+<li>Ext2会分配一个inode与相对该文件大小的block数量</li>
+<li>inode记录文件属性与权限,和对应的block号码</li>
+<li>block记录文件的实际数据</li>
+</ul>
+</li>
+<li>系统读取某文件数据的流程<ul>
+<li>例子:读取/etc/passwd中数据<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">kumho@kumho-Inspiron-3421:~$ ls -dil / /etc /etc/passwd</div><div class="line">     2 drwxr-xr-x  22 root root  4096  7月 18 16:49 /</div><div class="line">784897 drwxr-xr-x 135 root root 12288  7月 24 17:16 /etc</div><div class="line">812534 -rw-r--r--   1 root root  1899  7月 18 21:50 /etc/passwd</div><div class="line"></div></pre></td></tr></table></figure></li>
+</ul>
+<ol>
+<li>/的inode<br>通过挂载点信息找到inode为2的根目录inode,判断用户是否具有x,r权限,有则读取/的block</li>
+<li>/的block<br>上步骤取得block号码,并找到/etc的inode号码(784897)</li>
+<li>/etc的inode<br>访问/etc的inode,判断用户是否具有需要的权限,有则读取/etc的block</li>
+<li>/etc的block<br>找到./passwd的inode(812534)</li>
+<li>/etc/passwd的inode<br>访问/etc/passwd的inode,判断用户是否具有需要的权限,有则获取其block号</li>
+<li>/etc/passwd的block<br>从block中读取数据</li>
+</ol>
+</li>
+</ul>
+<h3 id="日志文件系统"><a href="#日志文件系统" class="headerlink" title=" 日志文件系统"></a><a name="ch1.5"> 日志文件系统</a></h3><p>日志文件系统保护了数据的完整,避免不当的操作或突发情况造成数据的损坏,可以<b>恢复数据</b></p>
+<p>写入/修改文件时的流程:</p>
+<ul>
+<li>预备: 系统会在日志记录区记录某个文件准备要写入的信息</li>
+<li>写入阶段:写入文件数据与属性,更新中间数据(inode bitmap,block bitmap,superblock等)</li>
+<li>结束:在日志记录区标志此文件写入结束(如果没有此标志,数据就不完整,需要进行恢复)</li>
+</ul>
+<h3 id="文件系统与内存"><a href="#文件系统与内存" class="headerlink" title=" 文件系统与内存"></a><a name="ch1.6"> 文件系统与内存</a></h3><p>Linux为了解决文件频繁写入硬盘中,效率慢,采用异步处理,将数据先加载至内存中,内存中的某块数据被用户修改后,会设置Dirty标志,系统会不定时将带Dirty标志的数据写回硬盘,用户可以用<code>sync</code>将内存中的数据写回硬盘(关机时,系统会自动调用sync)</p>
+<h3 id="挂载点"><a href="#挂载点" class="headerlink" title=" 挂载点"></a><a name="ch1.7"> 挂载点</a></h3><p>一个文件系统的最顶层目录是挂载点,可以知道挂载点一定是目录,其inode编号通常为2.
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># mount /dev/sda12 /mnt/usr</span></div><div class="line"><span class="comment"># ls -dil /mnt/usr /</span></div><div class="line">2 drwxr-xr-x 22 root root 4096  7月 18 16:49 /</div><div class="line">2 drwxr-xr-x  3 root root 1024  7月 24 20:56 /mnt/usr</div></pre></td></tr></table></figure>
+通常我们判断是否为同一个文件是查看其inode编号</p>
+<h2 id="连接文件-ln"><a href="#连接文件-ln" class="headerlink" title=" 连接文件:ln"></a><a name="ch2"> 连接文件:ln</a></h2><p>Linux连接文件有两种,一种是硬连接(hard link),一种是类似Windows的快捷方式,称为符号连接(symbolil link),两种都使用命令<code>ln</code>来实现</p>
+<p><br></p>
+<ul>
+<li>硬连接<ul>
+<li>使用命令 <code>ln 源文件名 连接文件名</code></li>
+<li>硬连接只是在某个目录下新建一个文件名到某inode号的关联记录,不产生实际文件</li>
+<li>当我们查看源文件与硬连接文件的inode,它们是一样的</li>
+<li>被硬连接的inode节点,其连接数会+1</li>
+<li>硬连接不能跨文件系统</li>
+<li>硬连接不能连接目录<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_18_4.gif?raw=true" alt=""></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>符号连接<ul>
+<li>使用命令 <code>ln -s 源文件名 连接文件名</code></li>
+<li>创建一个独立的文件,这文件的数据读取会指向其连接那个文件的文件名</li>
+<li>符号连接产生的文件,其容量就是被连接文件的文件名的字符数
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_18_5.gif?raw=true" alt=""></li>
+</ul>
+</li>
+</ul>
+<p><br></p>
+<ul>
+<li>关于删除文件的疑问?<ul>
+<li>我们将源文件删除,硬连接仍可以读取到数据(因为指向的是inode),符号连接则不能读取数据(因为指向的是文件名)</li>
+<li>那么删除文件只是将目录下其关联记录删除吗?(我倾向Yes)</li>
+<li>那么能指定inode编号给某文件吗?(比如我将文件删除后,我知道其inode,是否可以恢复)</li>
+<li>还是说系统只会将连接数为0的inode节点对应的数据清除掉</li>
+</ul>
+</li>
+</ul>
+<h2 id="查看文件系统及硬盘状况"><a href="#查看文件系统及硬盘状况" class="headerlink" title=" 查看文件系统及硬盘状况"></a><a name="ch3"> 查看文件系统及硬盘状况</a></h2><h3 id="查看某文件系统的超级块"><a href="#查看某文件系统的超级块" class="headerlink" title=" 查看某文件系统的超级块"></a><a name="ch3.1"> 查看某文件系统的超级块</a></h3><ul>
+<li>使用命令<code>dumpe2fs [-bh] 设备文件名</code><ul>
+<li><code>h</code> 仅列出超级块信息(缺省)</li>
+</ul>
+</li>
+</ul>
+<h3 id="查看系统内的文件系统-当前系统挂载情况"><a href="#查看系统内的文件系统-当前系统挂载情况" class="headerlink" title=" 查看系统内的文件系统(当前系统挂载情况)"></a><a name="ch3.2"> 查看系统内的文件系统(当前系统挂载情况)</a></h3><ul>
+<li>使用命令<code>df [-ahikHTml] [目录或文件名]</code> 或使用<code>mount -l</code><ul>
+<li><code>a</code>:列出所有文件系统hl</li>
+<li><code>h</code>:以GB/MB/KB等格式显示文件系统容量</li>
+<li><code>i</code>:不用硬盘容量,而以inode数量来显示</li>
+<li><code>l</code>:显示本地的所有文件系统</li>
+<li>如果带目录/文件参数,则列出其所在文件系统的情况</li>
+<li>比较常用<code>df -hl</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="查看某文件的容量"><a href="#查看某文件的容量" class="headerlink" title=" 查看某文件的容量"></a><a name="ch3.3"> 查看某文件的容量</a></h3><ul>
+<li>使用命令<code>du [-ahskm] 目录/文件名</code><ul>
+<li><code>s</code>:列出总量,不细致列出子文件的各占用容量</li>
+<li><code>h</code>:以GB/MB/KB等格式显示文件容量</li>
+<li><code>m</code>:以MB列出容量显示</li>
+</ul>
+</li>
+</ul>
+<h3 id="查看硬盘分区情况"><a href="#查看硬盘分区情况" class="headerlink" title=" 查看硬盘分区情况"></a><a name="ch3.4"> 查看硬盘分区情况</a></h3><ul>
+<li>使用命令<code>fdisk -l</code>列出当前硬盘的所有分区</li>
+<li><code>fdisk</code>也是我们创建/删除分区的命令</li>
+</ul>
+<h3 id="查看硬盘某分区的UUID"><a href="#查看硬盘某分区的UUID" class="headerlink" title=" 查看硬盘某分区的UUID"></a><a name="ch3.5"> 查看硬盘某分区的UUID</a></h3><ul>
+<li>使用命令 <code>blkid 设备文件名</code></li>
+</ul>
+<h2 id="硬盘的分区-格式化-检验与挂载"><a href="#硬盘的分区-格式化-检验与挂载" class="headerlink" title=" 硬盘的分区/格式化/检验与挂载"></a><a name="ch4"> 硬盘的分区/格式化/检验与挂载</a></h2><h3 id="硬盘的分区"><a href="#硬盘的分区" class="headerlink" title=" 硬盘的分区"></a><a name="ch4.1"> 硬盘的分区</a></h3><p>使用命令<code>fdisk 文件设备名</code> 比如<code>fdisk /dev/sda</code> 注意<code>/dev/sda</code>代表整块硬盘,不能使用<code>/dev/sda1</code>某分区</p>
+<p>使用命令后进入<code>fdisk</code>程序区,相关的子命令:</p>
+<ul>
+<li><code>n</code> 增加分区</li>
+<li><code>d</code> 删除分区</li>
+<li><code>p</code> 打印分区表</li>
+<li><code>q</code> 不执行前面操作后退出</li>
+<li><code>w</code> 执行前面的操作后退出</li>
+</ul>
+<p>当我们新建完分区后,系统提示我们重启,让内核能重新查找分区表</p>
+<p>当然我们可以用<code>partprobe</code>强制让内核查找分区表<strike>(我自己试着不行,格式化还是找不到分区),或者使用<code>mount -o remount,rw,auto /</code>强制让根目录重新挂载</strike></p>
+<h3 id="文件系统格式化"><a href="#文件系统格式化" class="headerlink" title=" 文件系统格式化"></a><a name="ch4.2"> 文件系统格式化</a></h3><p>对某分区进行格式化,主要是将文件系统的相关信息写入到分区中(不写入这些信息,系统怎么知道你这块分区是什么类型的文件系统呢)</p>
+<p>使用命令<code>mkfs [-t 文件系统格式] 设备文件名</code></p>
+<p>如果想知道<code>mkfs</code>支持哪些文件系统的格式化,可以<code>mkfs[TAB][TAB]</code></p>
+<h3 id="硬盘检验"><a href="#硬盘检验" class="headerlink" title=" 硬盘检验"></a><a name="ch4.3"> 硬盘检验</a></h3><ul>
+<li><code>fsck</code> : 检验文件系统是否出错<ul>
+<li>格式: <code>fsck [-t 文件系统] [-Aayc] 设备名称</code></li>
+<li>常用参数:<ul>
+<li><code>a</code>:自动修复检查到的有问题扇区</li>
+<li><code>y</code>:与<code>a</code>类似,某些文件系统仅支持<code>y</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>badblocks</code> : 检验硬盘扇区坏轨命令</li>
+</ul>
+<h3 id="硬盘挂载与卸载"><a href="#硬盘挂载与卸载" class="headerlink" title=" 硬盘挂载与卸载"></a><a name="ch4.4"> 硬盘挂载与卸载</a></h3><ul>
+<li>硬盘挂载需注意的地方:<ul>
+<li>挂载点应是空目录(首先是目录,而且空,如果不为空,挂载点目录原数据会暂时隐藏,卸载后出现)</li>
+<li>单一文件系统不应该挂载到不同目录</li>
+<li>单一目录不应该挂载多个文件系统</li>
+<li>设备需要卸载后,才能退出</li>
+<li>使用命令:
+<code>mount [-t 文件系统] [-L label名] [-o 额外选项] 设备文件名 挂载点</code></li>
+<li>通常<code>mount /dev/sda6 /mnt/usr</code>这个格式就行        </li>
+</ul>
+</li>
+<li>硬盘卸载<ul>
+<li>命令:<code>umount [-fn] 设备文件名/挂载点</code> <code>f</code>强制卸载       </li>
+</ul>
+</li>
+<li>重新挂载根目录<ul>
+<li>命令:<code>mount -o remount,rw,auto /</code></li>
+</ul>
+</li>
+<li>挂载目录到另一个目录(做目录的硬连接)<ul>
+<li>命令:<code>mount --bind /dir1 /dir2</code> <code>dir1</code>与<code>dir2</code>的inode相同</li>
+</ul>
+</li>
+</ul>
+<h3 id="硬盘参数修改"><a href="#硬盘参数修改" class="headerlink" title=" 硬盘参数修改"></a><a name="ch4.5"> 硬盘参数修改</a></h3><ul>
+<li><code>mknod</code>  设置不同类型设备文件<ul>
+<li>格式 <code>mknod 设备文件名 [bcp] [Major] [Minor]</code></li>
+<li>参数:<ul>
+<li><code>b</code> 设置设备文件为一个外部存储文件,如硬盘等</li>
+<li><code>c</code> 设置设备文件为一个外部输入文件,如鼠标/键盘等</li>
+<li><code>p</code> 设置设备文件为管道</li>
+<li><code>Major</code> 主设备代码</li>
+<li><code>Minor</code> 次设备代码</li>
+<li>主设备与次设备代码决定一个设备文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>e2label</code>  设置设备文件的卷标名<ul>
+<li>格式: <code>e2label 设备文件名 卷标名</code></li>
+</ul>
+</li>
+<li><code>hdparm</code> 测试性能<ul>
+<li>使用命令<code>hdparm -Tt 设备文件</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="开机挂载"><a href="#开机挂载" class="headerlink" title=" 开机挂载"></a><a name="ch4.6"> 开机挂载</a></h3><p>开机挂载需要将挂载条目添加至<code>/etc/fstab</code>文件中,之后使用<code>mount -a</code>进行测试(按着<code>/etc/fstab</code>重新挂载)</p>
+<h3 id="特殊设备loop挂载"><a href="#特殊设备loop挂载" class="headerlink" title=" 特殊设备loop挂载"></a><a name="ch4.7"> 特殊设备loop挂载</a></h3><ul>
+<li>挂载镜像文件<br>使用命令:<code>mount -o loop 镜像文件名 挂载点</code><br>挂载好后,就可以直接从挂载点访问到镜像文件中的数据</li>
+<li>使用大容量文件作为分区挂载<ul>
+<li>新建大容量文件(大约等同于新建分区操作)<ul>
+<li>使用命令: <code>dd if=/dev/zero of=文件名 bs=块大小 count=块数量</code></li>
+<li>例如:<code>dd if=/dev/zero of=/home/loopdev bs=1M count=512</code><ul>
+<li><code>if</code> 输入文件,<code>/dev/zero</code>一直输出00</li>
+<li><code>of</code> 输出文件,将数据00写入of中</li>
+<li>文件大小=块大小x块数据,这里=512M</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>格式化文件<ul>
+<li>上例 <code>mount -t ext3 /home/loopdev</code></li>
+</ul>
+</li>
+<li>挂载<ul>
+<li>上例 <code>mount -o loop /home/loopdev 挂载点</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="内存交换空间-Swap-的构建"><a href="#内存交换空间-Swap-的构建" class="headerlink" title=" 内存交换空间(Swap)的构建"></a><a name="ch5"> 内存交换空间(Swap)的构建</a></h2><p>Swap:系统物理内存不足时,将数据移到Swap空间</p>
+<p>Swap构建分以下两种方式</p>
+<ul>
+<li>创建一个分区来构建Swap</li>
+<li>创建一个大容量文件来构建Swap</li>
+</ul>
+<p>构建Swap的步骤:</p>
+<ol>
+<li>创建分区/文件: 创建分区使用<code>fdisk</code>,创建大容量文件使用上节的命令<code>dd if=/dev/zero of=文件名 bs=块大小 count=块数量</code></li>
+<li>格式化 : 使用<code>mkswap 文件名</code></li>
+<li>加载/卸载 : 加载文件使用<code>swapon 文件名</code> 卸载文件使用<code>swapoff 文件名</code></li>
+<li>查看:使用<code>free</code>查看内存使用情况</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Android-UI组件/" rel="next" title="Android UI组件">
+                <i class="fa fa-chevron-left"></i> Android UI组件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-文件与文件系统的压缩与打包/" rel="prev" title="Linux 文件与文件系统的压缩与打包">
+                Linux 文件与文件系统的压缩与打包 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-磁盘与文件系统管理/"
+           data-title="Linux 磁盘与文件系统管理" data-url="http://yoursite.com/2016/09/06/Linux-磁盘与文件系统管理/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux的文件系统与VFS"><span class="nav-number">1.</span> <span class="nav-text"> Linux的文件系统与VFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux支持的文件系统"><span class="nav-number">1.1.</span> <span class="nav-text"> Linux支持的文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux-VFS"><span class="nav-number">1.2.</span> <span class="nav-text"> Linux VFS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux的Ext2文件系统"><span class="nav-number">1.3.</span> <span class="nav-text">  Linux的Ext2文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ext2文件系统与目录树的关系"><span class="nav-number">1.4.</span> <span class="nav-text"> Ext2文件系统与目录树的关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件系统"><span class="nav-number">1.5.</span> <span class="nav-text"> 日志文件系统</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统与内存"><span class="nav-number">1.6.</span> <span class="nav-text"> 文件系统与内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#挂载点"><span class="nav-number">1.7.</span> <span class="nav-text"> 挂载点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接文件-ln"><span class="nav-number">2.</span> <span class="nav-text"> 连接文件:ln</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看文件系统及硬盘状况"><span class="nav-number">3.</span> <span class="nav-text"> 查看文件系统及硬盘状况</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看某文件系统的超级块"><span class="nav-number">3.1.</span> <span class="nav-text"> 查看某文件系统的超级块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统内的文件系统-当前系统挂载情况"><span class="nav-number">3.2.</span> <span class="nav-text"> 查看系统内的文件系统(当前系统挂载情况)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看某文件的容量"><span class="nav-number">3.3.</span> <span class="nav-text"> 查看某文件的容量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看硬盘分区情况"><span class="nav-number">3.4.</span> <span class="nav-text"> 查看硬盘分区情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看硬盘某分区的UUID"><span class="nav-number">3.5.</span> <span class="nav-text"> 查看硬盘某分区的UUID</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#硬盘的分区-格式化-检验与挂载"><span class="nav-number">4.</span> <span class="nav-text"> 硬盘的分区/格式化/检验与挂载</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘的分区"><span class="nav-number">4.1.</span> <span class="nav-text"> 硬盘的分区</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统格式化"><span class="nav-number">4.2.</span> <span class="nav-text"> 文件系统格式化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘检验"><span class="nav-number">4.3.</span> <span class="nav-text"> 硬盘检验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘挂载与卸载"><span class="nav-number">4.4.</span> <span class="nav-text"> 硬盘挂载与卸载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#硬盘参数修改"><span class="nav-number">4.5.</span> <span class="nav-text"> 硬盘参数修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开机挂载"><span class="nav-number">4.6.</span> <span class="nav-text"> 开机挂载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊设备loop挂载"><span class="nav-number">4.7.</span> <span class="nav-text"> 特殊设备loop挂载</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内存交换空间-Swap-的构建"><span class="nav-number">5.</span> <span class="nav-text"> 内存交换空间(Swap)的构建</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

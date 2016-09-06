@@ -1,0 +1,1076 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="日志文件  Linux常见日志文件
+
+
+日志文件
+含义
+
+
+
+
+/var/log/cron
+例行工作日志
+
+
+/var/log/dmesg
+内核检测过程中分析的系统硬件信息
+
+
+/var/log/lastlog
+记录系统上账号最近一次登录的信息
+
+
+/var/log/mailog或/var/log/mail/*
+记录邮件往来信息
+
+
+/var/log/messages
+系统发生的重要信息(比如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 认识与分析日志文件">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-认识与分析日志文件/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="日志文件  Linux常见日志文件
+
+
+日志文件
+含义
+
+
+
+
+/var/log/cron
+例行工作日志
+
+
+/var/log/dmesg
+内核检测过程中分析的系统硬件信息
+
+
+/var/log/lastlog
+记录系统上账号最近一次登录的信息
+
+
+/var/log/mailog或/var/log/mail/*
+记录邮件往来信息
+
+
+/var/log/messages
+系统发生的重要信息(比如">
+<meta property="og:updated_time" content="2016-09-06T13:29:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 认识与分析日志文件">
+<meta name="twitter:description" content="日志文件  Linux常见日志文件
+
+
+日志文件
+含义
+
+
+
+
+/var/log/cron
+例行工作日志
+
+
+/var/log/dmesg
+内核检测过程中分析的系统硬件信息
+
+
+/var/log/lastlog
+记录系统上账号最近一次登录的信息
+
+
+/var/log/mailog或/var/log/mail/*
+记录邮件往来信息
+
+
+/var/log/messages
+系统发生的重要信息(比如">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-认识与分析日志文件/"/>
+
+  <title> Linux 认识与分析日志文件 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 认识与分析日志文件
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:25:32+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-认识与分析日志文件/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-认识与分析日志文件/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="日志文件"><a href="#日志文件" class="headerlink" title="  日志文件"></a><a name="ch1">  日志文件</a></h2><h3 id="Linux常见日志文件"><a href="#Linux常见日志文件" class="headerlink" title="  Linux常见日志文件"></a><a name="ch1.1">  Linux常见日志文件</a></h3><table>
+<thead>
+<tr>
+<th style="text-align:center">日志文件</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">/var/log/cron</td>
+<td style="text-align:center">例行工作日志</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/dmesg</td>
+<td style="text-align:center">内核检测过程中分析的系统硬件信息</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/lastlog</td>
+<td style="text-align:center">记录系统上账号最近一次登录的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/mailog或/var/log/mail/*</td>
+<td style="text-align:center">记录邮件往来信息</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/messages</td>
+<td style="text-align:center">系统发生的重要信息(比如错误信息)</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/secure</td>
+<td style="text-align:center">记录涉及到输入用户账号密码时的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/wtmp,/var/log/failog</td>
+<td style="text-align:center">记录正确登录的用户信息,记录错误登录的用户信息</td>
+</tr>
+<tr>
+<td style="text-align:center">/var/log/httpd/<em>,/var/log/news/</em>,/var/log/samba/*…</td>
+<td style="text-align:center">个别服务制定的日志文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="日志文件管理所需服务"><a href="#日志文件管理所需服务" class="headerlink" title="  日志文件管理所需服务"></a><a name="ch1.2">  日志文件管理所需服务</a></h3><p>Linux用于管理日志文件有syslogd/rsyslog,klogd这两个服务与logrotate这个程序</p>
+<ul>
+<li>syslogd/rsyslog: rsyslog已经代替syslogd,其会把系统各种信息分类,放置到相应的日志文件中.</li>
+<li>klogd: 记录内核产生的各项信息</li>
+<li>logrotate:日志文件的轮替,由于时间久了,日志文件会越来越大,影响读取,故将旧文件替换</li>
+</ul>
+<h3 id="日志分析工具-logwatch"><a href="#日志分析工具-logwatch" class="headerlink" title="  日志分析工具:logwatch"></a><a name="ch1.3">  日志分析工具:logwatch</a></h3><p>我们除了可以直接去查看各日志文件信息外,也可以使用一些分析工具,比如logwatch,其会分析特定的日志信息.</p>
+<h2 id="rsyslog-记录日志文件服务"><a href="#rsyslog-记录日志文件服务" class="headerlink" title="  rsyslog:记录日志文件服务"></a><a name="ch2">  rsyslog:记录日志文件服务</a></h2><p>rsyslog是常驻内存中的服务,用于记录系统各类信息,并输出到日志文件(或者设备上)</p>
+<h3 id="日志文件一般格式"><a href="#日志文件一般格式" class="headerlink" title="  日志文件一般格式"></a><a name="ch2.1">  日志文件一般格式</a></h3><p>系统产生的信息经由rsyslog记录,会产生下面格式的日志信息.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Aug 17 16:36:09 kumho-Inspiron-3421 postfix/pickup[1524]: 6BCA960072: uid=1000 from=&lt;kumho@kumho-Inspiron-3421&gt;</div></pre></td></tr></table></figure>
+其记录的几个重要数据,时间发生的日期与时间,发生此事件的主机名,启动此事件的服务名称或函数,该信息的实际数据内容</p>
+<h3 id="rsyslog的配置文件"><a href="#rsyslog的配置文件" class="headerlink" title="  rsyslog的配置文件"></a><a name="ch2.2">  rsyslog的配置文件</a></h3><p>rsyslog的配置文件是/etc/rsyslog.conf与/etc/rsyslog.d/<em>,通常/etc/rsyslog.conf负责整体的配置信息,/etc/rsyslog.d/</em>则是负责配置输出的日志信息与日志文件的对应.比如以下是/etc/rsyslog.d/50-default.conf的内容
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">auth,authpriv.*                 /var/log/auth.log</div><div class="line">*.*;auth,authpriv.none          -/var/log/syslog</div><div class="line">cron.*                         /var/log/cron.log</div><div class="line">daemon.*                       -/var/log/daemon.log</div><div class="line">kern.*                          -/var/log/kern.log</div><div class="line">lpr.*                          -/var/log/lpr.log</div><div class="line">mail.*                          -/var/log/mail.log</div><div class="line">mail.err                        /var/log/mail.err</div></pre></td></tr></table></figure>
+其分为日志信息与输出文件两部分</p>
+<h4 id="日志信息分类"><a href="#日志信息分类" class="headerlink" title="日志信息分类"></a><a name="ch2.2.1">日志信息分类</a></h4><p>因为系统产生的信息各式各样,所以对这些信息进行了分类,如下表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">类型名</th>
+<th style="text-align:center">含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">auth(authpriv)</td>
+<td style="text-align:center">主要与认证有关的信息,比如login,su,ssh登录时产生的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">cron</td>
+<td style="text-align:center">例行工作调度cron/at等信息</td>
+</tr>
+<tr>
+<td style="text-align:center">daemon</td>
+<td style="text-align:center">与各个daemon有关的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">kern</td>
+<td style="text-align:center">内核产生的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">lpr</td>
+<td style="text-align:center">打印相关的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">mail</td>
+<td style="text-align:center">邮件相关的信息记录</td>
+</tr>
+<tr>
+<td style="text-align:center">news</td>
+<td style="text-align:center">新闻组信息</td>
+</tr>
+<tr>
+<td style="text-align:center">syslog</td>
+<td style="text-align:center">就是syslog/rsyslog本身产生的信息</td>
+</tr>
+<tr>
+<td style="text-align:center">user,uucp,local0~local7</td>
+<td style="text-align:center">与机器相关的一些信息</td>
+</tr>
+</tbody>
+</table>
+<h4 id="日志信息等级及连接符"><a href="#日志信息等级及连接符" class="headerlink" title=" 日志信息等级及连接符"></a><a name="ch2.2.2"> 日志信息等级及连接符</a></h4><p>日志信息等级用来描述事情的情况,如下表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">等级</th>
+<th style="text-align:center">名称</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">none</td>
+<td style="text-align:center">不输出任何信息</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">debug</td>
+<td style="text-align:center">调试信息</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">info</td>
+<td style="text-align:center">基本信息说明</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">notice</td>
+<td style="text-align:center">注意事项说明</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">waring(warn)</td>
+<td style="text-align:center">警告信息,但不影响运行</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">err(error)</td>
+<td style="text-align:center">错误信息,已造成不能运行</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">crit</td>
+<td style="text-align:center">比err严重,到临界点了</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">alert</td>
+<td style="text-align:center">比crit还严重</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">emerg(panic)</td>
+<td style="text-align:center">通常是硬件出错,内核已经无法运行的程度</td>
+</tr>
+</tbody>
+</table>
+<p>等级连接符是为了方便我们书写配置文件,产生的。有以下：</p>
+<ul>
+<li><code>.</code> 表示大于等于后接等级的日志信息都会记录<ul>
+<li><code>.*</code> 任意等级</li>
+</ul>
+</li>
+<li><code>.=</code> 表示只有等于后接等级的日志信息才记录</li>
+<li><code>!=</code> 表示不等于后接等级的日志信息都会记录</li>
+</ul>
+<h4 id="输出日志文件或设备或主机"><a href="#输出日志文件或设备或主机" class="headerlink" title=" 输出日志文件或设备或主机"></a><a name="ch2.2.3"> 输出日志文件或设备或主机</a></h4><p>我们需要在配置文件中指定日志输出的地方,其可以是如下:</p>
+<ul>
+<li>一般文件: 以绝对路径书写</li>
+<li>设备文件: 比如打印机(/dev/lp0)等</li>
+<li>用户名称: 显示给用户</li>
+<li>远程主机: @对方IP或@域名,需要对方也支持rsyslog服务</li>
+<li><ul>
+<li>: 当前系统在线的用户(相当于wall)</li>
+</ul>
+</li>
+</ul>
+<p>当输出文件前有<code>-</code>,表示日志信息先存在内存中,等数据量大才写入硬盘中.</p>
+<h3 id="自定义日志文件"><a href="#自定义日志文件" class="headerlink" title="  自定义日志文件"></a><a name="ch2.3">  自定义日志文件</a></h3><p>我们只有在/etc/rsyslog.d/下新建相对的配置文件,配置文件格式如上说明,在重启rsyslog服务即可.(我在测试时,发觉输出日志文件定义在用户目录下没有输出日志信息,写在/var/log/下就有,很奇怪)</p>
+<h2 id="logrotate-日志文件轮替"><a href="#logrotate-日志文件轮替" class="headerlink" title="  logrotate:日志文件轮替"></a><a name="ch3">  logrotate:日志文件轮替</a></h2><p>前面我们提到logrotate是进行日志文件轮替的一个程序,其挂在crond服务下.例行检测日志文件是否需要替换,其主要工作是新建一个新文件记录之后的日志信息,之前的日志文件改名(<em>.1/</em>.2/*.3等),当备份的日志文件一定量后,就会将最旧的文件删除</p>
+<p>我们可以用<code>logrotate -vf logroate的配置文件</code>进行强制的轮替工作</p>
+<h3 id="logrotate的配置文件"><a href="#logrotate的配置文件" class="headerlink" title="  logrotate的配置文件"></a><a name="ch3.1">  logrotate的配置文件</a></h3><p>logrotate针对日志文件(即前一节提到日志输出文件)进行轮替,所以其配置文件作用对象也是日志文件</p>
+<p>logrotate的配置文件有/etc/logrotate.conf与/etc/logrotate.d/*
+这两个文件的格式类型,如下
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">日志文件的绝对路径名&#123;</div><div class="line">      参数设置</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+相关参数说明可以<code>man logrotate.conf</code>,注意logrotate配置文件可以写入shell命令,使用特殊参数,如下
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">sharedscripts</div><div class="line">    prerotate</div><div class="line">       /usr/bin/chattr -a /var/log/message</div><div class="line">endscript</div><div class="line"></div><div class="line">sharedscripts</div><div class="line">    postrotate</div><div class="line">       /usr/bin/chattr +a /var/log/message</div><div class="line">endscript</div></pre></td></tr></table></figure>
+上面的配置文件的意思是在进行轮替工作前,将/var/log/message的a权限去掉,轮替后,再加上a权限</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-认识系统服务-daemon/" rel="next" title="Linux 认识系统服务(daemon)">
+                <i class="fa fa-chevron-left"></i> Linux 认识系统服务(daemon)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-系统启动/" rel="prev" title="Linux 系统启动">
+                Linux 系统启动 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-认识与分析日志文件/"
+           data-title="Linux 认识与分析日志文件" data-url="http://yoursite.com/2016/09/06/Linux-认识与分析日志文件/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#日志文件"><span class="nav-number">1.</span> <span class="nav-text">  日志文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux常见日志文件"><span class="nav-number">1.1.</span> <span class="nav-text">  Linux常见日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件管理所需服务"><span class="nav-number">1.2.</span> <span class="nav-text">  日志文件管理所需服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志分析工具-logwatch"><span class="nav-number">1.3.</span> <span class="nav-text">  日志分析工具:logwatch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#rsyslog-记录日志文件服务"><span class="nav-number">2.</span> <span class="nav-text">  rsyslog:记录日志文件服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件一般格式"><span class="nav-number">2.1.</span> <span class="nav-text">  日志文件一般格式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#rsyslog的配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">  rsyslog的配置文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#日志信息分类"><span class="nav-number">2.2.1.</span> <span class="nav-text">日志信息分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#日志信息等级及连接符"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 日志信息等级及连接符</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#输出日志文件或设备或主机"><span class="nav-number">2.2.3.</span> <span class="nav-text"> 输出日志文件或设备或主机</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自定义日志文件"><span class="nav-number">2.3.</span> <span class="nav-text">  自定义日志文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#logrotate-日志文件轮替"><span class="nav-number">3.</span> <span class="nav-text">  logrotate:日志文件轮替</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#logrotate的配置文件"><span class="nav-number">3.1.</span> <span class="nav-text">  logrotate的配置文件</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

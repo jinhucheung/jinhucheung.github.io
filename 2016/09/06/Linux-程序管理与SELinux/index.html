@@ -1,0 +1,1075 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="工作管理(Job Control) 什么是工作管理工作管理是指在单一终端下同时进行多个工作的行为管理,不能管理其他终端上的工作,只关注自身终端
+以下是进行工作管理时的一些限制与概念:
+
+只管理自己的bash上的工作(即bash只能管理其子进程的工作)
+前台: 用户可以控制与执行命令的环境为前台
+后台: 可以自行工作的环境,无法用[ctrl]+c终止工作,可用fg/bg调度工作
+
+ 工作管理工作调">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 程序管理与SELinux">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-程序管理与SELinux/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="工作管理(Job Control) 什么是工作管理工作管理是指在单一终端下同时进行多个工作的行为管理,不能管理其他终端上的工作,只关注自身终端
+以下是进行工作管理时的一些限制与概念:
+
+只管理自己的bash上的工作(即bash只能管理其子进程的工作)
+前台: 用户可以控制与执行命令的环境为前台
+后台: 可以自行工作的环境,无法用[ctrl]+c终止工作,可用fg/bg调度工作
+
+ 工作管理工作调">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_27_2.gif?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_27_1.gif?raw=true">
+<meta property="og:updated_time" content="2016-09-06T13:17:26.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 程序管理与SELinux">
+<meta name="twitter:description" content="工作管理(Job Control) 什么是工作管理工作管理是指在单一终端下同时进行多个工作的行为管理,不能管理其他终端上的工作,只关注自身终端
+以下是进行工作管理时的一些限制与概念:
+
+只管理自己的bash上的工作(即bash只能管理其子进程的工作)
+前台: 用户可以控制与执行命令的环境为前台
+后台: 可以自行工作的环境,无法用[ctrl]+c终止工作,可用fg/bg调度工作
+
+ 工作管理工作调">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_27_2.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-程序管理与SELinux/"/>
+
+  <title> Linux 程序管理与SELinux | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 程序管理与SELinux
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:13:25+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-程序管理与SELinux/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-程序管理与SELinux/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="工作管理-Job-Control"><a href="#工作管理-Job-Control" class="headerlink" title=" 工作管理(Job Control)"></a><a name="ch1"> 工作管理(Job Control)</a></h2><h3 id="什么是工作管理"><a href="#什么是工作管理" class="headerlink" title=" 什么是工作管理"></a><a name="ch1.1"> 什么是工作管理</a></h3><p>工作管理是指在<b>单一终端</b>下同时进行多个工作的行为管理,不能管理其他终端上的工作,只关注自身终端</p>
+<p>以下是进行工作管理时的一些限制与概念:</p>
+<ul>
+<li>只管理自己的bash上的工作(即bash只能管理其子进程的工作)</li>
+<li>前台: 用户可以控制与执行命令的环境为前台</li>
+<li>后台: 可以自行工作的环境,无法用[ctrl]+c终止工作,可用fg/bg调度工作</li>
+</ul>
+<h3 id="工作管理"><a href="#工作管理" class="headerlink" title=" 工作管理"></a><a name="ch1.2"> 工作管理</a></h3><h4 id="工作调入后台"><a href="#工作调入后台" class="headerlink" title="工作调入后台"></a>工作调入后台</h4><ul>
+<li>将命令丢到后台运行: 命令尾+<code>&amp;</code>  如 <code>vim hello.txt &amp;</code>   </li>
+<li>将运行中的工作放置后台暂停: <code>[ctrl]+z</code></li>
+</ul>
+<h4 id="后台工作的编号与状态"><a href="#后台工作的编号与状态" class="headerlink" title="后台工作的编号与状态"></a>后台工作的编号与状态</h4><p>工作调入后台时会返回一个工作编号(jobNum)给我们处理.
+同时会标明工作调入后台后的状态. 其状态可分为<code>Done</code>,<code>Stopped</code>,<code>Killed</code>,<code>Running</code>(其中<code>Killed</code>是不正常终止)</p>
+<h4 id="查看目前后台的工作-jobs"><a href="#查看目前后台的工作-jobs" class="headerlink" title="查看目前后台的工作:jobs"></a>查看目前后台的工作:<code>jobs</code></h4><p>我们可以用<code>jobs -l</code>列出当前后台中的工作,同时可以查看到它们的PID</p>
+<h4 id="工作调回前台-fg"><a href="#工作调回前台-fg" class="headerlink" title="工作调回前台:fg"></a>工作调回前台:<code>fg</code></h4><p>通过<code>fg %jobNum</code>可以指定调出后台中的工作回前台运行</p>
+<h4 id="后台中运行暂停的工作-bg"><a href="#后台中运行暂停的工作-bg" class="headerlink" title="后台中运行暂停的工作:bg"></a>后台中运行暂停的工作:<code>bg</code></h4><p>当我们用<code>[ctrl]+z</code>暂停工作到后台后,我们可以调用<code>bg %jobNum</code>在后台运行指定工作</p>
+<h4 id="管理后台工作-kill"><a href="#管理后台工作-kill" class="headerlink" title="管理后台工作: kill"></a>管理后台工作: <code>kill</code></h4><p>通过<code>kill</code>+一个处理信号的方式来管理后台中的工作,形式如<code>kill -signal %jobNum</code>
+处理信号可以用<code>kill -l</code>查阅,一些常见的信号: <code>-1 重载入 -9 强制杀死 -15 正常结束</code></p>
+<h3 id="脱机工作管理"><a href="#脱机工作管理" class="headerlink" title=" 脱机工作管理"></a><a name="ch1.3"> 脱机工作管理</a></h3><p>当我们脱机或注销后,需要保持某些工作运行,好让我们下次登录时处理.该怎么做?</p>
+<p>首先我们要明白<b>脱机/注销后</b>,系统分配给我们的用户进程(理解为登录后取得的终端,图形界面的是gnome-terminal)及子进程会被回收. </p>
+<p>而我们需要做的是指定某进程不被系统回收,用<code>nohup</code>,在需要执行的命令前加上<code>nohup</code>即可.
+此时输出信息会到<code>～/nohup.out</code>中.</p>
+<h2 id="进程"><a href="#进程" class="headerlink" title=" 进程"></a><a name="ch2"> 进程</a></h2><h3 id="什么是进程"><a href="#什么是进程" class="headerlink" title=" 什么是进程"></a><a name="ch2.1"> 什么是进程</a></h3><p>其实我们前面提到的工作就是一个进程,其有一个程序触发,在内存中活动,以PID来标示一个内存单元(维护着程序数据以及执行者权限)</p>
+<p>即 进程就是程序执行过程,执行者的权限与属性和程序代码与数据会加载至内存单元,并以PID来标示这个内存单元.</p>
+<h3 id="子进程与父进程"><a href="#子进程与父进程" class="headerlink" title=" 子进程与父进程"></a><a name="ch2.2"> 子进程与父进程</a></h3><p>当我们父进程派生一个子进程后,父进程会休眠(关于进程状态,我们后面提),之后进入子进程的环境,通过PPID可以知道.</p>
+<p>然后是父进程通过什么方式派生子进程?
+父进程是通过<b>fork-and-exec</b>方式来派生子进程,系统先以fork复制一个与父进程相同的进程(数据相同,但PID不同,其PPID指向父进程),再以exec来加载子进程实际需要的数据.
+如下图:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_27_2.gif?raw=true" alt=""></p>
+<h3 id="进程查看"><a href="#进程查看" class="headerlink" title=" 进程查看"></a><a name="ch2.3"> 进程查看</a></h3><p>查看当前系统正在运行当中的进程,可以使用ps查看静态数据,或者top动态查看进程,还能以pstree查看进程树</p>
+<h4 id="查看自己bash所有进程和某进程-ps-l与ps-l-PID"><a href="#查看自己bash所有进程和某进程-ps-l与ps-l-PID" class="headerlink" title="查看自己bash所有进程和某进程:ps -l与ps -l PID"></a>查看自己bash所有进程和某进程:<code>ps -l</code>与<code>ps -l PID</code></h4><p>当我们使用<code>ps -l</code>查看自己bash,会出现如下信息
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD</div><div class="line">0 S  1000  4616  2586  0  80   0 -  1786 wait   pts/13   00:00:00 bash</div><div class="line">4 R  1000  4620  4616  0  80   0 -  1605 -      pts/13   00:00:00 ps</div></pre></td></tr></table></figure>
+第一行的各字段解释:</p>
+<ul>
+<li>F : 进程标志,说明进程权限 常见的<code>4</code>表root权限,<code>1</code>表进程只能fork不能exec,其中<code>0</code>表示没标志适用</li>
+<li>S : 进程状态,<code>S</code>:Sleep,可唤醒 <code>R</code>:运行中 <code>D</code>:不可唤醒的睡眠状态 <code>T</code>:停止  <code>Z</code>:僵尸状态,进程终止却无法从内存中删除</li>
+<li>UID/PID/PPID: 进程所有者/PID/父进程PID</li>
+<li>C:CPU使用率</li>
+<li>PRI/NI: 进程优先级,我们通过修改NI还改变PRI值,PRI决定进程优先,越小越优先</li>
+<li>ADDR/SZ/WCHAN:内存相关,ADDR指示内存单元位置,SZ表示进程用掉多少内存,WCHAN表示进程是否运行中</li>
+<li>TTY:指示终端机</li>
+<li>CMD:触发进程的命令</li>
+</ul>
+<h4 id="查看系统所有进程-ps-Al或ps-aux"><a href="#查看系统所有进程-ps-Al或ps-aux" class="headerlink" title="查看系统所有进程:ps -Al或ps -aux"></a>查看系统所有进程:<code>ps -Al</code>或<code>ps -aux</code></h4><p>以下是用<code>ps -aux</code>以另一种呈现方式输出系统所有进程
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND</div><div class="line">root         1  0.0  0.0   4616  3736 ?        Ss   08:08   0:01 /sbin/init</div><div class="line">root         2  0.0  0.0      0     0 ?        S    08:08   0:00 [kthreadd]</div><div class="line">root         3  0.0  0.0      0     0 ?        S    08:08   0:00 [ksoftirqd/0]</div><div class="line">root         5  0.0  0.0      0     0 ?        S&lt;   08:08   0:00 [kworker/0:0H]</div><div class="line">root         7  0.0  0.0      0     0 ?        S    08:08   0:03 [rcu_sched]</div><div class="line">root         8  0.0  0.0      0     0 ?        S    08:08   0:00 [rcu_bh]</div></pre></td></tr></table></figure>
+字段的含义以之前类似,其中<code>VSZ</code>与<code>`RSS</code>分别表示进程使用的虚拟内存与固定内存量</p>
+<h4 id="动态查看进程的变化-top"><a href="#动态查看进程的变化-top" class="headerlink" title="动态查看进程的变化:top"></a>动态查看进程的变化:top</h4><p>top可以持续监听进程的运行状态
+其中选项<code>-d</code>:后接秒数,表示多少秒后更新状态  <code>-p</code>:接PID
+在top内我们还可以通过操作来修改进程的状态,以下是一些top操作</p>
+<ul>
+<li><code>P</code>:以CPU使用率排序进程</li>
+<li><code>M</code>:以内存使用率排序进程</li>
+<li><code>N</code>:以PID排序进程</li>
+<li><code>k</code>:给与某进程一个信号</li>
+<li><code>r</code>:修改某进程的NI值(NICE)</li>
+</ul>
+<p>top的输出信息以下
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">### 以下部分描述当前系统状态 load aveage:表示CPU的平均负载(1,5,15分钟)</div><div class="line">top - 10:00:41 up  1:51,  3 users,  load average: 0.37, 0.37, 0.33</div><div class="line">Tasks: 212 total,   1 running, 211 sleeping,   0 stopped,   0 zombie</div><div class="line">%Cpu(s): 14.0 us,  3.7 sy,  0.0 ni, 81.9 id,  0.5 wa,  0.0 hi,  0.0 si,  0.0 st</div><div class="line">KiB Mem:   6075096 total,  2214228 used,  3860868 free,   148028 buffers</div><div class="line">KiB Swap:  3998716 total,        0 used,  3998716 free.  1198676 cached Mem</div><div class="line"></div><div class="line">### top操作命令</div><div class="line">Send pid 4698 signal [15/sigterm] </div><div class="line"></div><div class="line">### 进程信息</div><div class="line">  PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND     </div><div class="line"> 4698 root      20   0       0      0      0 S   0.0  0.0   0:00.06 kworker/u4+ </div><div class="line"> 4697 kumho     20   0    6960   2796   2392 R   0.3  0.0   0:00.34 top   </div></pre></td></tr></table></figure></p>
+<h4 id="进程的树结果-pstree"><a href="#进程的树结果-pstree" class="headerlink" title="进程的树结果:pstree"></a>进程的树结果:pstree</h4><p>通过<code>pstree</code>我们可以了解到进程间的相互关系,如果要同时输出PID及进程所有者,可加上<code>-up</code>选项,如果进程所有者是root,则进程树不会显示出来</p>
+<h3 id="进程管理"><a href="#进程管理" class="headerlink" title=" 进程管理"></a><a name="ch2.4"> 进程管理</a></h3><p>与工作管理类似,进程也是通过kill加信号量来管理的,不同的是,进程间可以彼此管理.</p>
+<h4 id="需指定PID-kill"><a href="#需指定PID-kill" class="headerlink" title="需指定PID:kill"></a>需指定PID:<code>kill</code></h4><p>kill需要指定进程的PID,才能对进程进行管理,通常配合<code>ps</code>等
+格式是<code>kill -signal PID</code>,signal如<code>工作管理</code>中提到,可通过<code>kill -l</code>才查看,
+这里再补充下</p>
+<ul>
+<li><code>1</code>:重新启动</li>
+<li><code>2</code>:相当与<code>[ctrl]+c</code></li>
+<li><code>9</code>:强制杀死</li>
+<li><code>15</code>:正常结束</li>
+<li><code>17</code>:相当与<code>[ctrl]+z</code></li>
+</ul>
+<h4 id="管理指定命令启动的所有进程-killall"><a href="#管理指定命令启动的所有进程-killall" class="headerlink" title="管理指定命令启动的所有进程:killall"></a>管理指定命令启动的所有进程:<code>killall</code></h4><p>killall 格式是<code>killall -signal 命令</code>,其中<code>killall</code>也包含其他的选项 <code>i</code>:询问用户 <code>I</code>忽略命令大小写</p>
+<h3 id="进程优先级"><a href="#进程优先级" class="headerlink" title=" 进程优先级"></a><a name="ch2.5"> 进程优先级</a></h3><p>CPU会根据进程优先级来决定某进程的执行频率,一些冗长的进程应该较不优先
+进程优先级由PRI值决定,值越低越优先,用户无法直接设置PRI值,而是通过NI值来修改PRI值.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PRI(new)=PRI(old)+Ni #这个加式,不是绝对的,PRI(new)可能会有点偏差,由系统分析后绝对</div></pre></td></tr></table></figure>
+Ni值的修改有以下限制:</p>
+<ul>
+<li>Ni值可调整范围为-20~19</li>
+<li>root可以随意调整自己或他人的进程的Ni值,范围是-20~19</li>
+<li>一般用户仅可以调整自己进程的Ni值,范围是0~19,且值只能越调越大</li>
+</ul>
+<p>要调整Ni值有以下两种方式:</p>
+<h4 id="nice-给予新执行命令一个NI值"><a href="#nice-给予新执行命令一个NI值" class="headerlink" title="nice: 给予新执行命令一个NI值"></a>nice: 给予新执行命令一个NI值</h4><p>格式<code>nice -n NI值 commad</code></p>
+<h4 id="renice-修改已存在的进程的Ni值"><a href="#renice-修改已存在的进程的Ni值" class="headerlink" title="renice:修改已存在的进程的Ni值"></a>renice:修改已存在的进程的Ni值</h4><p>格式<code>renice NI值 PID</code></p>
+<h3 id="进程与文件"><a href="#进程与文件" class="headerlink" title=" 进程与文件"></a><a name="ch2.6"> 进程与文件</a></h3><h4 id="查看正在使用某文件的进程-fuser"><a href="#查看正在使用某文件的进程-fuser" class="headerlink" title="查看正在使用某文件的进程:fuser"></a>查看正在使用某文件的进程:fuser</h4><p>fuser的格式: <code>fuser [-umv] [-k -signal] file/dir</code></p>
+<ul>
+<li><code>u</code> :显示进程执行者</li>
+<li><code>m</code> :后接的文件,会上提到其所在的文件系统挂载点,等价与查看正在使用此文件系统的进程</li>
+<li><code>v</code> : 显示列出文件与进程的相关数据</li>
+<li><code>k</code> : 管理进程</li>
+</ul>
+<h4 id="列出某进程所打开的文件-lsof"><a href="#列出某进程所打开的文件-lsof" class="headerlink" title="列出某进程所打开的文件: lsof"></a>列出某进程所打开的文件: lsof</h4><p> lsof的格式: <code>lsof [-p PID] [-u username] [+d] [-a] [-U]</code></p>
+<ul>
+<li><code>a</code> ： 连接词，AND</li>
+<li><code>u</code>  :  列出该用户相关进程所打开的文件</li>
+<li><code>U</code>  : 列出系统的socket文件</li>
+<li><code>+d</code> : 后接目录,列出该目录已被打开的文件</li>
+</ul>
+<h4 id="查看某命令所启动的进程-pidof"><a href="#查看某命令所启动的进程-pidof" class="headerlink" title="查看某命令所启动的进程: pidof"></a>查看某命令所启动的进程: pidof</h4><p>pidof格式是<code>pidof command</code></p>
+<h2 id="系统资源查看"><a href="#系统资源查看" class="headerlink" title=" 系统资源查看"></a><a name="ch3"> 系统资源查看</a></h2><h3 id="free-查看内存使用情况"><a href="#free-查看内存使用情况" class="headerlink" title=" free:查看内存使用情况"></a><a name="ch3.1"> free:查看内存使用情况</a></h3><p>free输出的信息默认以KB为单位,如果我需要其他单位显示容量,可以使用<code>-b|-k|-m|-g</code></p>
+<h3 id="uname-查看系统与内核相关信息"><a href="#uname-查看系统与内核相关信息" class="headerlink" title=" uname:查看系统与内核相关信息"></a><a name="ch3.2"> uname:查看系统与内核相关信息</a></h3><p>uname相关选项:</p>
+<ul>
+<li><code>a</code> : 所有信息</li>
+<li><code>s</code> : 内核名称</li>
+<li><code>r</code> ： 内核版本</li>
+<li><code>m</code> : 本系统的硬件名称,如i686或x86_64</li>
+<li><code>i</code> ： 硬件架构,i686等</li>
+</ul>
+<h3 id="uptime-查看系统启动时间与工作负载"><a href="#uptime-查看系统启动时间与工作负载" class="headerlink" title=" uptime:查看系统启动时间与工作负载"></a><a name="ch3.3"> uptime:查看系统启动时间与工作负载</a></h3><p>uptime所查看的信息就是top描述系统信息的部分</p>
+<h3 id="netstat-跟踪网络"><a href="#netstat-跟踪网络" class="headerlink" title=" netstat:跟踪网络"></a><a name="ch3.4"> netstat:跟踪网络</a></h3><p>netstat被用在网络监控方面,以下网络连接,与本地socket的信息
+以下是一些选项</p>
+<ul>
+<li><code>a</code> : 列出目前系统所有连接/socket/监听</li>
+<li><code>t</code> : 列出tcp网络数据包的数据</li>
+<li><code>u</code>：列出udp网络数据包的数据</li>
+<li><code>n</code> : 不列出进程的服务名称,以端口号显示</li>
+<li><code>l</code>: 列出目前正在网络监听的服务</li>
+<li><code>p</code>:显示PID</li>
+</ul>
+<p>比如列出目前系统上已在监听的网络连接及PID:<code>netstat -tlnp</code></p>
+<h3 id="dmesg-分析内核产生的信息-主机硬件信息"><a href="#dmesg-分析内核产生的信息-主机硬件信息" class="headerlink" title=" dmesg:分析内核产生的信息(主机硬件信息)"></a><a name="ch3.5"> dmesg:分析内核产生的信息(主机硬件信息)</a></h3><p>dmesg是用来查看内核分析出来的主机硬件信息的,通常配合grep一起使用</p>
+<h3 id="vmstat-动态跟踪系统资源的变化"><a href="#vmstat-动态跟踪系统资源的变化" class="headerlink" title=" vmstat:动态跟踪系统资源的变化"></a><a name="ch3.6"> vmstat:动态跟踪系统资源的变化</a></h3><p>vmstat可以检测CPU/内存/磁盘的IO状态等.下面是常见的参数说明:</p>
+<ul>
+<li><code>vmstat time</code>:vmstat默认是检测CPU/内存等信息,time为秒数,表示动态跟踪</li>
+<li><code>vmstat -d</code> 磁盘IO总量统计表</li>
+<li><code>vmstat -p 分区</code> 显示该分区的IO总量统计表</li>
+</ul>
+<h3 id="proc目录"><a href="#proc目录" class="headerlink" title=" /proc目录"></a><a name="ch3.7"> /proc目录</a></h3><p>/proc目录存放的是内存中的数据,每一个进度都会在/proc下创建一个以PID为名的子目录,进程目录下存放着相当多的文件,比如cmdline是存放启动此进程的命令,environ是这个进程的环境变量</p>
+<h2 id="SELinux"><a href="#SELinux" class="headerlink" title=" SELinux"></a><a name="ch4"> SELinux</a></h2><h3 id="什么是SELinux"><a href="#什么是SELinux" class="headerlink" title=" 什么是SELinux"></a><a name="ch4.1"> 什么是SELinux</a></h3><p>SELinux是在进行程序/文件等权限设置依据的一个内核模块,是程序进程能访问系统资源的一道关卡,通常用于控制网络服务.</p>
+<p>SELinux是基于以策略规则制定特定程序访问特定文件的模式,即委托访问控制(MAC),我们之前用户访问文件,直接通过判断文件权限与用户对比,这种访问方式称为自主访问控制(DAC).</p>
+<p>DAC的一些缺陷:</p>
+<ul>
+<li>root具有最高权限</li>
+<li>用户取得进程来更改文件资源的访问权限</li>
+</ul>
+<p>而MAC是针对进程设置对文件的访问权限,通过提供一些策略来管理众多的进程与文件</p>
+<h3 id="SELinux运行模式"><a href="#SELinux运行模式" class="headerlink" title=" SELinux运行模式"></a><a name="ch4.2"> SELinux运行模式</a></h3><p>SELinux是通过MAC方式控管进程的,其控管的主体是进程,而目标是文件资源,其相关性如下:</p>
+<ul>
+<li>主体(Subject)<ul>
+<li>进程</li>
+</ul>
+</li>
+<li>目标(Object)<ul>
+<li>文件资源</li>
+</ul>
+</li>
+<li>策略(Policy)<ul>
+<li>由于进程与文件数量庞大,所有SELinux依据某些服务制定了基本的访问策略,这些策略内还会有详细的规则(rule)来制定不同服务的开放某些资源的程度</li>
+<li>targetd: 针对网络服务限制较多,本机限制较少</li>
+<li>strict:限制方面较严格</li>
+</ul>
+</li>
+<li>安全上下文(security context)<ul>
+<li>安全上下文是描述主体/目标的相关信息,只有当主体与目标的安全上下文匹配时,主体才能去访问目标.(当然,最后还要匹配目标的rwx权限)</li>
+</ul>
+</li>
+</ul>
+<p>SELinux 运行各组件的相关性如下图
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_27_1.gif?raw=true" alt=""></p>
+<h3 id="安全上下文"><a href="#安全上下文" class="headerlink" title=" 安全上下文"></a><a name="ch4.3"> 安全上下文</a></h3><p>安全上下文存在于文件的inode上,因为进程也是由文件触发的,所以主体进程也有安全上下文
+SELinux下,只有当主体通过策略与安全上下文的匹配后,才能得到放行.而最主要的部分就是安全上下文.</p>
+<h4 id="安全上下文的查看"><a href="#安全上下文的查看" class="headerlink" title="安全上下文的查看"></a>安全上下文的查看</h4><p><b>文件安全上下文的查看: ls -Z</b>
+<b>进程安全上下文的查看: ps -Z</b></p>
+<p>安全上下文主要分为3个字段
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Identify:role:type</div></pre></td></tr></table></figure></p>
+<ul>
+<li><code>Identify</code>：标明数据所有者的身份,值为:<ul>
+<li><code>root</code> root所有</li>
+<li><code>system_u</code> 系统程序方面的标识,通常指服务进程</li>
+<li><code>user_u</code> 一般用户</li>
+</ul>
+</li>
+<li><code>role</code> :表明数据的角色,比如程序,文件资源等<ul>
+<li><code>object_r</code>：代表文件资源</li>
+<li><code>system_r</code> ： 代表进程</li>
+</ul>
+</li>
+<li><code>type</code>:安全上下文的比较字段<ul>
+<li><code>domain</code>:在主体的安全上下文中其type字段称为domain</li>
+<li><code>type</code>: 在目标安全上下文其type字段称为type</li>
+<li>只有domain与type匹配后,安全上下文才匹配成功</li>
+<li>SELinux启动后会写入domain与type的映射表,匹配就是在映射表中搜索</li>
+</ul>
+</li>
+</ul>
+<h4 id="安全上下文的修改"><a href="#安全上下文的修改" class="headerlink" title="安全上下文的修改"></a>安全上下文的修改</h4><p>如果已知某文件的安全上下文的type字段错了,需要改回正常可以怎么做？</p>
+<ul>
+<li><code>chcon</code>:指定修改安全上下文的字段<ul>
+<li>格式 <code>chcon [-R] [-t type] [-u user] [-r role] 文件</code>或 <code>chcon [-R] --reference=范例文件 文件</code></li>
+<li>参数: <code>-R</code>是级联修改 <code>-t</code>修改type字段 <code>-u</code>修改Identify字段 <code>-r</code>修改role字段</li>
+</ul>
+</li>
+<li><code>restorecon</code>:还原文件的默认安全上下文<ul>
+<li>格式 <code>restorecon [-Rv] 文件</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="SELinux的启动-关闭-查看"><a href="#SELinux的启动-关闭-查看" class="headerlink" title=" SELinux的启动/关闭/查看"></a><a name="ch4.4"> SELinux的启动/关闭/查看</a></h3><p>SELinux支持3种运行模式(注意与MAC策略模式的区别)</p>
+<ul>
+<li>enforcing: 强制模式,代表SELinux已正确限制访问</li>
+<li>permissive:宽容模式,代表SELinux已启动,但不会限制访问,但会提出警告</li>
+<li>disable:SELinux关闭</li>
+</ul>
+<h4 id="SELinux的查看"><a href="#SELinux的查看" class="headerlink" title="SELinux的查看"></a>SELinux的查看</h4><ul>
+<li><code>getenforce</code>:查看SELinux的运行模式</li>
+<li><code>sestatus</code>:查看SELinux目前的状态,如运行模式,策略模式等</li>
+</ul>
+<h4 id="SELinux的启动"><a href="#SELinux的启动" class="headerlink" title="SELinux的启动"></a>SELinux的启动</h4><ol>
+<li>首先了解你的系统是否装了SELinux(apt-get install selinux)</li>
+<li>打开SELinux的配置文件/etc/selinux/config,将其中的SELINUX项设为enforcing,SELINUXTYPE设为targeted</li>
+<li>修改/boot配置文件(/boot/grub/menu.1st或/boot/grub/grub.cfg),将其中的selinux=0改为=1(或者去掉)</li>
+<li>重启主机</li>
+<li>查看getenforce
+(可是我在Ubuntu14.04上进行以上操作,并不能启动SELinux,待解)</li>
+</ol>
+<h4 id="SELinux的关闭"><a href="#SELinux的关闭" class="headerlink" title="SELinux的关闭"></a>SELinux的关闭</h4><p>只要将SELinux配置文件SELINUX改回disable，重启即可</p>
+<h4 id="SELinux运行模式切换"><a href="#SELinux运行模式切换" class="headerlink" title="SELinux运行模式切换"></a>SELinux运行模式切换</h4><p>我们SELinux启动/关闭要进行上面工作,但enforcing与permissive模式的切换只要用<code>setenforce</code>即可</p>
+<h3 id="SELinux的错误回报处理"><a href="#SELinux的错误回报处理" class="headerlink" title=" SELinux的错误回报处理"></a><a name="ch4.5"> SELinux的错误回报处理</a></h3><p>当SELinux发生错误时,我们可以通过<code>setroubleshoot</code>或<code>auditd</code>服务收集SELinux的错误信息,并加以分析处理</p>
+<h4 id="setroubleshoot：SELinux错误信息写入-var-log-messages"><a href="#setroubleshoot：SELinux错误信息写入-var-log-messages" class="headerlink" title="setroubleshoot：SELinux错误信息写入/var/log/messages"></a>setroubleshoot：SELinux错误信息写入/var/log/messages</h4><p>首先我们需要确认安装setroubleshoot,并将其启动</p>
+<p>当SELinux报告错误信息后,我们可以查看/var/log/messages,其会提供解决的方法.</p>
+<h4 id="auditd-SELinux日志信息写入-var-log-audit-audit-log"><a href="#auditd-SELinux日志信息写入-var-log-audit-audit-log" class="headerlink" title="auditd:SELinux日志信息写入/var/log/audit/audit.log"></a>auditd:SELinux日志信息写入/var/log/audit/audit.log</h4><p>auditd会收集SELinux的日志信息,由于auditd信息庞大,可以借由audit2why来处理导入的audit信息</p>
+<h3 id="SELinuxde的策略与规则管理"><a href="#SELinuxde的策略与规则管理" class="headerlink" title=" SELinuxde的策略与规则管理"></a><a name="ch4.6"> SELinuxde的策略与规则管理</a></h3><p>我们知道,一个主体进程能否读取目标文件的重点在于SELinuxde的策略以及策略下的各项规则,然后在通过该规则的定义去处理各文件的安全上下文.</p>
+<h4 id="查看当前策略提供的信息-seinfo"><a href="#查看当前策略提供的信息-seinfo" class="headerlink" title="查看当前策略提供的信息:seinfo"></a>查看当前策略提供的信息:<code>seinfo</code></h4><p>seinfo的参数有以下:</p>
+<ul>
+<li><code>b</code> 列出当前策略提供的所有规则种类(bool值,表示该规则启动与否)</li>
+<li><code>t</code>  列出所能提供的安全上下文中的type种类</li>
+<li><code>u</code> 列出所能提供的安全上下文中的Identify种类</li>
+<li><code>r</code> 列出所能提供的安全上下文中的role种类</li>
+</ul>
+<p>比如以下看出所有与httpd有关的规则: <code>seinfo -b | grep httpd</code></p>
+<h4 id="查看安全上下文type字段映射表-sesearch"><a href="#查看安全上下文type字段映射表-sesearch" class="headerlink" title="查看安全上下文type字段映射表:sesearch"></a>查看安全上下文type字段映射表:<code>sesearch</code></h4><p>基本格式 <code>sesearch [-a] [-s 主体type] [-t 目标type] [-b 策略bool]</code></p>
+<ul>
+<li><code>a</code> 列出该类型或布尔值的所有相关信息</li>
+</ul>
+<p>比如我要查找目标文件类型为httpd_sys_content_t的有关信息
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">sesearch -a -t httpd_sys_content_t</div><div class="line"></div><div class="line">输出结果</div><div class="line">allow 主体安全上下文类型 目标安全上下文类型 目标文件资源格式</div></pre></td></tr></table></figure></p>
+<h4 id="查看-设置规则的状态-getsebool-a-规则bool与setsebool-P-规则bool-0-1"><a href="#查看-设置规则的状态-getsebool-a-规则bool与setsebool-P-规则bool-0-1" class="headerlink" title="查看/设置规则的状态:getsebool [-a] 规则bool与setsebool [-P] 规则bool=[0|1]"></a>查看/设置规则的状态:<code>getsebool [-a] 规则bool</code>与<code>setsebool [-P] 规则bool=[0|1]</code></h4><p>我们通过<code>getsebool</code>来查看SELinux目前策略下的规则状态,<code>-a</code>是查看所有规则条款
+而<code>setsebool</code>来设置规则条款的状态 0-关闭 1-开启 -P直接写入配置文件</p>
+<h4 id="默认目录的安全上下文查询与修改-semanage"><a href="#默认目录的安全上下文查询与修改-semanage" class="headerlink" title="默认目录的安全上下文查询与修改:semanage"></a>默认目录的安全上下文查询与修改:<code>semanage</code></h4><p>semanage的查询格式：<code>semanage {user|port|interface|fcontext|login} -l</code> (其中fcontext是用与安全上下文方面)
+semanage的修改格式 : <code>semanage fcontext -{a|d|m} [-tru] file_spec</code></p>
+<ul>
+<li><code>a|d|m</code> 增/删/改 一条安全上下文</li>
+<li><code>tru</code>  对于安全上下文的类型/角色/身份上的处理</li>
+<li><code>file_spec</code> 针对的目标文件或主体文件的路径名(如/srv/samba(/.*)?)</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-例行工作-at-crontab/" rel="next" title="Linux 例行工作(at/crontab)">
+                <i class="fa fa-chevron-left"></i> Linux 例行工作(at/crontab)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-认识系统服务-daemon/" rel="prev" title="Linux 认识系统服务(daemon)">
+                Linux 认识系统服务(daemon) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-程序管理与SELinux/"
+           data-title="Linux 程序管理与SELinux" data-url="http://yoursite.com/2016/09/06/Linux-程序管理与SELinux/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#工作管理-Job-Control"><span class="nav-number">1.</span> <span class="nav-text"> 工作管理(Job Control)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是工作管理"><span class="nav-number">1.1.</span> <span class="nav-text"> 什么是工作管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作管理"><span class="nav-number">1.2.</span> <span class="nav-text"> 工作管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#工作调入后台"><span class="nav-number">1.2.1.</span> <span class="nav-text">工作调入后台</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台工作的编号与状态"><span class="nav-number">1.2.2.</span> <span class="nav-text">后台工作的编号与状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看目前后台的工作-jobs"><span class="nav-number">1.2.3.</span> <span class="nav-text">查看目前后台的工作:jobs</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工作调回前台-fg"><span class="nav-number">1.2.4.</span> <span class="nav-text">工作调回前台:fg</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#后台中运行暂停的工作-bg"><span class="nav-number">1.2.5.</span> <span class="nav-text">后台中运行暂停的工作:bg</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#管理后台工作-kill"><span class="nav-number">1.2.6.</span> <span class="nav-text">管理后台工作: kill</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#脱机工作管理"><span class="nav-number">1.3.</span> <span class="nav-text"> 脱机工作管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进程"><span class="nav-number">2.</span> <span class="nav-text"> 进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是进程"><span class="nav-number">2.1.</span> <span class="nav-text"> 什么是进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子进程与父进程"><span class="nav-number">2.2.</span> <span class="nav-text"> 子进程与父进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程查看"><span class="nav-number">2.3.</span> <span class="nav-text"> 进程查看</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看自己bash所有进程和某进程-ps-l与ps-l-PID"><span class="nav-number">2.3.1.</span> <span class="nav-text">查看自己bash所有进程和某进程:ps -l与ps -l PID</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看系统所有进程-ps-Al或ps-aux"><span class="nav-number">2.3.2.</span> <span class="nav-text">查看系统所有进程:ps -Al或ps -aux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#动态查看进程的变化-top"><span class="nav-number">2.3.3.</span> <span class="nav-text">动态查看进程的变化:top</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#进程的树结果-pstree"><span class="nav-number">2.3.4.</span> <span class="nav-text">进程的树结果:pstree</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程管理"><span class="nav-number">2.4.</span> <span class="nav-text"> 进程管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#需指定PID-kill"><span class="nav-number">2.4.1.</span> <span class="nav-text">需指定PID:kill</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#管理指定命令启动的所有进程-killall"><span class="nav-number">2.4.2.</span> <span class="nav-text">管理指定命令启动的所有进程:killall</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程优先级"><span class="nav-number">2.5.</span> <span class="nav-text"> 进程优先级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#nice-给予新执行命令一个NI值"><span class="nav-number">2.5.1.</span> <span class="nav-text">nice: 给予新执行命令一个NI值</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#renice-修改已存在的进程的Ni值"><span class="nav-number">2.5.2.</span> <span class="nav-text">renice:修改已存在的进程的Ni值</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#进程与文件"><span class="nav-number">2.6.</span> <span class="nav-text"> 进程与文件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看正在使用某文件的进程-fuser"><span class="nav-number">2.6.1.</span> <span class="nav-text">查看正在使用某文件的进程:fuser</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#列出某进程所打开的文件-lsof"><span class="nav-number">2.6.2.</span> <span class="nav-text">列出某进程所打开的文件: lsof</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看某命令所启动的进程-pidof"><span class="nav-number">2.6.3.</span> <span class="nav-text">查看某命令所启动的进程: pidof</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统资源查看"><span class="nav-number">3.</span> <span class="nav-text"> 系统资源查看</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#free-查看内存使用情况"><span class="nav-number">3.1.</span> <span class="nav-text"> free:查看内存使用情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uname-查看系统与内核相关信息"><span class="nav-number">3.2.</span> <span class="nav-text"> uname:查看系统与内核相关信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#uptime-查看系统启动时间与工作负载"><span class="nav-number">3.3.</span> <span class="nav-text"> uptime:查看系统启动时间与工作负载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#netstat-跟踪网络"><span class="nav-number">3.4.</span> <span class="nav-text"> netstat:跟踪网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dmesg-分析内核产生的信息-主机硬件信息"><span class="nav-number">3.5.</span> <span class="nav-text"> dmesg:分析内核产生的信息(主机硬件信息)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vmstat-动态跟踪系统资源的变化"><span class="nav-number">3.6.</span> <span class="nav-text"> vmstat:动态跟踪系统资源的变化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#proc目录"><span class="nav-number">3.7.</span> <span class="nav-text"> /proc目录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SELinux"><span class="nav-number">4.</span> <span class="nav-text"> SELinux</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是SELinux"><span class="nav-number">4.1.</span> <span class="nav-text"> 什么是SELinux</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELinux运行模式"><span class="nav-number">4.2.</span> <span class="nav-text"> SELinux运行模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安全上下文"><span class="nav-number">4.3.</span> <span class="nav-text"> 安全上下文</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安全上下文的查看"><span class="nav-number">4.3.1.</span> <span class="nav-text">安全上下文的查看</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#安全上下文的修改"><span class="nav-number">4.3.2.</span> <span class="nav-text">安全上下文的修改</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELinux的启动-关闭-查看"><span class="nav-number">4.4.</span> <span class="nav-text"> SELinux的启动/关闭/查看</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#SELinux的查看"><span class="nav-number">4.4.1.</span> <span class="nav-text">SELinux的查看</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SELinux的启动"><span class="nav-number">4.4.2.</span> <span class="nav-text">SELinux的启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SELinux的关闭"><span class="nav-number">4.4.3.</span> <span class="nav-text">SELinux的关闭</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#SELinux运行模式切换"><span class="nav-number">4.4.4.</span> <span class="nav-text">SELinux运行模式切换</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELinux的错误回报处理"><span class="nav-number">4.5.</span> <span class="nav-text"> SELinux的错误回报处理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#setroubleshoot：SELinux错误信息写入-var-log-messages"><span class="nav-number">4.5.1.</span> <span class="nav-text">setroubleshoot：SELinux错误信息写入/var/log/messages</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#auditd-SELinux日志信息写入-var-log-audit-audit-log"><span class="nav-number">4.5.2.</span> <span class="nav-text">auditd:SELinux日志信息写入/var/log/audit/audit.log</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SELinuxde的策略与规则管理"><span class="nav-number">4.6.</span> <span class="nav-text"> SELinuxde的策略与规则管理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看当前策略提供的信息-seinfo"><span class="nav-number">4.6.1.</span> <span class="nav-text">查看当前策略提供的信息:seinfo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看安全上下文type字段映射表-sesearch"><span class="nav-number">4.6.2.</span> <span class="nav-text">查看安全上下文type字段映射表:sesearch</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看-设置规则的状态-getsebool-a-规则bool与setsebool-P-规则bool-0-1"><span class="nav-number">4.6.3.</span> <span class="nav-text">查看/设置规则的状态:getsebool [-a] 规则bool与setsebool [-P] 规则bool=[0|1]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#默认目录的安全上下文查询与修改-semanage"><span class="nav-number">4.6.4.</span> <span class="nav-text">默认目录的安全上下文查询与修改:semanage</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

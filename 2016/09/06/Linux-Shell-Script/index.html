@@ -1,0 +1,971 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Script的执行方式Script执行方式分为直接执行和source执行
+直接执行其中直接执行,是启动子进程执行Script,父进程休眠,Script中的操作不影响父进程.
+可以分为路径执行,PATH执行与sh执行(sh是/bin/bash的硬连接)
+这里说下sh执行,sh可以调试script
+使用参数-n 不执行script,仅检查语法
+使用参数-x 调试模式,显示执行时的script(变量">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Shell Script">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-Shell-Script/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="Script的执行方式Script执行方式分为直接执行和source执行
+直接执行其中直接执行,是启动子进程执行Script,父进程休眠,Script中的操作不影响父进程.
+可以分为路径执行,PATH执行与sh执行(sh是/bin/bash的硬连接)
+这里说下sh执行,sh可以调试script
+使用参数-n 不执行script,仅检查语法
+使用参数-x 调试模式,显示执行时的script(变量">
+<meta property="og:updated_time" content="2016-09-06T05:46:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux Shell Script">
+<meta name="twitter:description" content="Script的执行方式Script执行方式分为直接执行和source执行
+直接执行其中直接执行,是启动子进程执行Script,父进程休眠,Script中的操作不影响父进程.
+可以分为路径执行,PATH执行与sh执行(sh是/bin/bash的硬连接)
+这里说下sh执行,sh可以调试script
+使用参数-n 不执行script,仅检查语法
+使用参数-x 调试模式,显示执行时的script(变量">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-Shell-Script/"/>
+
+  <title> Linux Shell Script | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux Shell Script
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T13:42:30+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-Shell-Script/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-Shell-Script/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Script的执行方式"><a href="#Script的执行方式" class="headerlink" title="  Script的执行方式"></a><a name="ch1">  Script的执行方式</a></h2><p>Script执行方式分为直接执行和source执行</p>
+<h3 id="直接执行"><a href="#直接执行" class="headerlink" title="直接执行"></a>直接执行</h3><p>其中直接执行,是启动<b>子进程</b>执行Script,父进程休眠,Script中的操作不影响父进程.</p>
+<p>可以分为路径执行,PATH执行与sh执行(sh是/bin/bash的硬连接)</p>
+<p>这里说下sh执行,sh可以调试script
+使用参数-n 不执行script,仅检查语法
+使用参数-x 调试模式,显示执行时的script(变量都被准确赋值)</p>
+<h3 id="source执行"><a href="#source执行" class="headerlink" title="source执行"></a>source执行</h3><p>父进程中执行,操作会影响父进程</p>
+<h2 id="Shell中的数值运算"><a href="#Shell中的数值运算" class="headerlink" title="  Shell中的数值运算"></a><a name="ch2">  Shell中的数值运算</a></h2><p>我们除了可以使用 <code>declare</code>来定义数值型变量外,也可以直接使用<code>$((运算式))</code>来进执行数值处理,比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">x=<span class="string">"10"</span></div><div class="line">y=<span class="string">"4"</span></div><div class="line"><span class="built_in">echo</span> $((<span class="variable">$x</span>%<span class="variable">$y</span>))</div></pre></td></tr></table></figure>
+<h2 id="test与判断式"><a href="#test与判断式" class="headerlink" title="  test与判断式"></a><a name="ch3">  test与判断式</a></h2><h3 id="test"><a href="#test" class="headerlink" title="test"></a>test</h3><p>我们可以使用<code>test</code>来查看文件是否存在及其属性,也可进行数值比较与字符串比较(这两个也可以在判断式中比较)
+以下是test的一部分参数表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">参数</th>
+<th style="text-align:center">代表意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">判断文件存在与类型</td>
+<td style="text-align:center">格式 test -e filename</td>
+</tr>
+<tr>
+<td style="text-align:center">-e</td>
+<td style="text-align:center">该文件是否存在</td>
+</tr>
+<tr>
+<td style="text-align:center">-f</td>
+<td style="text-align:center">该文件是否存在且为文件</td>
+</tr>
+<tr>
+<td style="text-align:center">-d</td>
+<td style="text-align:center">该文件是否存在且为目录</td>
+</tr>
+<tr>
+<td style="text-align:center">-b</td>
+<td style="text-align:center">该文件是否存在为块设备</td>
+</tr>
+<tr>
+<td style="text-align:center">判断文件权限</td>
+<td style="text-align:center">格式 test -r filename</td>
+</tr>
+<tr>
+<td style="text-align:center">-r</td>
+<td style="text-align:center">该文件是否可读</td>
+</tr>
+<tr>
+<td style="text-align:center">-w</td>
+<td style="text-align:center">该文件是否可写</td>
+</tr>
+<tr>
+<td style="text-align:center">-x</td>
+<td style="text-align:center">该文件是否可执行</td>
+</tr>
+<tr>
+<td style="text-align:center">-u</td>
+<td style="text-align:center">是否具有SUID</td>
+</tr>
+<tr>
+<td style="text-align:center">-g</td>
+<td style="text-align:center">是否具有SGID</td>
+</tr>
+<tr>
+<td style="text-align:center">-k</td>
+<td style="text-align:center">是否具有SBIT</td>
+</tr>
+<tr>
+<td style="text-align:center">比较两数值</td>
+<td style="text-align:center">test n1 -eq n2</td>
+</tr>
+<tr>
+<td style="text-align:center">-eq</td>
+<td style="text-align:center">==</td>
+</tr>
+<tr>
+<td style="text-align:center">-ne</td>
+<td style="text-align:center">!=</td>
+</tr>
+<tr>
+<td style="text-align:center">-gt</td>
+<td style="text-align:center">&gt;(greater than)</td>
+</tr>
+<tr>
+<td style="text-align:center">-lt</td>
+<td style="text-align:center">&lt;</td>
+</tr>
+<tr>
+<td style="text-align:center">-ge</td>
+<td style="text-align:center">&gt;=</td>
+</tr>
+<tr>
+<td style="text-align:center">-le</td>
+<td style="text-align:center">&lt;=</td>
+</tr>
+<tr>
+<td style="text-align:center">判断字符串数据</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">test str1=str2</td>
+<td style="text-align:center">相等</td>
+</tr>
+<tr>
+<td style="text-align:center">test str1!=str2</td>
+<td style="text-align:center">不相等</td>
+</tr>
+<tr>
+<td style="text-align:center">多重条件判定</td>
+<td style="text-align:center">逻辑操作</td>
+</tr>
+<tr>
+<td style="text-align:center">-a</td>
+<td style="text-align:center">AND : test -e file1 -a test -e file2</td>
+</tr>
+<tr>
+<td style="text-align:center">-o</td>
+<td style="text-align:center">OR</td>
+</tr>
+<tr>
+<td style="text-align:center">!</td>
+<td style="text-align:center">反向:test ! -e file1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="判断式"><a href="#判断式" class="headerlink" title="判断式[]"></a>判断式[]</h3><p>判断式基本格式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">x=1</div><div class="line">[□$x□-le□0□]</div></pre></td></tr></table></figure>
+注意<code>□</code>为空格,在变量/常量/操作符间一定要有空格</p>
+<h2 id="shell-script的默认变量"><a href="#shell-script的默认变量" class="headerlink" title="  shell script的默认变量"></a><a name="ch4">  shell script的默认变量</a></h2><p>当我们执行命令时,会带参数(执行操作,文件参数等)
+我们在script中怎么读取这些参数,script内置了变量<code>$#</code>,<code>$@</code>,<code>$num</code>来表示这些参数</p>
+<ul>
+<li><code>$#</code> 参数个数</li>
+<li><code>$@</code> 参数列表</li>
+<li><code>$num</code> 其中$0表示script名 $1..$num表示第num个参数</li>
+</ul>
+<h2 id="程序结构"><a href="#程序结构" class="headerlink" title="  程序结构"></a><a name="ch5">  程序结构</a></h2><h3 id="判断结构"><a href="#判断结构" class="headerlink" title="判断结构"></a>判断结构</h3><h4 id="if结构"><a href="#if结构" class="headerlink" title="if结构"></a>if结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">if [ 条件1 ] ; then</div><div class="line">     代码段1</div><div class="line">elif [ 条件2 ] ; then</div><div class="line">    代码段2</div><div class="line">esle </div><div class="line">    代码段3</div><div class="line">fi</div></pre></td></tr></table></figure>
+<h4 id="swicth结构"><a href="#swicth结构" class="headerlink" title="swicth结构"></a>swicth结构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">case $var in</div><div class="line">       constant1 )</div><div class="line">           代码段1</div><div class="line">         ;;</div><div class="line">       constant2 )</div><div class="line">             代码段2</div><div class="line">          ;;</div><div class="line">         * )</div><div class="line">             代码段 </div><div class="line">          ;;</div><div class="line">esac          </div></pre></td></tr></table></figure>
+<p>注意这里的swicth不能跨段,就是<code>constant1</code>后一定有<code>;;</code>  <code>constant</code>可以是通配符,比如<code>[Yy]</code></p>
+<h3 id="循环结构"><a href="#循环结构" class="headerlink" title="循环结构"></a>循环结构</h3><h4 id="while-done-满足条件循环"><a href="#while-done-满足条件循环" class="headerlink" title="while..done : 满足条件循环"></a>while..done : 满足条件循环</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">while [ 条件 ]</div><div class="line">do</div><div class="line">   代码段</div><div class="line">done</div></pre></td></tr></table></figure>
+<h4 id="utile…done-满足条件终止循环"><a href="#utile…done-满足条件终止循环" class="headerlink" title="utile…done : 满足条件终止循环"></a>utile…done : 满足条件终止循环</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">util [ 条件 ]</div><div class="line">do</div><div class="line">   代码段</div><div class="line">done</div></pre></td></tr></table></figure>
+<h4 id="for…each-循环遍历"><a href="#for…each-循环遍历" class="headerlink" title="for…each : 循环遍历"></a>for…each : 循环遍历</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for var in con1 con2 con3 ...</div><div class="line">do</div><div class="line">   代码段</div><div class="line">done</div></pre></td></tr></table></figure>
+<p>例子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">for filename in $(ls -al .)</div><div class="line">do</div><div class="line">    echo $filename</div><div class="line">done</div></pre></td></tr></table></figure></p>
+<h4 id="for…done-条件遍历"><a href="#for…done-条件遍历" class="headerlink" title="for…done : 条件遍历"></a>for…done : 条件遍历</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">s=0</div><div class="line">for (( i=1 ; i &lt;= $num ; i++ ))</div><div class="line">do</div><div class="line">    s=$(($s+$i))</div><div class="line">done </div></pre></td></tr></table></figure>
+<h2 id="function"><a href="#function" class="headerlink" title="  function"></a><a name="ch6">  function</a></h2><p>function需要写在执行之前,因为script执行顺序是<code>从上到下,从左到右</code>
+而且function内置有变量,跟script类似
+需要返回值是使用<code>return</code>
+例子:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">function calnum ()&#123;</div><div class="line">  if [ $1 -le 0 ] ; then</div><div class="line">     return 1</div><div class="line">  fi</div><div class="line">   </div><div class="line">   sum=0</div><div class="line">   for (( i=1 ;  i&lt;=$1 ; i++ ))</div><div class="line">   do</div><div class="line">      sum=$(($sum+$i))</div><div class="line">   done</div><div class="line">   echo $sum</div><div class="line">   return 0</div><div class="line">&#125;</div><div class="line"></div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-正则表达式/" rel="next" title="Linux 正则表达式">
+                <i class="fa fa-chevron-left"></i> Linux 正则表达式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-账号管理与ACL权限/" rel="prev" title="Linux 账号管理与ACL权限">
+                Linux 账号管理与ACL权限 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-Shell-Script/"
+           data-title="Linux Shell Script" data-url="http://yoursite.com/2016/09/06/Linux-Shell-Script/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Script的执行方式"><span class="nav-number">1.</span> <span class="nav-text">  Script的执行方式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#直接执行"><span class="nav-number">1.1.</span> <span class="nav-text">直接执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#source执行"><span class="nav-number">1.2.</span> <span class="nav-text">source执行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell中的数值运算"><span class="nav-number">2.</span> <span class="nav-text">  Shell中的数值运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#test与判断式"><span class="nav-number">3.</span> <span class="nav-text">  test与判断式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#test"><span class="nav-number">3.1.</span> <span class="nav-text">test</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#判断式"><span class="nav-number">3.2.</span> <span class="nav-text">判断式[]</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shell-script的默认变量"><span class="nav-number">4.</span> <span class="nav-text">  shell script的默认变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#程序结构"><span class="nav-number">5.</span> <span class="nav-text">  程序结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#判断结构"><span class="nav-number">5.1.</span> <span class="nav-text">判断结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#if结构"><span class="nav-number">5.1.1.</span> <span class="nav-text">if结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#swicth结构"><span class="nav-number">5.1.2.</span> <span class="nav-text">swicth结构</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#循环结构"><span class="nav-number">5.2.</span> <span class="nav-text">循环结构</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#while-done-满足条件循环"><span class="nav-number">5.2.1.</span> <span class="nav-text">while..done : 满足条件循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#utile…done-满足条件终止循环"><span class="nav-number">5.2.2.</span> <span class="nav-text">utile…done : 满足条件终止循环</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for…each-循环遍历"><span class="nav-number">5.2.3.</span> <span class="nav-text">for…each : 循环遍历</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#for…done-条件遍历"><span class="nav-number">5.2.4.</span> <span class="nav-text">for…done : 条件遍历</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#function"><span class="nav-number">6.</span> <span class="nav-text">  function</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

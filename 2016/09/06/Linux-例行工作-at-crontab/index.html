@@ -1,0 +1,864 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是例行工作例行工作就是一些事先安排要进行的工作,其可能是周期发生,也可能是单次工作的.
+ Linux工作调度种类
+周期工作: crontab进行周期工作调度,其由cron服务支持
+单次工作: at进行单次工作调度,其是一次性的,由atd服务支持
+
+ 单次工作调度:at atd服务的启动单次工作调度：at需有atd服务支持,其启动方法如下
+1234/etc/init.d/atd restart">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 例行工作(at/crontab)">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-例行工作-at-crontab/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="什么是例行工作例行工作就是一些事先安排要进行的工作,其可能是周期发生,也可能是单次工作的.
+ Linux工作调度种类
+周期工作: crontab进行周期工作调度,其由cron服务支持
+单次工作: at进行单次工作调度,其是一次性的,由atd服务支持
+
+ 单次工作调度:at atd服务的启动单次工作调度：at需有atd服务支持,其启动方法如下
+1234/etc/init.d/atd restart">
+<meta property="og:updated_time" content="2016-09-06T13:11:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 例行工作(at/crontab)">
+<meta name="twitter:description" content="什么是例行工作例行工作就是一些事先安排要进行的工作,其可能是周期发生,也可能是单次工作的.
+ Linux工作调度种类
+周期工作: crontab进行周期工作调度,其由cron服务支持
+单次工作: at进行单次工作调度,其是一次性的,由atd服务支持
+
+ 单次工作调度:at atd服务的启动单次工作调度：at需有atd服务支持,其启动方法如下
+1234/etc/init.d/atd restart">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-例行工作-at-crontab/"/>
+
+  <title> Linux 例行工作(at/crontab) | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 例行工作(at/crontab)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:08:49+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-例行工作-at-crontab/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-例行工作-at-crontab/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是例行工作"><a href="#什么是例行工作" class="headerlink" title=" 什么是例行工作"></a><a name="ch1"> 什么是例行工作</a></h2><p>例行工作就是一些事先安排要进行的工作,其可能是周期发生,也可能是单次工作的.</p>
+<h3 id="Linux工作调度种类"><a href="#Linux工作调度种类" class="headerlink" title=" Linux工作调度种类"></a><a name="ch1.1"> Linux工作调度种类</a></h3><ul>
+<li>周期工作: <code>crontab</code>进行周期工作调度,其由<code>cron</code>服务支持</li>
+<li>单次工作: <code>at</code>进行单次工作调度,其是一次性的,由<code>atd</code>服务支持</li>
+</ul>
+<h2 id="单次工作调度-at"><a href="#单次工作调度-at" class="headerlink" title=" 单次工作调度:at"></a><a name="ch2"> 单次工作调度:at</a></h2><h3 id="atd服务的启动"><a href="#atd服务的启动" class="headerlink" title=" atd服务的启动"></a><a name="ch2.1"> atd服务的启动</a></h3><p>单次工作调度：at需有atd服务支持,其启动方法如下
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/etc/init.d/atd restart</div><div class="line"></div><div class="line"># 开机启动atd方法,Ubuntu不支持chkconfig,其会默认启动atd</div><div class="line">chkconfig atd on </div></pre></td></tr></table></figure></p>
+<h3 id="at用户限制"><a href="#at用户限制" class="headerlink" title=" at用户限制"></a><a name="ch2.2"> at用户限制</a></h3><p>at进行工作调度,其是针对执行at命令的用户,我们并不想让所有用户都可以执行at(某些用户可能执行破坏系统的命令),所以我们会限制可at的用户.</p>
+<p>at工作时会区查找/etc/at.allow和/etc/at.deny中限制的用户名单(通常at.allow与at.deny不同时存在)</p>
+<h4 id="etc-at-allow"><a href="#etc-at-allow" class="headerlink" title="/etc/at.allow"></a>/etc/at.allow</h4><p>当其存在时,只有at.allow中的用户才能执行at</p>
+<h4 id="etc-at-deny"><a href="#etc-at-deny" class="headerlink" title="/etc/at.deny"></a>/etc/at.deny</h4><p>当/etc/at.allow不存在,at会查找/etc/at.deny,这个文件内的用户都不能执行at</p>
+<h4 id="以上两个文件都不存在"><a href="#以上两个文件都不存在" class="headerlink" title="以上两个文件都不存在"></a>以上两个文件都不存在</h4><p>只有root才能执行at</p>
+<h3 id="at进行工作调度"><a href="#at进行工作调度" class="headerlink" title=" at进行工作调度"></a><a name="ch2.3"> at进行工作调度</a></h3><p><code>at</code>命令格式如下：
+<code>at time</code>: 进行工作调度安排,以[CTRL]+[d]结束工作安排,并返回一个工作编号
+<code>at -l</code>: 显示当前存在的工作
+<code>at -d 工作编号</code>:取消某个工作
+<code>at -c 工作编号</code>:显示某个工作具体的执行过程
+其中<code>time</code>的格式可以有<code>HH:MM</code> <code>HH:MM YYYY-MM-DD</code> <code>now + num [minutes| hours | days | weeks]</code>等</p>
+<p>一个例子:
+主机预计在5小时后关机
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"># at now + 5 hours    # 进入at shell的环境</div><div class="line">at &gt;  /bin/sync  #命令最好以绝对路径写,因为at shell的环境是其父进程的环境</div><div class="line">                        #比如我直接新建一个文件,其会在执行at时的目录下新建</div><div class="line">at &gt; /bin/sync</div><div class="line">at &gt; /sbin/shutdown -h 0</div><div class="line">at &gt; &lt;EOF&gt;</div><div class="line">job 5 at 2016-8-11 12:00</div></pre></td></tr></table></figure></p>
+<h3 id="batch进行工作调度"><a href="#batch进行工作调度" class="headerlink" title=" batch进行工作调度"></a><a name="ch2.4"> batch进行工作调度</a></h3><p> batch其实就是at,只不过batch要求CPU工作负载低时才会进行工作.(Ubuntu的batch不能加入时间参数)
+CPU负载是指单一时间点CPU负责的工作数量.</p>
+<h2 id="周期工作调度-crontab"><a href="#周期工作调度-crontab" class="headerlink" title=" 周期工作调度:crontab"></a><a name="ch3"> 周期工作调度:crontab</a></h2><h3 id="cron服务"><a href="#cron服务" class="headerlink" title=" cron服务"></a><a name="ch3.1"> cron服务</a></h3><p>Linux原本就有很多周期性例行工作,所以<code>cron</code>服务会默认启动</p>
+<h3 id="crontab用户限制"><a href="#crontab用户限制" class="headerlink" title=" crontab用户限制"></a><a name="ch3.2"> crontab用户限制</a></h3><p>与at用户限制类似,crontab也会限制执行的用户,crontab会去查找/etc/cron.allow与/etc/cron.deny这两个文件,如果这两个文件不存在,我们可自行创建,文件写入的用户名会被限制(一般只保留cron.deny)</p>
+<h3 id="用户的周期工作调度"><a href="#用户的周期工作调度" class="headerlink" title=" 用户的周期工作调度"></a><a name="ch3.3"> 用户的周期工作调度</a></h3><p>上面提到的是对执行crontab命令的用户进行限制,当一个用户执行crontab,crontab会在<code>/var/spool/cron/crontabs</code>(Ubuntu)创建一个同用户名的文件,来记录用户的周期工作.
+CentOS会在<code>/var/spool/cron</code>目录下创建同用户名的记录文件.</p>
+<p>我们可以通过<code>crontab -e</code>来打开这个文件</p>
+<p>这个文件的一条工作记录格式如下
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">0   12   *   *    *   echo &quot;Hello World!&quot; &gt; /tmp/test.log</div><div class="line">#一条工作记录由5个字段组成,分别是</div><div class="line">#分 时 日 月 周 命令</div><div class="line">#时间参数可以用特殊值来表示如下:</div><div class="line">*  :  代表任何时刻都接受</div><div class="line">,   :  代表时刻A和时刻B都接受,比如 0 3,6 * * * 每天3点和6点</div><div class="line">-   :  代表某个时间段,比如0,3-6 * * * 每天3点到6点</div><div class="line">/n : 代表间隔n个时间单位,比如*/5 * * * * 每5分钟</div></pre></td></tr></table></figure></p>
+<p>如果要删除某个工作,用<code>crontab -e</code>打开文件后删除相应的工作记录即可.</p>
+<p>如果root要为某用户安排工作,可以使用<code>crontab -u username -e</code> 或者直接打开用户的工作记录文件.</p>
+<h3 id="系统的周期工作调度"><a href="#系统的周期工作调度" class="headerlink" title=" 系统的周期工作调度"></a><a name="ch3.4"> 系统的周期工作调度</a></h3><p>系统的周期工作记录文件在/etc/crontab中,我们打开/etc/crontab,可以看到如下类似的工作记录
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"> # m h dom mon dow user  command</div><div class="line">25 6    * * *   root    cd / &amp;&amp;run-parts --report /etc/cron.daily</div><div class="line"></div><div class="line"># 工作记录与用户的工作记录类似,多了一个user字段</div><div class="line"># 上面的工作是每天6时25分钟时执行/etc/cron.daily目录下的所有可执行文件.</div><div class="line"># run-parts是执行指定目录下的所有文件</div><div class="line"># 执行者是root</div><div class="line"># 当然我们可以不进行run-parts,直接执行某个命令.</div><div class="line"># 也可以指定某个目录,放置要执行的script文件,再进行run-parts</div></pre></td></tr></table></figure></p>
+<h3 id="唤醒停机期间的工作调度-anacron"><a href="#唤醒停机期间的工作调度-anacron" class="headerlink" title=" 唤醒停机期间的工作调度:anacron"></a><a name="ch3.5"> 唤醒停机期间的工作调度:anacron</a></h3><p>当主机停机期间,安排好的工作并不能执行,哪该怎么办?
+<code>anacron</code>会帮我们处理这个问题.其本质也是一个crontab</p>
+<h4 id="anacron工作原理"><a href="#anacron工作原理" class="headerlink" title="anacron工作原理"></a>anacron工作原理</h4><p>当我们每次处理crontab安排的工作时,都会先处理anacron安排的工作,anacron安排的工作很简单,就是记录这次处理crontab的时间(时间记录在目录/var/spool/anacront/下的子文件).当我们下次处理anacron工作时,会比较与前一个时间的差值,看它是否满足工作记录的要求,不满足就进行差值时间内之前的crontab工作.</p>
+<h4 id="anacron工作记录文件-etc-anacrontab"><a href="#anacron工作记录文件-etc-anacrontab" class="headerlink" title="anacron工作记录文件/etc/anacrontab"></a>anacron工作记录文件/etc/anacrontab</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># These replace cron&apos;s entries</div><div class="line">1       5       cron.daily      run-parts --report /etc/cron.daily</div><div class="line"></div><div class="line"># 上面工作记录表示:此条工作名为cron.daily,其每天执行的(1),执行会延迟5分钟才开始</div><div class="line"># 执行命令是 run-parts --report /etc/cron.daily</div><div class="line"></div><div class="line">7       10      cron.weekly     run-parts --report /etc/cron.weekly</div><div class="line"></div><div class="line"># 还有下面这条工作记录,应该看得懂吧</div></pre></td></tr></table></figure>
+<p>如果我们自己要安排一些周期工作,又担心系统停机后没处理到数据,那就可以在/etc/anacrotab中指定.anacron记录的时间在文件/var/spool/anacron/工作名中</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/" rel="next" title="Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM)">
+                <i class="fa fa-chevron-left"></i> Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-程序管理与SELinux/" rel="prev" title="Linux 程序管理与SELinux">
+                Linux 程序管理与SELinux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-例行工作-at-crontab/"
+           data-title="Linux 例行工作(at/crontab)" data-url="http://yoursite.com/2016/09/06/Linux-例行工作-at-crontab/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是例行工作"><span class="nav-number">1.</span> <span class="nav-text"> 什么是例行工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux工作调度种类"><span class="nav-number">1.1.</span> <span class="nav-text"> Linux工作调度种类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#单次工作调度-at"><span class="nav-number">2.</span> <span class="nav-text"> 单次工作调度:at</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#atd服务的启动"><span class="nav-number">2.1.</span> <span class="nav-text"> atd服务的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#at用户限制"><span class="nav-number">2.2.</span> <span class="nav-text"> at用户限制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-at-allow"><span class="nav-number">2.2.1.</span> <span class="nav-text">/etc/at.allow</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-at-deny"><span class="nav-number">2.2.2.</span> <span class="nav-text">/etc/at.deny</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#以上两个文件都不存在"><span class="nav-number">2.2.3.</span> <span class="nav-text">以上两个文件都不存在</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#at进行工作调度"><span class="nav-number">2.3.</span> <span class="nav-text"> at进行工作调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#batch进行工作调度"><span class="nav-number">2.4.</span> <span class="nav-text"> batch进行工作调度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#周期工作调度-crontab"><span class="nav-number">3.</span> <span class="nav-text"> 周期工作调度:crontab</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cron服务"><span class="nav-number">3.1.</span> <span class="nav-text"> cron服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#crontab用户限制"><span class="nav-number">3.2.</span> <span class="nav-text"> crontab用户限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户的周期工作调度"><span class="nav-number">3.3.</span> <span class="nav-text"> 用户的周期工作调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统的周期工作调度"><span class="nav-number">3.4.</span> <span class="nav-text"> 系统的周期工作调度</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#唤醒停机期间的工作调度-anacron"><span class="nav-number">3.5.</span> <span class="nav-text"> 唤醒停机期间的工作调度:anacron</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#anacron工作原理"><span class="nav-number">3.5.1.</span> <span class="nav-text">anacron工作原理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#anacron工作记录文件-etc-anacrontab"><span class="nav-number">3.5.2.</span> <span class="nav-text">anacron工作记录文件/etc/anacrontab</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

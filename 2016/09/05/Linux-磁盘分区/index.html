@@ -118,7 +118,7 @@ IDE硬盘
 /de">
 <meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_10_1.png?raw=true">
 <meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_10_2.gif?raw=true">
-<meta property="og:updated_time" content="2016-09-05T02:45:36.000Z">
+<meta property="og:updated_time" content="2016-09-05T04:31:29.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Linux 磁盘分区">
 <meta name="twitter:description" content="Linux与硬件 各硬件设备在Linux中的文件名在Linux系统中，每个设备都被当成一个文件来对待。举例说，IDE接口连接的硬盘的文件名即为/dev/hd[a-d],其中，括号内的字母为a-d当中的任意一个。
@@ -425,7 +425,8 @@ IDE硬盘
 </tbody>
 </table>
 <p>需要特别留意的是硬盘(IDE,SCSI,USB,SATA都一样)，每个磁盘驱动器的磁盘分区不同时,其磁盘文件名还会改变。以SATA/USB接口的磁盘为例，Linux内核会根据检测到磁盘的顺序来决定磁盘的设备文件名。</p>
-<p>比如:<br>如果你的PC上面有两个SATA磁盘以及一个USB磁盘，而主板上面有六个SATA的插槽，这两个SATA磁盘分别安插在主板上的SATA1,SATA5插槽上，请问这三个磁盘在Linux中的设备文件名是什么？</p>
+<p>比如:
+如果你的PC上面有两个SATA磁盘以及一个USB磁盘，而主板上面有六个SATA的插槽，这两个SATA磁盘分别安插在主板上的SATA1,SATA5插槽上，请问这三个磁盘在Linux中的设备文件名是什么？</p>
 <ol>
 <li>SATA1插槽上的文件名是:/dev/sda</li>
 <li>SATA5插槽上的文件名是:/dev/sdb</li>
@@ -474,7 +475,8 @@ IDE硬盘
 <li>转交其他loader：将引导加载功能转交给其他loader负责。</li>
 </ul>
 <p>当你的计算机系统有两个以上的引导加载程序，我们可以使用多重引导。引导加载程序除了可以安装在MBR之外，还可以安装在每个分区的引导扇区。</p>
-<p>举个例子：<br>假设你的计算机只有一块硬盘,里面分成4个分区，其中第1,2分区分别安装了Windows及Linux，你要如何在开机的时候选择用Windows还是Linux开机呢？假设MBR内安装的是同时识别Windows/Linux操作系统的引导加载程序，那么整个流程如下:</p>
+<p>举个例子：
+假设你的计算机只有一块硬盘,里面分成4个分区，其中第1,2分区分别安装了Windows及Linux，你要如何在开机的时候选择用Windows还是Linux开机呢？假设MBR内安装的是同时识别Windows/Linux操作系统的引导加载程序，那么整个流程如下:</p>
 <p><img src="https://github.com/HiKumho/blog/blob/master/img/blog_10_2.gif?raw=true" alt=""></p>
 <hr>
 <h3 id="文件系统与目录树"><a href="#文件系统与目录树" class="headerlink" title=" 文件系统与目录树"></a><a name="ch2.4"> 文件系统与目录树</a></h3><ul>
@@ -492,7 +494,7 @@ IDE硬盘
 </ul>
 </li>
 </ul>
-<p>详细请查看<a href="https://github.com/HiKumho/blog/blob/master/Liunx%E5%90%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9A%84%E4%BD%9C%E7%94%A8(%E8%BD%AC%E8%BD%BD" target="_blank" rel="external">Liunx各目录作用</a>.md)</p>
+<p>详细请查看<a href="https://github.com/HiKumho/blog/blob/master/Liunx%E5%90%84%E6%96%87%E4%BB%B6%E5%A4%B9%E7%9A%84%E4%BD%9C%E7%94%A8(%E8%BD%AC%E8%BD%BD.md" target="_blank" rel="external">Liunx各目录作用</a></p>
 
       
     </div>
@@ -531,6 +533,10 @@ IDE硬盘
           </div>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/05/Linux-Android环境搭建/" rel="prev" title="Linux Android环境搭建">
+                Linux Android环境搭建 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -602,7 +608,7 @@ IDE硬盘
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

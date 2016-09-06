@@ -1,0 +1,936 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="磁盘额度(quota) 什么是quota在Linux系统中，多用户多任务的环境会经常抢占资源，quota则是制定用户/用户组，对硬盘资源的进行配额 ， 妥善分配资源。
+
+quota的一般用途
+针对WWW server ， 例如：限制用户的网页空间容量
+针对 mail server  ， 例如 ： 限制用户的邮件空间
+针对 file server ， 例如 ： 限制用户最大的可能网络磁盘空间
+限制">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM)">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="磁盘额度(quota) 什么是quota在Linux系统中，多用户多任务的环境会经常抢占资源，quota则是制定用户/用户组，对硬盘资源的进行配额 ， 妥善分配资源。
+
+quota的一般用途
+针对WWW server ， 例如：限制用户的网页空间容量
+针对 mail server  ， 例如 ： 限制用户的邮件空间
+针对 file server ， 例如 ： 限制用户最大的可能网络磁盘空间
+限制">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_25_2.gif?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_25_3.jpg?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_25_1.png?raw=true">
+<meta property="og:updated_time" content="2016-09-06T13:06:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM)">
+<meta name="twitter:description" content="磁盘额度(quota) 什么是quota在Linux系统中，多用户多任务的环境会经常抢占资源，quota则是制定用户/用户组，对硬盘资源的进行配额 ， 妥善分配资源。
+
+quota的一般用途
+针对WWW server ， 例如：限制用户的网页空间容量
+针对 mail server  ， 例如 ： 限制用户的邮件空间
+针对 file server ， 例如 ： 限制用户最大的可能网络磁盘空间
+限制">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_25_2.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/"/>
+
+  <title> Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM) | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:00:58+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="磁盘额度-quota"><a href="#磁盘额度-quota" class="headerlink" title=" 磁盘额度(quota)"></a><a name="ch1"> 磁盘额度(quota)</a></h2><h3 id="什么是quota"><a href="#什么是quota" class="headerlink" title=" 什么是quota"></a><a name="ch1.1"> 什么是quota</a></h3><p>在Linux系统中，多用户多任务的环境会经常抢占资源，quota则是制定用户/用户组，对硬盘资源的进行配额 ， 妥善分配资源。</p>
+<ul>
+<li>quota的一般用途<ul>
+<li>针对WWW server ， 例如：限制用户的网页空间容量</li>
+<li>针对 mail server  ， 例如 ： 限制用户的邮件空间</li>
+<li>针对 file server ， 例如 ： 限制用户最大的可能网络磁盘空间</li>
+<li>限制某用户的最大磁盘配额</li>
+<li>限制某用户组的最大磁盘配额</li>
+<li>以LINK方式对目录进行用户/用户组配额</li>
+</ul>
+</li>
+<li>quota的使用限制<ul>
+<li>仅能针对整个文件系统， 如果某文件系统没有设置quota，其下的文件可以通过link来指向设置了quota的文件系统</li>
+<li>内核必须支持quota</li>
+<li>只对一般身份用户有效（root没效）</li>
+<li>quota的日志文件:kernel2.6的日志文件是aquota.user aquota.group ，文件名比旧版的quota前面多了个a</li>
+</ul>
+</li>
+<li>quota的设置选项<ul>
+<li>quota可以限制文件系统的block与inode的大小：限制block的大小就是其使用文件系统容量，限制inode就是限制其可创建的文件数</li>
+<li>限制值（soft/hard） ：hard表示用户使用的容量绝对不能超过此值。soft表示用户超过此值就会警告，并倒数宽限时间，超过宽限时间后hard=soft。</li>
+<li>宽限时间（grace time） </li>
+</ul>
+</li>
+</ul>
+<h3 id="文件系统启用quota"><a href="#文件系统启用quota" class="headerlink" title=" 文件系统启用quota"></a><a name="ch1.2"> 文件系统启用quota</a></h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">下面以/home的文件系统为例</div><div class="line"></div><div class="line"><span class="comment"># 查看/home是否启用quota</span></div><div class="line"><span class="comment"># mount | grep home</span></div><div class="line">/dev/mapper/vg1-lv1 on /home <span class="built_in">type</span> ext4 (rw)  <span class="comment"># 没有</span></div><div class="line"></div><div class="line"><span class="comment"># 启用 quota （用户限制与用户组限制）</span></div><div class="line"><span class="comment"># mount -o remount,usrquota,grpquota /home</span></div><div class="line">/dev/mapper/vg1-lv1 on /home <span class="built_in">type</span> ext4 (rw,usrquota,grpquota)</div><div class="line"></div><div class="line"><span class="comment"># 如果要开机就启用quota</span></div><div class="line"><span class="comment"># 可以修改/etc/fstab文件系统的选项</span></div><div class="line"></div></pre></td></tr></table></figure>
+<h3 id="新建quota日志文件"><a href="#新建quota日志文件" class="headerlink" title=" 新建quota日志文件"></a><a name="ch1.3"> 新建quota日志文件</a></h3><p>quota日志文件除了进行日志记录时，也是对用户/用户组的额度进行配置
+使用<code>quotacheck</code> ： 扫描文件系统并新建quota日志文件（aquota.user   aquota.group）
+命令格式 ： <code>quotacheck -vug /mount_point</code>   :  <code>v</code>：显示进度  <code>u</code>：新建用户日志 <code>g</code>：新建用户组日志</p>
+<h3 id="启动-停止quota与限制值设置"><a href="#启动-停止quota与限制值设置" class="headerlink" title=" 启动/停止quota与限制值设置"></a><a name="ch1.4"> 启动/停止quota与限制值设置</a></h3><p>启动quota：quotaon /mount_point
+停止quota：quotaoff /mount_point</p>
+<p>限制值设置：edquota与setquota
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"># 以限制用户额度为例</div><div class="line"># edquota -u user1 [-g groupname]  #其会打开一个关于此用户限值设置的文档</div><div class="line"></div><div class="line">FileSystem Blocks  soft hard Inodes  soft  hard</div><div class="line">/dev/sda9     80    0     0       10     0   0</div><div class="line"></div><div class="line">FileSystem：针对的文件系统</div><div class="line">Blocks：磁盘容量,单位KB</div><div class="line">soft：blocks的soft 单位KB,0表示不限制</div><div class="line">hard：block的hard</div><div class="line">inodes： Inode数量，单位个数</div><div class="line">soft:Inode的soft</div><div class="line">hard: Inode的hard</div><div class="line"></div><div class="line">我们通常只会设置block的soft与hard</div><div class="line"></div><div class="line">setquota可以帮助我们在shell script中设置quota</div><div class="line">其格式为：setquota [-u name][-g name] blockSoft blockHard inodeSoft inodeHard /mount_point</div><div class="line"></div><div class="line">设置宽限时间</div><div class="line">edquota -t </div></pre></td></tr></table></figure></p>
+<h3 id="quota当前情况报表以及警告信息"><a href="#quota当前情况报表以及警告信息" class="headerlink" title=" quota当前情况报表以及警告信息"></a><a name="ch1.5"> quota当前情况报表以及警告信息</a></h3><p>针对用户/用户组的报表 ：  quota [-u|-g]vs name
+针对文件系统的报表： repquota -augvs</p>
+<p>发送警告信息：warnquota（当有用户超过soft时，才会成功送出两份mail，分别给root与该用户），如果要明天定时执行warnquota，可以在/etc/cron.daily/warnquota中写入<code>warnquota命令的绝对路径</code></p>
+<h2 id="磁盘阵列-RAID"><a href="#磁盘阵列-RAID" class="headerlink" title=" 磁盘阵列(RAID)"></a><a name="ch2"> 磁盘阵列(RAID)</a></h2><h3 id="什么是RAID"><a href="#什么是RAID" class="headerlink" title=" 什么是RAID"></a><a name="ch2.1"> 什么是RAID</a></h3><p>磁盘阵列(RAID)，即容错廉价磁盘阵列，其有多个较小的磁盘整合成一个较大的磁盘。其不只具有存储功能，还有数据保护和性能优化等功能。 特别是用相同型号等大小的磁盘组成时性能最优，以下是其整合模式。</p>
+<h4 id="RAID-0-等量模式-性能最优"><a href="#RAID-0-等量模式-性能最优" class="headerlink" title="RAID-0(等量模式):性能最优"></a>RAID-0(等量模式):性能最优</h4><p>数据依次放到各个磁盘中，由于磁盘是交错放置数据的，所以数据会被等量分到各个磁盘中。此中模式性能最优，但是没有对数据毁坏的处理。</p>
+<h4 id="RAID-1-映像模式-完整备份"><a href="#RAID-1-映像模式-完整备份" class="headerlink" title="RAID-1(映像模式):完整备份"></a>RAID-1(映像模式):完整备份</h4><p>一份数据会存放在RAID中存放两次。所以RAID-1的容量只是组成磁盘总容量的一半(或者更小)。优点是完整备份数据，性能较差。</p>
+<h4 id="RAID0-1与RAID1-0"><a href="#RAID0-1与RAID1-0" class="headerlink" title="RAID0+1与RAID1+0"></a>RAID0+1与RAID1+0</h4><p>磁盘先组成RAID0或1，再去组成RAID1或0，这种模式优化了性能，又备份了数据。但是组成的硬盘较多，容量也只有这些硬盘的一半。</p>
+<h4 id="RAID-5：性能与数据均衡考虑"><a href="#RAID-5：性能与数据均衡考虑" class="headerlink" title="RAID-5：性能与数据均衡考虑"></a>RAID-5：性能与数据均衡考虑</h4><p>RAID-5：至少需要3个硬盘以上。数据以RAID-0方式依次循环写硬盘中，但是一个循环过程会在某个硬盘写入一同步检查码(其可以恢复此轮循环中写入其他盘的数据)，由于检查码会用掉一个硬盘，所以RAID-5的总量等于硬盘-1的容量。</p>
+<h4 id="Spare-Disk：-预备盘"><a href="#Spare-Disk：-预备盘" class="headerlink" title="Spare Disk： 预备盘"></a>Spare Disk： 预备盘</h4><p>组成RAID时，会多准备出几个空盘，当RAID中某盘坏掉时，系统会抽出坏盘，抽入一个预备盘。</p>
+<h3 id="软磁盘阵列"><a href="#软磁盘阵列" class="headerlink" title=" 软磁盘阵列"></a><a name="ch2.2"> 软磁盘阵列</a></h3><p>软磁盘阵列，相对与硬磁盘阵列，是用软件来模拟出RAID的功能，但实际上盘是不会改变的，坏盘了还是GG.</p>
+<h4 id="软磁盘阵列的设置"><a href="#软磁盘阵列的设置" class="headerlink" title=" 软磁盘阵列的设置"></a><a name="ch2.2.1"> 软磁盘阵列的设置</a></h4><p>使用如下的命令
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"># 创建一个名为md0的RAID,RAID模式5，用sda8,9,10构成RAID,用sda11,12构成预备盘</div><div class="line">mdadm --create --auto=yes /dev/md0   --raid-devices=3 --level=5  --spare-devices=2  /dev/sda&#123;8,9,10,11,12&#125;</div><div class="line"></div><div class="line"># 查看md0情况</div><div class="line">mdadm --detail /dev/md0</div></pre></td></tr></table></figure></p>
+<h4 id="软磁盘阵列的管理"><a href="#软磁盘阵列的管理" class="headerlink" title=" 软磁盘阵列的管理"></a><a name="ch2.2.2"> 软磁盘阵列的管理</a></h4><p>使用如下命令对raid进行管理
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">mdadm --manage /dev/md0 [--add 设备名] [--remove 设备名] [--fail 设备名]</div><div class="line"># 其中fail是设置raid中的设备出错</div></pre></td></tr></table></figure></p>
+<h4 id="软磁盘阵列的开机挂载"><a href="#软磁盘阵列的开机挂载" class="headerlink" title=" 软磁盘阵列的开机挂载"></a><a name="ch2.2.3"> 软磁盘阵列的开机挂载</a></h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 首先查出raid设备的uuid</span></div><div class="line">mdadm --detail /dev/md0</div><div class="line"></div><div class="line"><span class="comment"># 设置mdadm的映射关系</span></div><div class="line">在/etc/mdadm.conf中添加`ARRAY /dev/md0 UUID=值</div><div class="line"></div><div class="line"><span class="comment"># 设置etc/fstab</span></div></pre></td></tr></table></figure>
+<h4 id="软磁盘阵列的关闭"><a href="#软磁盘阵列的关闭" class="headerlink" title=" 软磁盘阵列的关闭"></a><a name="ch2.2.4"> 软磁盘阵列的关闭</a></h4><p>首先先停止RAID的挂载，再执行<code>mdadm --stop</code>，最后可能会要修改回/etc/mdadm.conf</p>
+<h2 id="逻辑卷管理-LVM"><a href="#逻辑卷管理-LVM" class="headerlink" title=" 逻辑卷管理(LVM)"></a><a name="ch3"> 逻辑卷管理(LVM)</a></h2><h3 id="什么是LVM"><a href="#什么是LVM" class="headerlink" title=" 什么是LVM"></a><a name="ch3.1"> 什么是LVM</a></h3><p>LVM可以弹性调整文件系统的容量,其可以整合多个物理分区成为一个逻辑分区,当然也可以从逻辑分区中删除物理分区。</p>
+<p>其作法是:将几个物理分区(PV)组合成一个分区组(VG),在从VG中划分从逻辑区(LV)供文件系统挂载。
+LVM中的最小单位是物理扩展块(PE),有点类似blocks,PE是PV的最小单位,其可以指定大小(需2的倍数),我们可以通过LV中PE的数量来调整LV的大小。</p>
+<p>PE/VG/LV关系图如下
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_25_2.gif?raw=true" alt="">
+这图可以将每两组看作一个PV,更好理解LVM各单位的关系</p>
+<p>LVM实现过程如下图：
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_25_3.jpg?raw=true" alt=""></p>
+<h3 id="LVM实现过程"><a href="#LVM实现过程" class="headerlink" title=" LVM实现过程"></a><a name="ch3.2"> LVM实现过程</a></h3><h4 id="PV阶段"><a href="#PV阶段" class="headerlink" title="PV阶段"></a>PV阶段</h4><ul>
+<li>pvcreate : 将物理分区(System Id 要改为8e)新建成PV</li>
+<li>pvdisplay: 显示目前系统的PV状态</li>
+<li>pvremove: 将PV属性删除,物理无法不具有PV属性
+以下命令将sda6,7,8,9构建成pv<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pvcreate /dev/sda&#123;6,7,8,9&#125;  #pv名同设备名</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="VG阶段"><a href="#VG阶段" class="headerlink" title="VG阶段"></a>VG阶段</h4><ul>
+<li>vgcreate:新建vg,基本格式是 <code>vgcreate -s PE大小 VG名 PV名</code></li>
+<li>vgdisplay:显示目前系统的vg状态</li>
+<li>vgextend:vg内增加额外的pv 格式是<code>vgextend VG名 PV名</code></li>
+<li>vgreduce:vg内删除pv,格式类似vgextend</li>
+<li>vgchange:激活/失活vg,在删除pv时都要失活vg,格式<code>vgchange -a n vg名</code></li>
+<li>vgremove:删除vg
+以下命令是将sda6,7,8构成一个vg,再添加sda9<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">vgcreate -s 4M vg1 /dev/sda&#123;6,7,8&#125;  #构成出的vg1设备名是/dev/vg1</div><div class="line">vgextend vg1 /dev/sda9</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h4 id="LV阶段"><a href="#LV阶段" class="headerlink" title="LV阶段"></a>LV阶段</h4><ul>
+<li>lvcreate:新建LV,可以直接指定大小(-L)或者通过PE个数来指定大小(-l) 基本格式是<code>lvcreate -l num -n lv名 vg名</code></li>
+<li>lvdisplay:显示目前系统的lv状态</li>
+<li>lvresize:对LV进行容量大小调整(+|-)</li>
+<li>lvremove:删除一个LV
+以下命令是在vg1下构建一个由365个PE构成的lv<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">lvcreate -l 365 -n lv1 /dev/vg1 # 构建成的lv 设备名是/dev/vg1/lv1</div></pre></td></tr></table></figure>
+最后就可以直接格式话化lv,并进行挂载</li>
+</ul>
+<h3 id="放大-缩小LV容量"><a href="#放大-缩小LV容量" class="headerlink" title=" 放大/缩小LV容量"></a><a name="ch3.3"> 放大/缩小LV容量</a></h3><h4 id="放大LV容量"><a href="#放大LV容量" class="headerlink" title="放大LV容量"></a>放大LV容量</h4><p>其过程可以在线完成(即vg活动时),一般步骤如下:</p>
+<ol>
+<li>构建pv (pvcreate)</li>
+<li>将pv加入vg (vgextend)</li>
+<li>放大lv容量 (lvresize)</li>
+<li>修改文件系统容量(修改超级块信息,resize2fs):resize2fs格式是<code>resize2fs 设备 [size]</code>
+以下将sda10加入到vg,以扩展lv<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># 创建pv</div><div class="line">pvcreate /dev/sda10</div><div class="line"></div><div class="line"># 向vg添加pv</div><div class="line">vgextend vg1 /dev/sda10</div><div class="line"></div><div class="line"># 放大lv容量</div><div class="line">lvresize -l +179 /dev/vg1/lv1</div><div class="line"></div><div class="line"># 修改文件系统容量</div><div class="line">resize2fs /dev/vg1/lv1</div><div class="line"></div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="缩小LV容量"><a href="#缩小LV容量" class="headerlink" title="缩小LV容量"></a>缩小LV容量</h4><p>缩小lv容量不能在vg活动时进入,具体过程就是放大lv容量的逆过程(注意:一定要先resize2fs,不然可能文件系统损坏)
+以下将/dev/sda10移出vg1
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"># 系统要求在resize2fs时先进行磁盘检查</div><div class="line">e2fsck -f /dev/vg1/lv1</div><div class="line"></div><div class="line"># 修改文件系统size,以减去/dev/sda10的大小</div><div class="line">resize2fs /dev/vg1/lv1 6900M</div><div class="line"></div><div class="line"># 失活vg1</div><div class="line">vgchange -a n vg1  (-a y 是激活)</div><div class="line"></div><div class="line"># lv缩小容量</div><div class="line">lvresize -l -179 /dev/vg1/lv1</div><div class="line"></div><div class="line"># vg1移出/dev/sda10</div><div class="line">vgreduce vg1 /dev/sda10</div><div class="line"></div><div class="line"># /dev/sda10删除pv属性</div><div class="line">pvremove /dev/sda10</div><div class="line"></div><div class="line"># 激活vg1</div><div class="line">vgchange -a y vg1</div></pre></td></tr></table></figure></p>
+<h3 id="LVM的快照功能"><a href="#LVM的快照功能" class="headerlink" title=" LVM的快照功能"></a><a name="ch3.4"> LVM的快照功能</a></h3><p>LVM的快照区会保存建立快照时的文件系统中的数据,当然这个快照区有一定的最值,当系统变化太多时,快照区就会饱满,通过我们建立快照区来备份某个时刻的数据,以恢复文件系统(比如,教学环境中,老师会将系统建立快照区,再将挂载快照区的文件系统供学生使用.这样并不会影响到原文件系统)</p>
+<p>建立快照区的命令
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"># 建立了lv1的100M快照区</div><div class="line">lvcreate -L 100M -s -n lv1ss /dev/vg1/lv1</div><div class="line"></div><div class="line"># 之后我们可以挂载这个快照区</div><div class="line">mount /dev/vg1/lv1ss /mnt/tmp</div><div class="line"></div><div class="line"># 再备份数据出来待恢复使用</div><div class="line">tar -jcv -f /mnt/backup/lv1.backup /mnt/tmp </div><div class="line"># 注意不能直接从快照区复制数据到原区,原区数据会覆盖删去后都转到快照区的</div></pre></td></tr></table></figure></p>
+<h3 id="LVM的相关命令汇总与LVM的关闭"><a href="#LVM的相关命令汇总与LVM的关闭" class="headerlink" title=" LVM的相关命令汇总与LVM的关闭"></a><a name="ch3.5"> LVM的相关命令汇总与LVM的关闭</a></h3><p>LVM相关命令汇总如下图:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_25_1.png?raw=true" alt=""></p>
+<p>LVM的关闭步骤如下:</p>
+<ol>
+<li>使用lvremove删除所有lv</li>
+<li>使vg失活 vgchange -a n vgname</li>
+<li>使用vgremove删除vg</li>
+<li>使用pvremoe删除pv</li>
+<li>fdisk 回收 分区</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-账号管理与ACL权限/" rel="next" title="Linux 账号管理与ACL权限">
+                <i class="fa fa-chevron-left"></i> Linux 账号管理与ACL权限
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-例行工作-at-crontab/" rel="prev" title="Linux 例行工作(at/crontab)">
+                Linux 例行工作(at/crontab) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/"
+           data-title="Linux 磁盘额度(Quota)与高级文件系统管理(RAID/LVM)" data-url="http://yoursite.com/2016/09/06/Linux-磁盘额度-Quota-与高级文件系统管理-RAID-LVM/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘额度-quota"><span class="nav-number">1.</span> <span class="nav-text"> 磁盘额度(quota)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是quota"><span class="nav-number">1.1.</span> <span class="nav-text"> 什么是quota</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件系统启用quota"><span class="nav-number">1.2.</span> <span class="nav-text"> 文件系统启用quota</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建quota日志文件"><span class="nav-number">1.3.</span> <span class="nav-text"> 新建quota日志文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动-停止quota与限制值设置"><span class="nav-number">1.4.</span> <span class="nav-text"> 启动/停止quota与限制值设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#quota当前情况报表以及警告信息"><span class="nav-number">1.5.</span> <span class="nav-text"> quota当前情况报表以及警告信息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#磁盘阵列-RAID"><span class="nav-number">2.</span> <span class="nav-text"> 磁盘阵列(RAID)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是RAID"><span class="nav-number">2.1.</span> <span class="nav-text"> 什么是RAID</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID-0-等量模式-性能最优"><span class="nav-number">2.1.1.</span> <span class="nav-text">RAID-0(等量模式):性能最优</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID-1-映像模式-完整备份"><span class="nav-number">2.1.2.</span> <span class="nav-text">RAID-1(映像模式):完整备份</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID0-1与RAID1-0"><span class="nav-number">2.1.3.</span> <span class="nav-text">RAID0+1与RAID1+0</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RAID-5：性能与数据均衡考虑"><span class="nav-number">2.1.4.</span> <span class="nav-text">RAID-5：性能与数据均衡考虑</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Spare-Disk：-预备盘"><span class="nav-number">2.1.5.</span> <span class="nav-text">Spare Disk： 预备盘</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软磁盘阵列"><span class="nav-number">2.2.</span> <span class="nav-text"> 软磁盘阵列</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#软磁盘阵列的设置"><span class="nav-number">2.2.1.</span> <span class="nav-text"> 软磁盘阵列的设置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软磁盘阵列的管理"><span class="nav-number">2.2.2.</span> <span class="nav-text"> 软磁盘阵列的管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软磁盘阵列的开机挂载"><span class="nav-number">2.2.3.</span> <span class="nav-text"> 软磁盘阵列的开机挂载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软磁盘阵列的关闭"><span class="nav-number">2.2.4.</span> <span class="nav-text"> 软磁盘阵列的关闭</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#逻辑卷管理-LVM"><span class="nav-number">3.</span> <span class="nav-text"> 逻辑卷管理(LVM)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是LVM"><span class="nav-number">3.1.</span> <span class="nav-text"> 什么是LVM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LVM实现过程"><span class="nav-number">3.2.</span> <span class="nav-text"> LVM实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#PV阶段"><span class="nav-number">3.2.1.</span> <span class="nav-text">PV阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VG阶段"><span class="nav-number">3.2.2.</span> <span class="nav-text">VG阶段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#LV阶段"><span class="nav-number">3.2.3.</span> <span class="nav-text">LV阶段</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#放大-缩小LV容量"><span class="nav-number">3.3.</span> <span class="nav-text"> 放大/缩小LV容量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#放大LV容量"><span class="nav-number">3.3.1.</span> <span class="nav-text">放大LV容量</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#缩小LV容量"><span class="nav-number">3.3.2.</span> <span class="nav-text">缩小LV容量</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LVM的快照功能"><span class="nav-number">3.4.</span> <span class="nav-text"> LVM的快照功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LVM的相关命令汇总与LVM的关闭"><span class="nav-number">3.5.</span> <span class="nav-text"> LVM的相关命令汇总与LVM的关闭</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

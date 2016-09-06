@@ -1,0 +1,1039 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是网络网络是将主机用网线或无线技术连接起来,使主机资源透过网络设备来传输的一种技术,其跨平台,一个标准用于不同操作系统间,这个标准为IEEE标准,其分为硬件标准(以太网络设备)与通信协议(TCP/IP)
+ 网络组成元件组成网络的元件有以下:
+
+节点: 主要是具有网络地址(IP)的设备
+服务器主机:一个提供资料的特殊节点
+工作站/客服端:任何可在网络上输入的设备都可是工作站/客服端,比如ATM">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 服务器篇 基础网络概念">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-服务器篇-基础网络概念/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="什么是网络网络是将主机用网线或无线技术连接起来,使主机资源透过网络设备来传输的一种技术,其跨平台,一个标准用于不同操作系统间,这个标准为IEEE标准,其分为硬件标准(以太网络设备)与通信协议(TCP/IP)
+ 网络组成元件组成网络的元件有以下:
+
+节点: 主要是具有网络地址(IP)的设备
+服务器主机:一个提供资料的特殊节点
+工作站/客服端:任何可在网络上输入的设备都可是工作站/客服端,比如ATM">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_34_1_OSI%E6%A8%A1%E5%9E%8B.gif?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/HiKumho/blog/9a69ddba59bac60c5344ddcd982ea6b398b96e2d/img/blog_34_2_TCP-IP%E6%A8%A1%E5%9E%8B.gif">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_34_3_%E5%B8%A7.png?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_34_4_IP%E5%8C%85.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/HiKumho/blog/e2e4d7bdce0011158e87d7b8ad5d1ba8cdfe1eb1/img/blog_34_5_route.jpg">
+<meta property="og:image" content="https://raw.githubusercontent.com/HiKumho/blog/e15407def84c9f9ee3530a5eb70f26b0c7b1355c/img/blog_35_6_tcp_ip_mac%E5%8C%85.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/HiKumho/blog/a02208423e1bd1ce08e8ccf8d1d829795a4c0964/img/blog_35_7_tcp%E5%8C%85.png">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_34_8_TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.png?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_34_9_udp%E5%8C%85.png?raw=true">
+<meta property="og:updated_time" content="2016-09-06T14:33:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 服务器篇 基础网络概念">
+<meta name="twitter:description" content="什么是网络网络是将主机用网线或无线技术连接起来,使主机资源透过网络设备来传输的一种技术,其跨平台,一个标准用于不同操作系统间,这个标准为IEEE标准,其分为硬件标准(以太网络设备)与通信协议(TCP/IP)
+ 网络组成元件组成网络的元件有以下:
+
+节点: 主要是具有网络地址(IP)的设备
+服务器主机:一个提供资料的特殊节点
+工作站/客服端:任何可在网络上输入的设备都可是工作站/客服端,比如ATM">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_34_1_OSI%E6%A8%A1%E5%9E%8B.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-服务器篇-基础网络概念/"/>
+
+  <title> Linux 服务器篇 基础网络概念 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 服务器篇 基础网络概念
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T22:02:17+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-服务器篇-基础网络概念/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-服务器篇-基础网络概念/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是网络"><a href="#什么是网络" class="headerlink" title=" 什么是网络"></a><a name="ch1"> 什么是网络</a></h2><p>网络是将主机用网线或无线技术连接起来,使主机资源透过网络设备来传输的一种技术,其跨平台,一个标准用于不同操作系统间,这个标准为IEEE标准,其分为硬件标准(以太网络设备)与通信协议(TCP/IP)</p>
+<h3 id="网络组成元件"><a href="#网络组成元件" class="headerlink" title=" 网络组成元件"></a><a name="ch1.1"> 网络组成元件</a></h3><p>组成网络的元件有以下:</p>
+<ul>
+<li>节点: 主要是具有网络地址(IP)的设备</li>
+<li>服务器主机:一个提供资料的特殊节点</li>
+<li>工作站/客服端:任何可在网络上输入的设备都可是工作站/客服端,比如ATM机</li>
+<li>网络卡:以太网卡,内建或外插在主机上的设备,提供网络连线,一个节点至少有一个网络卡</li>
+<li>网络接口:提供网络地址,一张网卡至少可以搭配一个以上的网络接口,每台主机都有一个内部网络接口,其提供127.0.0.1/8这个IP</li>
+<li>路由或网关:其具有两个以上的网络接口,可连接两个以上的不同网段的设备</li>
+<li>网络拓扑:各个节点在网络上的连接方式</li>
+</ul>
+<h3 id="网络区域范围"><a href="#网络区域范围" class="headerlink" title=" 网络区域范围"></a><a name="ch1.2"> 网络区域范围</a></h3><p>通常以距离来划分网络分为区域网络(Local Area Network,LAN)与广域网络(Wide Area Network,WAN),区域网络通过用较好的设备来连接,而广域网络则用较便宜的设备</p>
+<h3 id="网络通信协议-OSI七层协议"><a href="#网络通信协议-OSI七层协议" class="headerlink" title=" 网络通信协议:OSI七层协议"></a><a name="ch1.3"> 网络通信协议:OSI七层协议</a></h3><p>因为网络通信涉及到相当多的环节,如硬件/软件封包等,故将网络通信的实现划分成多个层级,每个层级独立,只负责处理本层的任务</p>
+<p>OSI七层模型如下图:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_34_1_OSI%E6%A8%A1%E5%9E%8B.gif?raw=true" alt=""></p>
+<p>七层模型中越接近硬件的层为底层,越接近应用程序的为高层,每层只认识对方同一层的数据,且每层都有自己独特的表头资料(header)</p>
+<p>每层负责的任务如下表:</p>
+<table style="margin: 1em auto 1em auto;">
+<tr>
+<th colspan="5">OSI 模型</th>
+</tr>
+<tr>
+<th></th>
+<th>数据单元</th>
+<th>层</th>
+<th colspan="2">功能</th>
+</tr>
+<tr>
+<th rowspan="4">主机层</th>
+<td style="background:#d8ec9c;" rowspan="3">Dat（数据）</td>
+<td style="background:#d8ec9b;"> 应用层</td>
+<td style="background:#d8ec9c;" colspan="2">网络进程到应用程序。提供为应用软件而设的界面，以设置与另一应用软件之间的通信。例如: HTTP，HTTPS，FTP，TELNET，SSH，SMTP，POP3等</td>
+</tr>
+<tr>
+<td style="background:#d8ec9b;"> 表示层</td>
+<td style="background:#d8ec9b;" colspan="2">把数据转换为能与接收者的系统格式兼容并适合传输的格式</td>
+</tr>
+<tr>
+<td style="background:#d8ec9b;"> 会话层</td>
+<td style="background:#d8ec9b;" colspan="2">负责在数据传输中设置和维护电脑网络中两台电脑之间的通信连接</td>
+</tr>
+<tr>
+<td style="background:#e7ed9c;">Segments（数据段）</td>
+<td style="background:#e7ed9c;"> 传输层</td>
+<td style="background:#e7ed9c;" colspan="2">把传输表头(TH)加至数据以形成数据包。传输表头包含了所使用的协议等发送信息。例如:传输控制协议(TCP/UDP) 等</td>
+</tr>
+<tr>
+<th rowspan="3">媒介层</th>
+<td style="background:#eddc9c;">网络分组/数据报文</td>
+<td style="background:#eddc9c;"> 网络层</td>
+<td style="background:#eddc9c;" colspan="2">决定数据的路径选择和转寄，将网络表头(NH)加至数据包，以形成分组。网络表头包含了网络数据。例如:互联网协议(IP) 等</td>
+</tr>
+<tr>
+<td style="background:#e9c189;">Frame（数据帧）</td>
+<td style="background:#e9c189;">数据链路层</td>
+<td style="background:#e9c189;" colspan="2">负责网络寻址、错误侦测和改错。当表头和表尾被加至数据包时，会形成了帧。数据链表头(DLH)是包含了物理地址和错误侦测及改错的方法。数据链表尾(DLT)是一串指示数据包末端的字符串。例如以太网、无线局域网(Wi-Fi)和通用分组无线服务(GPRS)等</td>
+</tr>
+<tr>
+<td style="background:#e9988a;">Bit（比特）</td>
+<td style="background:#e9988a;">物理层</td>
+<td style="background:#e9988a;" colspan="2">在局部局域网上传送帧，它负责管理电脑通信设备和网络媒体之间的互通。包括了针脚、电压、线缆规范、集线器、中继器、网卡、主机适配器等</td>
+</tr>
+</table>
+
+<h3 id="网络通信协议：TCP-IP"><a href="#网络通信协议：TCP-IP" class="headerlink" title=" 网络通信协议：TCP/IP"></a><a name="ch1.4"> 网络通信协议：TCP/IP</a></h3><p>由于OSI过于严谨,所以实际使用时会将其简化,那就是TCP/IP协议,其为4层。</p>
+<p>TCP/IP与OSI对应关系以及使用协议如下图:
+<img src="https://raw.githubusercontent.com/HiKumho/blog/9a69ddba59bac60c5344ddcd982ea6b398b96e2d/img/blog_34_2_TCP-IP%E6%A8%A1%E5%9E%8B.gif" alt=""></p>
+<p>TCP/IP如何运行,我们以打开一个网址为例:<br>0. 应用程序阶段: 在浏览器输入网址,此时网址与相关资料被浏览器包装成一个资料,向下传给TCP/IP的应用层<br>1. 应用层阶段:由应用层提供的HTTP协议,将来自浏览器资料包装起来,并给予一个应用层表头,再向传输层送去<br>2. 传输层阶段:由于HTTP为可靠连接,因此该包会被装入TCP封包中,并给予TCP包的表头,向网络层送去<br>3. 网络层阶段:将TCP包装入IP封包,给予IP表头(包含来源IP:port与目的地IP:port),向链接层送去<br>4. 链接层阶段:将IP包依据CSMA/CD标准,包装成MAC帧,并给予MAC表头,最后转换成位元串,利用传输设备送到远端主机上<br>5. 服务器回应:服务器接受到此包后,会进行逆向地拆解,每个层级进行分析,最后取得想要的资料再根据上面的流程送回给客服端       </p>
+<h2 id="TCP-IP协议-链接层-Network-Interface-link"><a href="#TCP-IP协议-链接层-Network-Interface-link" class="headerlink" title=" TCP/IP协议:链接层(Network Interface/link)"></a><a name="ch2"> TCP/IP协议:链接层(Network Interface/link)</a></h2><p>TCP/IP最底层的链接层主要与硬件有关,下面会说明WAN/LAN的硬件与以太网络的传输协议:CSMA/CD,以及MAC帧等概念</p>
+<h3 id="WAN使用的设备"><a href="#WAN使用的设备" class="headerlink" title=" WAN使用的设备"></a><a name="ch2.1"> WAN使用的设备</a></h3><p>LAN使用的设备较为便宜,但使用的设备非常多,一般用户通常接触到的主要是ADSL或光纤等</p>
+<h4 id="传统电话拨号-通过ppp协议"><a href="#传统电话拨号-通过ppp协议" class="headerlink" title="传统电话拨号:通过ppp协议"></a>传统电话拨号:通过ppp协议</h4><p>早期网络只能通过数据机加上电话线以及电脑九针端口，通过点对点协议（Point-to-Point Protocol，PPP，它通常用在两节点间创建直接的连接）,来访问网络,速度非常慢,通过打电话后就不能使用网络了</p>
+<h4 id="综合业务数字网-Integrated-Services-Digital-Network，ISDN"><a href="#综合业务数字网-Integrated-Services-Digital-Network，ISDN" class="headerlink" title="综合业务数字网(Integrated Services Digital Network，ISDN)"></a>综合业务数字网(Integrated Services Digital Network，ISDN)</h4><p>利用现有的电话线路来达成网络连线的目的,只是连线两端都需要有ISDN数据机来提供连线功能,其有多种通道可以使用</p>
+<h4 id="非对称数字用户线路-Asymmetric-Digital-Subscriber-Line-ADSL"><a href="#非对称数字用户线路-Asymmetric-Digital-Subscriber-Line-ADSL" class="headerlink" title="非对称数字用户线路(Asymmetric Digital Subscriber Line,ADSL)"></a>非对称数字用户线路(Asymmetric Digital Subscriber Line,ADSL)</h4><p>采用频分多路复用技术把普通的电话线分成了电话、上行和下行三个相对独立的信道，从而避免了相互之间的干扰,注意ADSL中速度单位是bits/s,比如下行速度2Mbps,实际是256KB(types)ps</p>
+<h4 id="线缆调制解调器-Cable-modem"><a href="#线缆调制解调器-Cable-modem" class="headerlink" title="线缆调制解调器(Cable modem)"></a>线缆调制解调器(Cable modem)</h4><p>是利用有线电视双向同轴电缆提供互联网相关应用服务的技术</p>
+<h3 id="LAN使用的设备-以太网"><a href="#LAN使用的设备-以太网" class="headerlink" title=" LAN使用的设备:以太网"></a><a name="ch2.2"> LAN使用的设备:以太网</a></h3><p>在局域网中使用的设备是以太网</p>
+<h4 id="以太网速度与标准"><a href="#以太网速度与标准" class="headerlink" title="以太网速度与标准"></a>以太网速度与标准</h4><ul>
+<li>10Mbps/100Mbps/1Gbps/10Gbps/100Gbps以太网</li>
+<li>从10Gbps以太网标准包含7种不同类型,分别适用于局域网、城域网和广域网</li>
+</ul>
+<h4 id="以太网网线接口"><a href="#以太网网线接口" class="headerlink" title="以太网网线接口"></a>以太网网线接口</h4><ul>
+<li>目前以太网最常见的接口是RJ-45,共有8芯。因为每条芯线的不同RJ4-5分为568A与568B接口</li>
+<li>虽然RJ-45有8芯,实际使用的1,2,3,6芯</li>
+<li>跳线:一边接568A,一边接568B时称为跳线,用于直接连接两部主机的网卡</li>
+<li>平行线:两边同为568A或568B,用于连接主机与集线器的网卡</li>
+</ul>
+<h3 id="以太网的传输协议-CSMA-CD"><a href="#以太网的传输协议-CSMA-CD" class="headerlink" title=" 以太网的传输协议:CSMA/CD"></a><a name="ch2.3"> 以太网的传输协议:CSMA/CD</a></h3><p>以太网的传输主要就是网卡对网卡间的资料传递，每张网卡出厂时,都有独一无二的卡号,我们称为MAC(物理地址),其中传输遵循CSMA/CD协议</p>
+<ul>
+<li>CS:载波侦听<br>指任何连接到网络(LAN)上的设备在发送MAC帧前,先对网络进行监听,当通道空闲时,才发送</li>
+<li>MA:多点传输<br>一个设备发送的帧会被网络上其他设备所接收,接收的设备根据帧中目的地址来判断是否要处理此帧</li>
+<li>CD:碰撞检测<br>网络上帧碰撞时的一种解决方式,发送的帧具有检测功能,若网络上两帧发送碰撞损坏后,其发送端会随机等待一个时间再发送</li>
+</ul>
+<h3 id="链接层传输单位-帧及其最大传输量-MTU"><a href="#链接层传输单位-帧及其最大传输量-MTU" class="headerlink" title=" 链接层传输单位:帧及其最大传输量:MTU"></a><a name="ch2.4"> 链接层传输单位:帧及其最大传输量:MTU</a></h3><h4 id="链接层传输单位-帧"><a href="#链接层传输单位-帧" class="headerlink" title="链接层传输单位:帧"></a>链接层传输单位:帧</h4><p>CSMA/CD传输的单位就是帧(整个网络硬件上面传输资料的最小单位),一条网路一次只能通过一个帧,其内容如下
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_34_3_%E5%B8%A7.png?raw=true" alt=""></p>
+<p>其中目的地址与来源地址就是MAC(物理地址),其范围是<code>00:00:00:00:00:00</code>到<code>FF:FF:FF:FF:FF:FF</code>（6bytes,前3bytes是厂商编号,后3bytes是厂商定义编号） <code>ifconfig</code>可以查到MAC</p>
+<p>帧实际数据大小范围:46bytes-MTU(1500bytes)</p>
+<h4 id="最大传输量-MTU"><a href="#最大传输量-MTU" class="headerlink" title="最大传输量:MTU"></a>最大传输量:MTU</h4><p>以太网标准能传输的实际数据最大量称为MTU,通常是1500bytes,当IP包过大时,就会将IP包拆包装进帧中.</p>
+<p>虽然MTU可以扩大,其需要硬件支持,不仅是自身的设备,还要求接收端的设备支持,所有通常不扩张</p>
+<h3 id="集线器与交换机"><a href="#集线器与交换机" class="headerlink" title=" 集线器与交换机"></a><a name="ch2.5"> 集线器与交换机</a></h3><p>集线器与交换机都是以太网常用的设备</p>
+<p>集线器：接收到帧,并向所有端口广播出去
+交换机: 交换机内部的CPU会在每个端口成功连接时,通过将其MAC地址和端口对应,形成一张MAC表。在今后的通讯中，发往该MAC地址的数据包将仅送往其对应的端口，而不是所有的端口。</p>
+<h2 id="TCP-IP协议-网络层"><a href="#TCP-IP协议-网络层" class="headerlink" title=" TCP/IP协议:网络层"></a><a name="ch3"> TCP/IP协议:网络层</a></h2><p>网络层提供路由和寻址的功能，使两终端系统能够互连且决定最佳路径，并具有一定的拥塞控制和流量控制的能力。TCP/IP协议体系中的网络层功能由IP协议规定和实现，故又称IP层</p>
+<h3 id="IP数据包"><a href="#IP数据包" class="headerlink" title=" IP数据包"></a><a name="ch3.1"> IP数据包</a></h3><p>前面谈到链接层传输的数据单位是帧,而网络层传输的是IP包,由于IP有不同版本,目前广泛使用的是IPv4,其使用32位表示IP地址(IPv6用128位表示IP地址)</p>
+<p>以下是一个IPv4的数据包
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_34_4_IP%E5%8C%85.png?raw=true" alt=""></p>
+<ul>
+<li><code>Version</code>  IP包的版本,IPv4或IPv6</li>
+<li><code>IHL(Internet Header Length)</code>  IP表头长度</li>
+<li><code>Type of Service</code>  IP包的服务类型,如高传输T,高可靠R</li>
+<li><code>Total Length</code> IP包总大小=表头+实际数据,最大达65535bytes</li>
+<li><code>Identification</code> 识别码,用于表示IP包被拆包,分段后,这些小包是否属于同一个IP包</li>
+<li><code>Flags</code> 特殊标志,D为0表可分段,1表不可分段等</li>
+<li><code>Fragment Offset</code> IP分段在原始IP包中的偏移量</li>
+<li><code>Time To Live(TTL)</code> IP包存活时间,取值范围为0-255,通过网络上一个路由器就减1,当TTL为0时,此包会被丢弃</li>
+<li><code>Protocol Number</code> 协议代码 记录此包在传输层及网络层使用的协议是什么,如TCP=6，UDP=17等</li>
+<li><code>Header Checksum</code> IP表头检查码,用于检查IP包表头的错误</li>
+<li><code>Source Address</code> 来源IP地址</li>
+<li><code>Destination Address</code> 目的IP地址</li>
+<li><code>Options</code> 其他额外功能,如安全处理，路由记录</li>
+<li><code>Padding</code> 由于IP每条资料必须是32bit,由于Options没有固定位数,所有Padding用于补齐</li>
+</ul>
+<h3 id="IP地址的组成与分级"><a href="#IP地址的组成与分级" class="headerlink" title=" IP地址的组成与分级"></a><a name="ch3.2"> IP地址的组成与分级</a></h3><p>如上面提到,IPv4由32位组成,其中我们又将这32位IP划分出Net_ID(用于标识网段)和Host_ID(用于标识同网段下的主机),为了方便记录,我们通常将这32位IP以每8位写成十进制来表示.如<code>11111111 11111111 11111111  @11111111</code>通常写成<code>255.255.255.255</code></p>
+<p>我们将Host_ID全为0的IP用来标识某网段地址(Network IP),用Host_ID全为1来标识此网段的广播地址(Broadcast IP)</p>
+<h4 id="IP与网段"><a href="#IP与网段" class="headerlink" title="IP与网段"></a>IP与网段</h4><p>前面我们提到Net_ID用于标识网段,首先我们需要明白,网段是在同一个物理网段上划分出来的,不是说你们两IP的Net_ID一样(前提是同一个物理网段)就可以广播通信</p>
+<p>当我们确定在同一个网段时,可以通过CSMA/CD直接在此网段上广播自己的数据包出去</p>
+<p>当我们确定在同一个物理网,不同的子网段上时,可以路由或者网关,将我们传送的包转交至其他网段上,然后在其他网段上广播到目的主机</p>
+<h4 id="IP与门牌"><a href="#IP与门牌" class="headerlink" title="IP与门牌"></a>IP与门牌</h4><p>IP地址中的Net_ID就像我们的街道,Host_ID就像我们的门牌.而Host_ID全为0标识街道的地址,当我们要找街道上某户人时,我们可以在街道的广播设备(Host_ID全为1)上呼叫,目标听到后回应,而当我们写信给不同地方的朋友时,那只能通过邮局了(route),通过这个街道上的邮局都是用Host_ID全为1再减1后的IP来标识</p>
+<h4 id="IP分级"><a href="#IP分级" class="headerlink" title="IP分级"></a>IP分级</h4><p>为了规范Net_ID的位数,于是我们将IP进行分级,其中A类IP为<code>0.0.0.0/8-127.255.255.255/8</code> B类IP为<code>128.0.0.0/16-191.255.0.0/16</code> C类IP为<code>192.0.0.0/24-223.255.255.255/24</code>,其中<code>IP/Num</code>的Num是Net_ID的位数</p>
+<h3 id="IP的类别与取得方式"><a href="#IP的类别与取得方式" class="headerlink" title=" IP的类别与取得方式"></a><a name="ch3.3"> IP的类别与取得方式</a></h3><h4 id="IP类别"><a href="#IP类别" class="headerlink" title="IP类别"></a>IP类别</h4><p>上面是对IP进行分级,下面我们对IP进行分类,其可以分成公有IP和私有IP,而我们要连上Internet须使用公有IP,私有IP用来构建局域网来划分主机，如果要将私有IP送上Internet,需要架设防火墙与NAT服务</p>
+<p>IPv4规划好的私有IP:
+A类私有IP : <code>10.0.0.0 - 10.255.255.255</code>
+B类私有IP : <code>172.16.0.0 - 172.31.255.255</code>
+C类私有IP : <code>192.168.0.0 - 192.168.255.255</code></p>
+<p>此外还有一个特殊的IP网段(loopback),用于本地测试使用,就是<code>127.0.0.0/8</code>,本地服务都是在此网段的主机上启动,如<code>127.0.0.1</code>这个IP</p>
+<h4 id="IP取得方式"><a href="#IP取得方式" class="headerlink" title="IP取得方式"></a>IP取得方式</h4><ul>
+<li>直接手动设置:向网关询问IP相关参数</li>
+<li>通过拨号取得</li>
+<li>自动取得网络参数(DHCP):在局域网内架设一部主机负责管理所有主机的网络参数</li>
+</ul>
+<h3 id="子网掩码-Netmask-与无类别域间路由-CIDR"><a href="#子网掩码-Netmask-与无类别域间路由-CIDR" class="headerlink" title=" 子网掩码(Netmask)与无类别域间路由(CIDR)"></a><a name="ch3.4"> 子网掩码(Netmask)与无类别域间路由(CIDR)</a></h3><h4 id="子网掩码"><a href="#子网掩码" class="headerlink" title="子网掩码"></a>子网掩码</h4><p>由于我们默认使用的IP地址,可能Host_ID过多,实际使用时,我们并没有这么多主机(如一个A类IP可使用2^24-2个主机),假设我们有这么多主机,如果我们同时向这些主机广播一个数据包,也是很痛苦的一件事</p>
+<p>所以我们将我们获取的IP地址再进一步划分出不同的子网段,来管理网络(其实就是从Host_ID中分出子网的ID位)</p>
+<p>Netmask就是用32位IP地址中Net_ID全为1,Host_ID全为0来表示</p>
+<p>假设我要对<code>192.168.0.0/24</code>这个IP地址划分出2个子网
+可以这么做<code>Net_ID+1=24+1=25</code>,由于划分出两个网段,原本<code>192.168.0.0/24</code>有256个IP,每个网段有128个IP,
+那么第1个网段地址(Network IP)是<code>192.168.0.0/25</code>  而其广播地址(Broadcast IP)是<code>192.168.0.127/25</code>
+第2个网段地址是<code>192.168.0.128/25</code> 而其广播地址是<code>192.168.0.255</code>
+子网掩码是<code>255.255.255.128</code></p>
+<h4 id="无类别域间路由-CIDR"><a href="#无类别域间路由-CIDR" class="headerlink" title="无类别域间路由(CIDR)"></a>无类别域间路由(CIDR)</h4><p>打破原本IP分级,将Net_ID位用作Host_ID位,使得多个网段写成一个网段</p>
+<h3 id="路由概念与查看本机路由表"><a href="#路由概念与查看本机路由表" class="headerlink" title=" 路由概念与查看本机路由表"></a><a name="ch3.5"> 路由概念与查看本机路由表</a></h3><h4 id="路由概念"><a href="#路由概念" class="headerlink" title="路由概念"></a>路由概念</h4><p>在同一个网段内,我们可以通过IP广播来传输数据,而如上面提到的,当你要在不同网段上传输数据时,这时就只能借助邮局(路由或网关)了,路由其实就是路径选择</p>
+<p>我们以下图为例
+<img src="https://raw.githubusercontent.com/HiKumho/blog/e2e4d7bdce0011158e87d7b8ad5d1ba8cdfe1eb1/img/blog_34_5_route.jpg" alt=""></p>
+<p><code>192.168.0.0/24</code>与<code>192.168.1.0/24</code>是不同网段,当PC01传输资料给PC11,其流程如下
+1. 查询IP包的目的IP地址
+当PC01要传输IP包时,查询到IP包表头的目的IP地址</p>
+<p>2. 查询本机的路由
+PC01查看其的路由表,发现目的IP与自己处于同网段时,就会广播数据包出去</p>
+<p>3. 查询默认路由器(default gateway)
+本例中由于PC01与PC11在不同网段,所以PC01会将IP包发给其设置的路由器,由路由器处理此包,本例是server A</p>
+<p>4. 路由器转交IP包到目的网段
+路由器查看自己的路由信息,将PC01的IP包转交给<code>192.168.1.254</code>,并将IP包在此网段广播出去,给目的IP</p>
+<p>由上我们可以知道,每台主机都存在一个路由表,而且会设置其默认的网关/路由器地址,用于不同网段间的通信</p>
+<h4 id="查看本机路由表-route"><a href="#查看本机路由表-route" class="headerlink" title="查看本机路由表:route"></a>查看本机路由表:route</h4><p>我们可以使用route来查看本机的路由表,其中第1列是网段地址,而<code>default</code>来表示缺省的网段</p>
+<h3 id="IP与MAC-ARP与RARP协议"><a href="#IP与MAC-ARP与RARP协议" class="headerlink" title=" IP与MAC:ARP与RARP协议"></a><a name="ch3.6"> IP与MAC:ARP与RARP协议</a></h3><p>我们知道,网络实际上是利用MAC来传输帧,并不是我们指定的IP,所以我们需要通过IP地址来获取MAC地址,则就是ARP协议</p>
+<p>ARP协议:通过广播包含目标IP地址的ARP包出去,目标接收到此包后会返回其MAC地址,发送端接收到目标MAC地址后记录进ARP table中,并开始通信</p>
+<p>RARP协议是MAC地址来获取IP地址</p>
+<p>查看本机的MAC地址:<code>ifconfig</code></p>
+<p>查看本机的ARP table: <code>arp</code></p>
+<h3 id="反馈信息-ICMP协议"><a href="#反馈信息-ICMP协议" class="headerlink" title=" 反馈信息:ICMP协议"></a><a name="ch3.7"> 反馈信息:ICMP协议</a></h3><p>网络控制消息协定（Internet Control Message Protocol，ICMP）,通常用于返回的错误信息或是分析路由。ICMP错误消息总是包括了源数据并返回给发送者。 ICMP错误消息的例子之一是TTL值过期。每个路由器在转发数据报的时候都会把IP包头中的TTL值减一。如果TTL值为0，“TTL在传输中过期”的消息将会回报给源地址。 每个ICMP消息都是直接封装在一个IP数据包中的，因此，和UDP一样，ICMP是不可靠的。</p>
+<h2 id="TCP-IP协议-传输层"><a href="#TCP-IP协议-传输层" class="headerlink" title=" TCP/IP协议:传输层"></a><a name="ch4"> TCP/IP协议:传输层</a></h2><p>网络层的IP只是负责将数据送到正确的目标上,而数据没有被接收,那是传输层的任务之一,传输层的封包分为连接导向的TCP封包,与非连接导向的UDP封包</p>
+<h3 id="可靠连接的TCP协议"><a href="#可靠连接的TCP协议" class="headerlink" title=" 可靠连接的TCP协议"></a><a name="ch4.1"> 可靠连接的TCP协议</a></h3><p>通常传输层会将数据打包成TCP包,然后将其传入网络层,装入IP包中,TCP包/IP包/帧的关系如下图
+<img src="https://raw.githubusercontent.com/HiKumho/blog/e15407def84c9f9ee3530a5eb70f26b0c7b1355c/img/blog_35_6_tcp_ip_mac%E5%8C%85.png" alt=""></p>
+<p>TCP数据包如下
+<img src="https://raw.githubusercontent.com/HiKumho/blog/a02208423e1bd1ce08e8ccf8d1d829795a4c0964/img/blog_35_7_tcp%E5%8C%85.png" alt=""></p>
+<ul>
+<li><code>source port &amp; destination port</code> ： 来源IP中的端口与目标IP中的服务端口,传输数据时,两个端口需要连接,其中一个IP与一个端口组成socket pair</li>
+<li><code>sequence number</code>: TCP包比IP包大时,TCP包进行分段,sequence number就是每个分段的序号</li>
+<li><code>acknoledge number</code>:回应代码</li>
+<li><code>Data offset</code> 对<code>Options</code>的补齐,保证TCP包的大小</li>
+<li><code>Reserved</code> 保留</li>
+<li><code>Code</code> 控制码,好让接收端明白这个封包的动作<ul>
+<li><code>ACK</code> 回应</li>
+<li><code>SYN</code> 表示发送端希望与接收端建立同步连接</li>
+<li><code>FIN</code> 表示传输结束</li>
+<li><code>URG</code> 表示紧急包,接收端应紧急处理</li>
+<li><code>PSH</code> 要求接收端立即传输缓存区的对应的包</li>
+<li><code>RST</code> 强制结束连线</li>
+</ul>
+</li>
+<li><code>Window</code> 主要用于控制包的流量</li>
+<li><code>Checksum</code> 发送端发送资料前,进行检验动作,检验码写到此项中</li>
+<li><code>Urgent pointer</code> 紧急资料，与<code>URG</code>对应,告知紧急资料所在位置</li>
+<li><code>Options</code> 表示接收端可以接收的最大数据容量</li>
+<li><code>Padding</code> 补齐包的大小</li>
+</ul>
+<h3 id="TCP的三次握手"><a href="#TCP的三次握手" class="headerlink" title=" TCP的三次握手"></a><a name="ch4.2"> TCP的三次握手</a></h3><p>TCP被称为可靠的连线传输,是因为客服端与接收端建立在同步连接的基础上的,而同步连接是通过三次握手来实现,如下图
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_34_8_TCP%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B.png?raw=true" alt=""></p>
+<p>通过客服端发起SYN连线请求,服务端发起ACK/SYN请求,最后客服端回应ACK建立连接</p>
+<h3 id="非连接导向的UDP协议"><a href="#非连接导向的UDP协议" class="headerlink" title=" 非连接导向的UDP协议"></a><a name="ch4.3"> 非连接导向的UDP协议</a></h3><p>在UDP传输过程中,不会建立连线,接收端在接收到包后不会回应(ACK)发送端,直接发送数据给与客服端,不管客服端是否正确接收到数据,UDP较为快速</p>
+<p>UDP数据包如下
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_34_9_udp%E5%8C%85.png?raw=true" alt=""></p>
+<h3 id="网络防火墙与OSI七层协议"><a href="#网络防火墙与OSI七层协议" class="headerlink" title=" 网络防火墙与OSI七层协议"></a><a name="ch4.4"> 网络防火墙与OSI七层协议</a></h3><p>防火墙针对OSI七层协议来说,每层可以抵挡的方面有:</p>
+<ul>
+<li>第二层: 可以针对来源与目标的MAC进行抵挡</li>
+<li>第三层: 可以针对来源与目标的IP,以及ICMP的类别进行抵挡</li>
+<li>第四层: 可以针对TCP/UDP的端口进行抵挡,也可以针对TCP的状态来处理</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/web/" rel="tag">#web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-内核编译/" rel="next" title="Linux 内核编译">
+                <i class="fa fa-chevron-left"></i> Linux 内核编译
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-建立虚拟WiFi/" rel="prev" title="Linux 建立虚拟WiFi">
+                Linux 建立虚拟WiFi <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-服务器篇-基础网络概念/"
+           data-title="Linux 服务器篇 基础网络概念" data-url="http://yoursite.com/2016/09/06/Linux-服务器篇-基础网络概念/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是网络"><span class="nav-number">1.</span> <span class="nav-text"> 什么是网络</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网络组成元件"><span class="nav-number">1.1.</span> <span class="nav-text"> 网络组成元件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络区域范围"><span class="nav-number">1.2.</span> <span class="nav-text"> 网络区域范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络通信协议-OSI七层协议"><span class="nav-number">1.3.</span> <span class="nav-text"> 网络通信协议:OSI七层协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络通信协议：TCP-IP"><span class="nav-number">1.4.</span> <span class="nav-text"> 网络通信协议：TCP/IP</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP协议-链接层-Network-Interface-link"><span class="nav-number">2.</span> <span class="nav-text"> TCP/IP协议:链接层(Network Interface/link)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#WAN使用的设备"><span class="nav-number">2.1.</span> <span class="nav-text"> WAN使用的设备</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#传统电话拨号-通过ppp协议"><span class="nav-number">2.1.1.</span> <span class="nav-text">传统电话拨号:通过ppp协议</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#综合业务数字网-Integrated-Services-Digital-Network，ISDN"><span class="nav-number">2.1.2.</span> <span class="nav-text">综合业务数字网(Integrated Services Digital Network，ISDN)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非对称数字用户线路-Asymmetric-Digital-Subscriber-Line-ADSL"><span class="nav-number">2.1.3.</span> <span class="nav-text">非对称数字用户线路(Asymmetric Digital Subscriber Line,ADSL)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#线缆调制解调器-Cable-modem"><span class="nav-number">2.1.4.</span> <span class="nav-text">线缆调制解调器(Cable modem)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LAN使用的设备-以太网"><span class="nav-number">2.2.</span> <span class="nav-text"> LAN使用的设备:以太网</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#以太网速度与标准"><span class="nav-number">2.2.1.</span> <span class="nav-text">以太网速度与标准</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#以太网网线接口"><span class="nav-number">2.2.2.</span> <span class="nav-text">以太网网线接口</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#以太网的传输协议-CSMA-CD"><span class="nav-number">2.3.</span> <span class="nav-text"> 以太网的传输协议:CSMA/CD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#链接层传输单位-帧及其最大传输量-MTU"><span class="nav-number">2.4.</span> <span class="nav-text"> 链接层传输单位:帧及其最大传输量:MTU</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#链接层传输单位-帧"><span class="nav-number">2.4.1.</span> <span class="nav-text">链接层传输单位:帧</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#最大传输量-MTU"><span class="nav-number">2.4.2.</span> <span class="nav-text">最大传输量:MTU</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集线器与交换机"><span class="nav-number">2.5.</span> <span class="nav-text"> 集线器与交换机</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP协议-网络层"><span class="nav-number">3.</span> <span class="nav-text"> TCP/IP协议:网络层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IP数据包"><span class="nav-number">3.1.</span> <span class="nav-text"> IP数据包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP地址的组成与分级"><span class="nav-number">3.2.</span> <span class="nav-text"> IP地址的组成与分级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP与网段"><span class="nav-number">3.2.1.</span> <span class="nav-text">IP与网段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IP与门牌"><span class="nav-number">3.2.2.</span> <span class="nav-text">IP与门牌</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IP分级"><span class="nav-number">3.2.3.</span> <span class="nav-text">IP分级</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP的类别与取得方式"><span class="nav-number">3.3.</span> <span class="nav-text"> IP的类别与取得方式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#IP类别"><span class="nav-number">3.3.1.</span> <span class="nav-text">IP类别</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#IP取得方式"><span class="nav-number">3.3.2.</span> <span class="nav-text">IP取得方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子网掩码-Netmask-与无类别域间路由-CIDR"><span class="nav-number">3.4.</span> <span class="nav-text"> 子网掩码(Netmask)与无类别域间路由(CIDR)</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#子网掩码"><span class="nav-number">3.4.1.</span> <span class="nav-text">子网掩码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无类别域间路由-CIDR"><span class="nav-number">3.4.2.</span> <span class="nav-text">无类别域间路由(CIDR)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由概念与查看本机路由表"><span class="nav-number">3.5.</span> <span class="nav-text"> 路由概念与查看本机路由表</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#路由概念"><span class="nav-number">3.5.1.</span> <span class="nav-text">路由概念</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看本机路由表-route"><span class="nav-number">3.5.2.</span> <span class="nav-text">查看本机路由表:route</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IP与MAC-ARP与RARP协议"><span class="nav-number">3.6.</span> <span class="nav-text"> IP与MAC:ARP与RARP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反馈信息-ICMP协议"><span class="nav-number">3.7.</span> <span class="nav-text"> 反馈信息:ICMP协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP-IP协议-传输层"><span class="nav-number">4.</span> <span class="nav-text"> TCP/IP协议:传输层</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#可靠连接的TCP协议"><span class="nav-number">4.1.</span> <span class="nav-text"> 可靠连接的TCP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP的三次握手"><span class="nav-number">4.2.</span> <span class="nav-text"> TCP的三次握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非连接导向的UDP协议"><span class="nav-number">4.3.</span> <span class="nav-text"> 非连接导向的UDP协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络防火墙与OSI七层协议"><span class="nav-number">4.4.</span> <span class="nav-text"> 网络防火墙与OSI七层协议</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -385,8 +385,10 @@ android:id=”@+id/btn”表示在R.java资源文件中新增一个id为btn的�
 <h4 id="android-id-”-id-btn”"><a href="#android-id-”-id-btn”" class="headerlink" title="android:id=”@+id/btn”"></a>android:id=”@+id/btn”</h4><p>表示在R.java资源文件中新增一个id为btn的控件索引</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">id</span> </span>&#123;</div><div class="line">        <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> btn =<span class="number">0x7f0b0056</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>代码获取方式:findViewById(R.id.btn);</p>
-<h4 id="android-id-”-id-btn”-1"><a href="#android-id-”-id-btn”-1" class="headerlink" title="android:id=”@id/btn”"></a>android:id=”@id/btn”</h4><p>表示使用R.java资源文件中已存在的id为btn的索引<br>代码获取方式:跟1一样</p>
-<h4 id="android-id-”-android-id-button1”"><a href="#android-id-”-android-id-button1”" class="headerlink" title="android:id=”@android:id/button1”"></a>android:id=”@android:id/button1”</h4><p>表示使用的是系统已有的ID，在对应的sdk目录下的ids.xml里面(如Sdk/platforms/android-21/data/res/values/ids.xml) ,一般只去引用其ID,不直接使用其ID作为自己App控件索引<br>代码中获取方式:android.R.id.button1</p>
+<h4 id="android-id-”-id-btn”-1"><a href="#android-id-”-id-btn”-1" class="headerlink" title="android:id=”@id/btn”"></a>android:id=”@id/btn”</h4><p>表示使用R.java资源文件中已存在的id为btn的索引
+代码获取方式:跟1一样</p>
+<h4 id="android-id-”-android-id-button1”"><a href="#android-id-”-android-id-button1”" class="headerlink" title="android:id=”@android:id/button1”"></a>android:id=”@android:id/button1”</h4><p>表示使用的是系统已有的ID，在对应的sdk目录下的ids.xml里面(如Sdk/platforms/android-21/data/res/values/ids.xml) ,一般只去引用其ID,不直接使用其ID作为自己App控件索引
+代码中获取方式:android.R.id.button1</p>
 <h4 id="在ids-xml中添加自己的Id组"><a href="#在ids-xml中添加自己的Id组" class="headerlink" title="在ids.xml中添加自己的Id组"></a>在ids.xml中添加自己的Id组</h4><p> 我们可以在values下新建ids.xml,然后写入id项,便于方式2使用.</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;resources&gt;</div><div class="line">    &lt;item name=&quot;btn_1&quot; type=&quot;id&quot;&gt;&lt;/item&gt;</div><div class="line">    &lt;item name=&quot;btn_2&quot; type=&quot;id&quot;&gt;&lt;/item&gt;</div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
 <h4 id="当同个layout布局文件中-多个组件使用同一个id的问题"><a href="#当同个layout布局文件中-多个组件使用同一个id的问题" class="headerlink" title="当同个layout布局文件中,多个组件使用同一个id的问题"></a>当同个layout布局文件中,多个组件使用同一个id的问题</h4><p>当我们调用<code>findViewById(int id)</code>被引用的是第一个使用此id的控件</p>
@@ -404,10 +406,14 @@ android:id=”@+id/btn”表示在R.java资源文件中新增一个id为btn的�
 <p>即运行程序后，Activity会调用PhoneWindow的setContentView()来生成一个Window，而此时的setContentView就是那个最底层的View。然后通过LayoutInflater.infalte()方法加载布局生成View对象并通过addView()方法添加到Window上，（一层一层的叠加到Window上）</p>
 <p>所以，Activity其实不是显示视图，View才是真正的显示视图</p>
 <p>注：一个Activity构造的时候只能初始化一个Window(PhoneWindow)，另外这个PhoneWindow有一个”ViewRoot”，这个”ViewRoot”是一个ViewGroup，是最初始的根视图，然后通过addView方法将View一个个层叠到ViewRoot上，这些层叠的View最终放在Window这个载体上面</p>
-<h3 id="关于9-patch的使用"><a href="#关于9-patch的使用" class="headerlink" title=" 关于9-patch的使用"></a><a name="q4"> 关于9-patch的使用</a></h3><p>学习<a href="http://leoray.leanote.com/post/android-9-patch" target="_blank" rel="external">9-pathch笔记</a><br>从上面的文章,我们可以知道Android显示9-patch的内容区域是在图片上设置padding,如果我们在引用这张图片的组件上再设置padding的话,9-patch的padding就会失效,达不到需要的效果.</p>
-<p>注意:Android Studio使用minmap代替drawable目录,9-patch图片在minmap目录,引用9-patch图片时会报错(AS支持问题)<br>解决方法1:9-patch图片放在drawable<br>解决方法2:修复9-patch的bad-patches区域(show bad patches出来的红色线区)</p>
+<h3 id="关于9-patch的使用"><a href="#关于9-patch的使用" class="headerlink" title=" 关于9-patch的使用"></a><a name="q4"> 关于9-patch的使用</a></h3><p>学习<a href="http://leoray.leanote.com/post/android-9-patch" target="_blank" rel="external">9-pathch笔记</a>
+从上面的文章,我们可以知道Android显示9-patch的内容区域是在图片上设置padding,如果我们在引用这张图片的组件上再设置padding的话,9-patch的padding就会失效,达不到需要的效果.</p>
+<p>注意:Android Studio使用minmap代替drawable目录,9-patch图片在minmap目录,引用9-patch图片时会报错(AS支持问题)
+解决方法1:9-patch图片放在drawable
+解决方法2:修复9-patch的bad-patches区域(show bad patches出来的红色线区)</p>
 <h3 id="ListView怎么隐藏滚动条"><a href="#ListView怎么隐藏滚动条" class="headerlink" title=" ListView怎么隐藏滚动条?"></a><a name="q5"> ListView怎么隐藏滚动条?</a></h3><p>设置andriod:scrollbars=”none”即可</p>
-<h3 id="关于同区域两个组件设置了类似的监听器-哪个作用"><a href="#关于同区域两个组件设置了类似的监听器-哪个作用" class="headerlink" title=" 关于同区域两个组件设置了类似的监听器,哪个作用?"></a><a name="q6"> 关于同区域两个组件设置了类似的监听器,哪个作用?</a></h3><p>是最上层的组件的监听器响应.<br>比方说,父组件设置点击监听,子组件也设置了点击监听,在子组件的区域里,点击是子组件响应,在子组件外的区域里,点击是父组件响应</p>
+<h3 id="关于同区域两个组件设置了类似的监听器-哪个作用"><a href="#关于同区域两个组件设置了类似的监听器-哪个作用" class="headerlink" title=" 关于同区域两个组件设置了类似的监听器,哪个作用?"></a><a name="q6"> 关于同区域两个组件设置了类似的监听器,哪个作用?</a></h3><p>是最上层的组件的监听器响应.
+比方说,父组件设置点击监听,子组件也设置了点击监听,在子组件的区域里,点击是子组件响应,在子组件外的区域里,点击是父组件响应</p>
 <h3 id="怎么引用当前主题的属性值"><a href="#怎么引用当前主题的属性值" class="headerlink" title=" 怎么引用当前主题的属性值"></a><a name="q7"> 怎么引用当前主题的属性值</a></h3><p>要引用样式属性，名称语法几乎与普通资源格式完全相同，只不过将 at 符号 (@) 改为问号 (?)，资源类型部分为可选项。比如,下面例子中,Android将会使用当前主题的android:textColorSecondary的属性值设置组件的textColor</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">android:textColor=&quot;?android:textColorSecondary&quot;</div></pre></td></tr></table></figure>
 
@@ -523,7 +529,7 @@ android:id=”@+id/btn”表示在R.java资源文件中新增一个id为btn的�
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

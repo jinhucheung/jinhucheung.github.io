@@ -1,0 +1,986 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="网络参数设置使用的指令 设置IP参数与启动/关闭网络接口:ifconfig/ifup/ifdown
+ifconfig  查看/设置/启动关闭网络接口 (设置的参数保存在内存中)
+ifconfig [interface(如eth0/wlan0)]  查看网络接口信息
+注意interface可以是同张网卡的别名,比如eth0:v1
+
+
+ifconfig [interface] {up|down}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 服务器篇 常用的网络指令">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-服务器篇-常用的网络指令/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="网络参数设置使用的指令 设置IP参数与启动/关闭网络接口:ifconfig/ifup/ifdown
+ifconfig  查看/设置/启动关闭网络接口 (设置的参数保存在内存中)
+ifconfig [interface(如eth0/wlan0)]  查看网络接口信息
+注意interface可以是同张网卡的别名,比如eth0:v1
+
+
+ifconfig [interface] {up|down}">
+<meta property="og:updated_time" content="2016-09-06T14:45:38.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 服务器篇 常用的网络指令">
+<meta name="twitter:description" content="网络参数设置使用的指令 设置IP参数与启动/关闭网络接口:ifconfig/ifup/ifdown
+ifconfig  查看/设置/启动关闭网络接口 (设置的参数保存在内存中)
+ifconfig [interface(如eth0/wlan0)]  查看网络接口信息
+注意interface可以是同张网卡的别名,比如eth0:v1
+
+
+ifconfig [interface] {up|down}">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-服务器篇-常用的网络指令/"/>
+
+  <title> Linux 服务器篇 常用的网络指令 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 服务器篇 常用的网络指令
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T22:43:20+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-服务器篇-常用的网络指令/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-服务器篇-常用的网络指令/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="网络参数设置使用的指令"><a href="#网络参数设置使用的指令" class="headerlink" title=" 网络参数设置使用的指令"></a><a name="ch1"> 网络参数设置使用的指令</a></h2><h3 id="设置IP参数与启动-关闭网络接口-ifconfig-ifup-ifdown"><a href="#设置IP参数与启动-关闭网络接口-ifconfig-ifup-ifdown" class="headerlink" title=" 设置IP参数与启动/关闭网络接口:ifconfig/ifup/ifdown"></a><a name="ch1.1"> 设置IP参数与启动/关闭网络接口:ifconfig/ifup/ifdown</a></h3><ul>
+<li><code>ifconfig</code>  查看/设置/启动关闭网络接口 (设置的参数保存在<b>内存</b>中)<ul>
+<li><code>ifconfig [interface(如eth0/wlan0)]</code>  查看网络接口信息<ul>
+<li>注意interface可以是同张网卡的别名,比如<code>eth0:v1</code></li>
+</ul>
+</li>
+<li><code>ifconfig [interface] {up|down}</code>  启动/关闭网络接口,设置时需先关闭网络接口</li>
+<li><code>ifconfig [interface] {options}</code> 设置网络接口信息<ul>
+<li><code>直接接ip地址</code></li>
+<li><code>mtu</code> 后接mtu数值<ul>
+<li><code>netmask</code> 子网掩码</li>
+<li><code>boradcast</code> 广播地址</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>ifup/ifdown</code> 启动/关闭网络接口<ul>
+<li>与<code>ifconfig</code>的启动关闭不同,其是参考/etc中的网络参数配置文件</li>
+<li>当内存中<code>/proc/net</code>与<code>/etc</code>中的配置文件参数不同时,就会报错</li>
+<li>格式是<code>ifup/ifdown [interface]</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="路由修改-route"><a href="#路由修改-route" class="headerlink" title=" 路由修改:route"></a><a name="ch1.2"> 路由修改:route</a></h3><p><code>route</code> 查看/设置路由表,同样的其设置的参数是保存在内存中的,要静态修改路由可以写入配置文件<code>/etc/sysconfig/network-script/route-interface(CentOS)</code>或<code>/etc/network/interface(Ubuntu)</code></p>
+<h4 id="查看路由表-route-n-ee-n是直接用IP和port显示主机名"><a href="#查看路由表-route-n-ee-n是直接用IP和port显示主机名" class="headerlink" title="查看路由表: route {-n|-ee} -n是直接用IP和port显示主机名"></a>查看路由表: <code>route {-n|-ee}</code> -n是直接用IP和port显示主机名</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">目标            网关            子网掩码        标志  跃点   引用  使用 接口</div><div class="line">192.168.14.0    0.0.0.0         255.255.254.0   U     1      0        0 eth0</div><div class="line">10.42.0.0       0.0.0.0         255.255.255.0   U     9      0        0 wlan0</div><div class="line">0.0.0.0         192.168.14.1    0.0.0.0         UG    0      0        0 eth0</div></pre></td></tr></table></figure>
+<p>上面参数的说明</p>
+<ul>
+<li><code>目标(Destination)</code> 网段IP地址(network)或主机IP,<code>0.0.0.0</code>表缺省</li>
+<li><code>网关(Gateway)</code> 是路由器IP(邮局2333),需同本机同一个子域网内,<code>0.0.0.0</code>表本机</li>
+<li><code>子网掩码(Genmask)</code> 标识网段</li>
+<li><code>标志(Flags)</code><ul>
+<li><code>U</code> 此路由已启动</li>
+<li><code>H</code> 目标是一部主机非域网</li>
+<li><code>G</code> 通过网关/路由器转包</li>
+<li><code>R</code> 使用动态路由时,恢复路由信息</li>
+<li><code>D</code> 已被设置为动态路由</li>
+<li><code>M</code> 路由已被修改</li>
+<li><code>!</code> 此路由不会被接受</li>
+</ul>
+</li>
+<li><code>接口(Iface)</code> 此路由使用的接口</li>
+</ul>
+<p><b>注意: 路由表的编写应该要有顺序,由上到下从C类IP到A类IP,这样数据包传输时,会更准确</b></p>
+<h4 id="路由的增加-删除"><a href="#路由的增加-删除" class="headerlink" title="路由的增加/删除"></a>路由的增加/删除</h4><ul>
+<li>增加路由 <code>route add {-net|-host} {网段或主机IP} netmask {mask} dev {interface} [gw] {网关IP}</code></li>
+<li>删除路由 <code>route del {-net|-host} {网段或主机IP} netmask {mask} dev {interface}</code></li>
+</ul>
+<h3 id="网络参数综合指令-ip"><a href="#网络参数综合指令-ip" class="headerlink" title=" 网络参数综合指令:ip"></a><a name="ch1.3"> 网络参数综合指令:ip</a></h3><p><code>ip</code>整合了<code>ifconfig</code>与<code>route</code>,且功能上比它们更多</p>
+<p><code>ip</code>可以查看/设置3部分的内容:</p>
+<ul>
+<li><code>link</code> 关于网卡,包括MAC</li>
+<li><code>addr</code> 关于IP参数</li>
+<li><code>route</code> 关于路由表</li>
+</ul>
+<h4 id="查看-设置网卡参数-ip-link"><a href="#查看-设置网卡参数-ip-link" class="headerlink" title="查看/设置网卡参数: ip link"></a>查看/设置网卡参数: ip link</h4><ul>
+<li>查看网卡参数 <code>ip [-s] link show</code></li>
+<li>设置网卡参数 <code>ip link set {interface} [options]</code><ul>
+<li><code>up|down</code> 启动/关闭网卡接口</li>
+<li><code>address</code> 修改MAC</li>
+<li><code>name</code>  网卡接口的特殊名字</li>
+<li><code>mtu</code> 修改mtu</li>
+</ul>
+</li>
+</ul>
+<h4 id="查看-设置IP参数-ip-address"><a href="#查看-设置IP参数-ip-address" class="headerlink" title="查看/设置IP参数:ip address"></a>查看/设置IP参数:ip address</h4><ul>
+<li>查看网卡参数 <code>ip [-s] address show</code></li>
+<li>设置网卡参数 <code>ip address {add|del} {ip地址}  dev {interface} [options]</code><ul>
+<li><code>broadcast</code> 广播地址 <code>+</code>表自动计算</li>
+<li><code>label</code> 网络接口别名</li>
+<li><code>name</code>  网卡接口的特殊名字</li>
+<li><code>scope</code><ul>
+<li><code>global</code> 允许来自所有来源的连线</li>
+<li><code>link</code> 仅允许本接口的自我连线</li>
+<li><code>host</code> 仅允许本主机内部的连线</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="查看-设置路由表-ip-route"><a href="#查看-设置路由表-ip-route" class="headerlink" title="查看/设置路由表:ip route"></a>查看/设置路由表:ip route</h4><ul>
+<li>查看路由表 <code>ip route show</code></li>
+<li>设置路由表 <code>ip route [add|del] [子网或主机IP] [via 网关IP] [dev 接口]</code></li>
+</ul>
+<h3 id="无线网络-iwlist-iwconfig"><a href="#无线网络-iwlist-iwconfig" class="headerlink" title=" 无线网络:iwlist/iwconfig"></a><a name="ch1.4"> 无线网络:iwlist/iwconfig</a></h3><ul>
+<li><code>iwconfig</code>   设置无线网络</li>
+<li><code>iwlist</code> 侦测无线基站(AP,热点)<ul>
+<li><code>iwlist [interface(如wlan0)] scan</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="使用dchp自动取得IP参数-dhclient"><a href="#使用dchp自动取得IP参数-dhclient" class="headerlink" title=" 使用dchp自动取得IP参数:dhclient"></a><a name="ch1.5"> 使用dchp自动取得IP参数:dhclient</a></h3><p>让某个网络接口发送dhcp要求取得IP参数:<code>dhclient [interface]</code></p>
+<h2 id="网络侦测与观察指令"><a href="#网络侦测与观察指令" class="headerlink" title=" 网络侦测与观察指令"></a><a name="ch2"> 网络侦测与观察指令</a></h2><h3 id="两主机两点连通测试与追踪路径中的MTU最大值：ping"><a href="#两主机两点连通测试与追踪路径中的MTU最大值：ping" class="headerlink" title=" 两主机两点连通测试与追踪路径中的MTU最大值：ping"></a><a name="ch2.1"> 两主机两点连通测试与追踪路径中的MTU最大值：ping</a></h3><h4 id="测试两主机是否连通-ping-IP-hostname"><a href="#测试两主机是否连通-ping-IP-hostname" class="headerlink" title="测试两主机是否连通:ping [IP|hostname]"></a>测试两主机是否连通:<code>ping [IP|hostname]</code></h4><p>ping会发送一个ICMP包(其装入IP包中)来进行网络状态的测试,利用ICMP包返回的信息来进行分析</p>
+<p>其中比较重要的是<code>ttl</code>参数,表示数据包经过的路由器数(经过一个就减1)
+当目标主机与本机同一个域网内,ttl预设64,否则预设255</p>
+<h4 id="测试路径能通过的最大MTU-ping-IP-hostname-s-MTU测试值-M-do-不进行拆包处理"><a href="#测试路径能通过的最大MTU-ping-IP-hostname-s-MTU测试值-M-do-不进行拆包处理" class="headerlink" title="测试路径能通过的最大MTU:ping [IP|hostname] -s MTU测试值 -M do(不进行拆包处理)"></a>测试路径能通过的最大MTU:<code>ping [IP|hostname] -s MTU测试值 -M do(不进行拆包处理)</code></h4><p>如果MTU测试值太大就会报错</p>
+<h3 id="两主机间各节点的分析：traceroute"><a href="#两主机间各节点的分析：traceroute" class="headerlink" title=" 两主机间各节点的分析：traceroute"></a><a name="ch2.2"> 两主机间各节点的分析：traceroute</a></h3><p><code>traceroute [IP|hostname]</code> 跟踪两主机间各节点的信息</p>
+<p>默认traceroute预设UDP包来进行测试,只是现在很多路由器会过滤UDP/ICMP的回应
+我们可以用TCP包来测试,只要加上<code>-T</code>参数 </p>
+<h3 id="查看本机的网络连接与后面：netstat"><a href="#查看本机的网络连接与后面：netstat" class="headerlink" title=" 查看本机的网络连接与后面：netstat"></a><a name="ch2.3"> 查看本机的网络连接与后面：netstat</a></h3><ul>
+<li><code>netstat -nlptu</code>  输出目前本机已启动的网络服务</li>
+<li><code>netstat -atunp</code> 查看本机所有网络连线状态</li>
+</ul>
+<h3 id="查看主机名与IP：host-nslookup-dig"><a href="#查看主机名与IP：host-nslookup-dig" class="headerlink" title=" 查看主机名与IP：host/nslookup/dig"></a><a name="ch2.4"> 查看主机名与IP：host/nslookup/dig</a></h3><ul>
+<li><code>host hostname [DNS IP]</code>: 查看对应主机的IP,默认以<code>/etc/resolv.conf</code>设置的DNS服务器查询</li>
+<li><code>nslookup [hostname|IP]</code> 查看主机名或IP的信息</li>
+<li><code>dig [hostname|IP]</code> 查看主机名或IP的信息</li>
+</ul>
+<h2 id="远端连线指令"><a href="#远端连线指令" class="headerlink" title=" 远端连线指令"></a><name="ch3"> 远端连线指令</name="ch3"></h2><p>这里的远端连线,连接到对方的服务器上,获取资源等操作
+传统的连线指令有<code>telnet</code>与<code>ftp</code>等,由于其使用明文传输,安全性较低,<code>ssh</code>针对这方面进行加强</p>
+<ul>
+<li><code>telnet</code>  比较常用与BBS<ul>
+<li><code>telnet [host|IP] [port]</code></li>
+</ul>
+</li>
+<li><code>ftp</code>  传输较大的资料<ul>
+<li><code>ftp [host|IP] [port]</code></li>
+</ul>
+</li>
+<li><code>lftp</code> 自动化ftp脚本<ul>
+<li>由于我们连接到目标的ftp服务器后,其操作都要参考目标服务器的设置,lftp能自动化处理</li>
+<li><code>lftp [host|IP] [port] [-u user[,pass]] -c &quot;commands&quot;</code><ul>
+<li>我们将要执行的操作写入commands中,每条指令到要分行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>ssh</code> 为Shell提供安全的传输和使用环境,传输的数据经压缩<ul>
+<li><code>ssh [host|IP] [port]</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="文字界面网页浏览器-下载器"><a href="#文字界面网页浏览器-下载器" class="headerlink" title=" 文字界面网页浏览器/下载器"></a><a name="ch4"> 文字界面网页浏览器/下载器</a></h2><p>我们在命令行中要想浏览html页面,可以使用<code>links</code></p>
+<p>而要下载网络资源可以使用<code>wget</code>或<code>axel</code>
+其中<code>axel</code>有断点续传的功能,而<code>wget</code>没有</p>
+<h2 id="数据包抓取"><a href="#数据包抓取" class="headerlink" title=" 数据包抓取"></a><a name="ch5"> 数据包抓取</a></h2><h3 id="对网络连线TCP-UDP读写-nc-netcat"><a href="#对网络连线TCP-UDP读写-nc-netcat" class="headerlink" title=" 对网络连线TCP/UDP读写:nc,netcat"></a><a name="ch5.1"> 对网络连线TCP/UDP读写:nc,netcat</a></h3><ul>
+<li>启动服务端口:<code>nc -l [ip|hostname] [port]</code></li>
+<li>连接服务端口:<code>nc [ip|hostname] [port]</code>(类似telnet)</li>
+</ul>
+<p>两个端口建立连线后,就可以传输数据,比如:
+透过端口3333（-l 监听状态listen）从机器foo复制到机器bar复制档案：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">user@bar$ nc -l -p 3333 &gt; backup.iso</div><div class="line">user@foo$ nc bar 3333 &lt; backup.iso</div></pre></td></tr></table></figure></p>
+<p>利用零模式I/O（参数 -z）检查192.168.0.1的UDP端口（参数 -u）80-90是否开启：
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">nc -vzu 192.168.0.1 80-90</div></pre></td></tr></table></figure></p>
+<h3 id="抓取TCP数据包-tcpdump-wireshark"><a href="#抓取TCP数据包-tcpdump-wireshark" class="headerlink" title=" 抓取TCP数据包:tcpdump/wireshark"></a><a name="ch5.2"> 抓取TCP数据包:tcpdump/wireshark</a></h3><ul>
+<li><code>tcpdump</code>  会监听某个网络接口上传输的数据包,并将其抓取进行分析<ul>
+<li>格式 <code>tcpdump [-i 网络接口] [-w 存取本地文件] [-r 读取保存本地的文件] [-Aennqx] [-c 监听数据包数量]</code><ul>
+<li><code>A</code> 以ASCII显示数据包内容,通常用于抓取网页数据包</li>
+<li><code>e</code>  以MAC帧数据来显示</li>
+<li><code>nn</code> 直接以IP/port显示主机名与服务名</li>
+<li><code>q</code> 简短的数据包信息</li>
+<li><code>X</code> 以十六进制与ASCII显示数据包内容</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>而wireshark是图形界面下的抓包工具</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/web/" rel="tag">#web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-服务器篇-连接Internet/" rel="next" title="Linux 服务器篇 连接Internet">
+                <i class="fa fa-chevron-left"></i> Linux 服务器篇 连接Internet
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/" rel="prev" title="Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux">
+                Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-服务器篇-常用的网络指令/"
+           data-title="Linux 服务器篇 常用的网络指令" data-url="http://yoursite.com/2016/09/06/Linux-服务器篇-常用的网络指令/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络参数设置使用的指令"><span class="nav-number">1.</span> <span class="nav-text"> 网络参数设置使用的指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#设置IP参数与启动-关闭网络接口-ifconfig-ifup-ifdown"><span class="nav-number">1.1.</span> <span class="nav-text"> 设置IP参数与启动/关闭网络接口:ifconfig/ifup/ifdown</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路由修改-route"><span class="nav-number">1.2.</span> <span class="nav-text"> 路由修改:route</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看路由表-route-n-ee-n是直接用IP和port显示主机名"><span class="nav-number">1.2.1.</span> <span class="nav-text">查看路由表: route {-n|-ee} -n是直接用IP和port显示主机名</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#路由的增加-删除"><span class="nav-number">1.2.2.</span> <span class="nav-text">路由的增加/删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络参数综合指令-ip"><span class="nav-number">1.3.</span> <span class="nav-text"> 网络参数综合指令:ip</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看-设置网卡参数-ip-link"><span class="nav-number">1.3.1.</span> <span class="nav-text">查看/设置网卡参数: ip link</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看-设置IP参数-ip-address"><span class="nav-number">1.3.2.</span> <span class="nav-text">查看/设置IP参数:ip address</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看-设置路由表-ip-route"><span class="nav-number">1.3.3.</span> <span class="nav-text">查看/设置路由表:ip route</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#无线网络-iwlist-iwconfig"><span class="nav-number">1.4.</span> <span class="nav-text"> 无线网络:iwlist/iwconfig</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用dchp自动取得IP参数-dhclient"><span class="nav-number">1.5.</span> <span class="nav-text"> 使用dchp自动取得IP参数:dhclient</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络侦测与观察指令"><span class="nav-number">2.</span> <span class="nav-text"> 网络侦测与观察指令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#两主机两点连通测试与追踪路径中的MTU最大值：ping"><span class="nav-number">2.1.</span> <span class="nav-text"> 两主机两点连通测试与追踪路径中的MTU最大值：ping</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#测试两主机是否连通-ping-IP-hostname"><span class="nav-number">2.1.1.</span> <span class="nav-text">测试两主机是否连通:ping [IP|hostname]</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试路径能通过的最大MTU-ping-IP-hostname-s-MTU测试值-M-do-不进行拆包处理"><span class="nav-number">2.1.2.</span> <span class="nav-text">测试路径能通过的最大MTU:ping [IP|hostname] -s MTU测试值 -M do(不进行拆包处理)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#两主机间各节点的分析：traceroute"><span class="nav-number">2.2.</span> <span class="nav-text"> 两主机间各节点的分析：traceroute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看本机的网络连接与后面：netstat"><span class="nav-number">2.3.</span> <span class="nav-text"> 查看本机的网络连接与后面：netstat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看主机名与IP：host-nslookup-dig"><span class="nav-number">2.4.</span> <span class="nav-text"> 查看主机名与IP：host/nslookup/dig</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#远端连线指令"><span class="nav-number">3.</span> <span class="nav-text"> 远端连线指令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文字界面网页浏览器-下载器"><span class="nav-number">4.</span> <span class="nav-text"> 文字界面网页浏览器/下载器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据包抓取"><span class="nav-number">5.</span> <span class="nav-text"> 数据包抓取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对网络连线TCP-UDP读写-nc-netcat"><span class="nav-number">5.1.</span> <span class="nav-text"> 对网络连线TCP/UDP读写:nc,netcat</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#抓取TCP数据包-tcpdump-wireshark"><span class="nav-number">5.2.</span> <span class="nav-text"> 抓取TCP数据包:tcpdump/wireshark</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

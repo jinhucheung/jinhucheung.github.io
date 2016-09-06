@@ -1,0 +1,996 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="网络数据包连线进入主机的过程当网络上一个连线要求进入我们主机获取资源时,这个数据包进入主机整个流程是怎样的?
+ 数据包进入主机的过程网络数据包传输是双向的,当数据包进入主机时会被一层层防护筛选,最后才能获取到主机中的资源,下图是数据包进入主机的流程
+
+
+经过防火墙的分析:linux内建两个防火墙机制:netfilter与TCP wrappers
+数据包过滤防火墙:NetFilter 由iptab">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="网络数据包连线进入主机的过程当网络上一个连线要求进入我们主机获取资源时,这个数据包进入主机整个流程是怎样的?
+ 数据包进入主机的过程网络数据包传输是双向的,当数据包进入主机时会被一层层防护筛选,最后才能获取到主机中的资源,下图是数据包进入主机的流程
+
+
+经过防火墙的分析:linux内建两个防火墙机制:netfilter与TCP wrappers
+数据包过滤防火墙:NetFilter 由iptab">
+<meta property="og:image" content="https://raw.githubusercontent.com/HiKumho/blog/a5a3591061509bfda8cf412b71b4806d958343d6/img/blog_39_1.gif">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_39_2.gif?raw=true">
+<meta property="og:updated_time" content="2016-09-06T14:49:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux">
+<meta name="twitter:description" content="网络数据包连线进入主机的过程当网络上一个连线要求进入我们主机获取资源时,这个数据包进入主机整个流程是怎样的?
+ 数据包进入主机的过程网络数据包传输是双向的,当数据包进入主机时会被一层层防护筛选,最后才能获取到主机中的资源,下图是数据包进入主机的流程
+
+
+经过防火墙的分析:linux内建两个防火墙机制:netfilter与TCP wrappers
+数据包过滤防火墙:NetFilter 由iptab">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/HiKumho/blog/a5a3591061509bfda8cf412b71b4806d958343d6/img/blog_39_1.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/"/>
+
+  <title> Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T22:47:33+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="网络数据包连线进入主机的过程"><a href="#网络数据包连线进入主机的过程" class="headerlink" title=" 网络数据包连线进入主机的过程"></a><a name="ch1"> 网络数据包连线进入主机的过程</a></h2><p>当网络上一个连线要求进入我们主机获取资源时,这个数据包进入主机整个流程是怎样的?</p>
+<h3 id="数据包进入主机的过程"><a href="#数据包进入主机的过程" class="headerlink" title=" 数据包进入主机的过程"></a><a name="ch1.1"> 数据包进入主机的过程</a></h3><p>网络数据包传输是双向的,当数据包进入主机时会被一层层防护筛选,最后才能获取到主机中的资源,下图是数据包进入主机的流程
+<img src="https://raw.githubusercontent.com/HiKumho/blog/a5a3591061509bfda8cf412b71b4806d958343d6/img/blog_39_1.gif" alt=""></p>
+<ol>
+<li>经过防火墙的分析:linux内建两个防火墙机制:<code>netfilter</code>与<code>TCP wrappers</code><ul>
+<li>数据包过滤防火墙:NetFilter 由<code>iptables</code>这个组件提供,对TCP/IP包表头信息进行过滤,主要对象是MAC/IP/ICMP/TCP/UDP数据包</li>
+<li>TCP wrapper:数据包经过NetFilter后由Super daemons及TCP wrapper检验,主要是抵挡IP或端口,并进报告,<code>/etc/hosts.allow</code>与<code>hosts.deny</code>中设置</li>
+</ul>
+</li>
+<li>服务的基本功能:服务进程同样可以过滤掉某些数据包,比如httpd.conf规范了一些IP不能访问资源,如果服务程序有漏洞,也是很重大的一件事</li>
+<li>SElinux对服务进程的权限控制:限制了服务进程能取得资源的范围,即使是root也要遵守规则</li>
+<li>文件系统的基本权限控制:能否读取到数据,最后还是由文件系统的基本权限来控制的</li>
+</ol>
+<h3 id="网络常见攻击手段及保护措施"><a href="#网络常见攻击手段及保护措施" class="headerlink" title=" 网络常见攻击手段及保护措施"></a><a name="ch1.2"> 网络常见攻击手段及保护措施</a></h3><ul>
+<li>取得用户账号信息后猜密码<ul>
+<li>知道你的主机名,获取到用户账号,通过nmap来扫描主机的服务端口,就可以猜密码</li>
+<li>保护措施<ul>
+<li>减少信息曝光</li>
+<li>建立严格的密码设定规划：比如<code>/etc/shadow</code> <code>/etc/login.defs</code>中设置密码须变更的时间</li>
+<li>完善的权限设置</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>利用系统的程序漏洞主动攻击<ul>
+<li>利用我们系统上开启的服务程序漏洞来进行攻击</li>
+<li>保护措施<ul>
+<li>关闭不需要的网络服务</li>
+<li>随时保持更新软件</li>
+<li>关闭不需要的软件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>利用社交工程欺骗<pre><code>-  一些钓鱼信息等等
+-  保护措施
+    -  不要随意透露账号/密码等信息
+    -  追踪对方
+</code></pre></li>
+<li>恶意网站<pre><code>- 保护措施
+   -  随时更新软件
+   -  最小化软件功能
+   -  不连接到不明的主机
+</code></pre></li>
+<li>蠕虫/木马的rootkit<ul>
+<li>rootkit是指取得root权限的一群工具组,rootkit主要也是通过程序漏洞来实现的</li>
+<li>蠕虫：让你的主机一直发送数据包对外攻击，网络频宽被吃光</li>
+<li>木马：让你主机开启后门(开一个port来黑客主动入侵)</li>
+<li>保护措施<pre><code>-   定时用rkhunter来追查
+-   不下载来路不明的软件/资料
+-   减少危险指令的使用,比如SUID/SGID等
+</code></pre></li>
+</ul>
+</li>
+<li>DDoS攻击<ul>
+<li>分散式阻断服务功能,通过绑架各地的僵尸主机来进行DDos</li>
+<li>让僵尸主机不断发送请求(同步连线)至目标服务器</li>
+<li>不理会服务器回应,持续发送请求,耗掉服务资源,使其不能提供正常服务</li>
+</ul>
+</li>
+</ul>
+<h3 id="主机保护：软件更新-减少网络服务-启动SElinux"><a href="#主机保护：软件更新-减少网络服务-启动SElinux" class="headerlink" title=" 主机保护：软件更新/减少网络服务/启动SElinux"></a><a name="ch1.3"> 主机保护：软件更新/减少网络服务/启动SElinux</a></h3><p>主机保护有以下几个方向:</p>
+<ul>
+<li>建立完善的用户密码规则</li>
+<li>完善的主机权限设置(SElinux与文件系统权限)</li>
+<li>设定自动升级与修补软件漏洞,移出软件(软件方面)</li>
+<li>强化服务程序的安全设定</li>
+<li>利用<code>iptables</code>/<code>tcp wrappers</code>强化网络防火墙</li>
+<li>利用日志文件分析主机状态(<code>logwatch</code>)</li>
+</ul>
+<p>后面部分也会谈到软件更新/减少网络服务(限制端口)等操作,有关SElinux部分请看<a href="https://github.com/HiKumho/blog/issues/27#ch4" target="_blank" rel="external">Linux 学习之程序管理与SELinux</a></p>
+<h2 id="网络自动更新软件"><a href="#网络自动更新软件" class="headerlink" title=" 网络自动更新软件"></a><a name="ch2"> 网络自动更新软件</a></h2><h3 id="如何进行软件更新"><a href="#如何进行软件更新" class="headerlink" title=" 如何进行软件更新"></a><a name="ch2.1"> 如何进行软件更新</a></h3><p>通常我们都是通过线上自动升级机制的<code>yum/apt/you/urpmi</code>来更新软件的,它们基于自家的包管理器(如rpm/dpkg)</p>
+<p>如果我们以tarball方式安装的软件,要进行升级,就只能自己到相关官网上下载更新的tarball,再次编译安装了</p>
+<h3 id="yum软件更新-镜像网站使用的原理"><a href="#yum软件更新-镜像网站使用的原理" class="headerlink" title=" yum软件更新/镜像网站使用的原理"></a><a name="ch2.2"> yum软件更新/镜像网站使用的原理</a></h3><p><code>yum</code>基于RPM软件包管理,<code>yum</code>会连线yum服务器上下载RPM软件清单(记录了各软件的相关信息与依赖关系),通过RPM软件界清单,直接下载我们需要的软件以及前驱软件</p>
+<p>yum更新软件流程如下图
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_39_2.gif?raw=true" alt=""></p>
+<ol>
+<li>由yum配置文件(<code>/etc/yum.rrepos.d/*.repo</code>)判断yum服务器IP地址<ul>
+<li>yum服务器可以是官网,或者一些镜像网站(对官网网站内容的拷贝,减轻官网的负担)</li>
+<li>比如CentOS镜像列表:<a href="https://www.centos.org/download/mirrors/" target="_blank" rel="external">CentOS Mirror List</a></li>
+</ul>
+</li>
+<li>连接到yum服务器后,先下载新的RPM软件清单</li>
+<li>分析比较欲安装/升级的软件包,并提供用户确认</li>
+<li>下载软件包到/var/cache/yum中,并进行实际安装</li>
+<li>安装完毕,删除下载的软件包, 可以用<code>yum clean</code>手动删除</li>
+</ol>
+<h3 id="yum的使用-安装-搜索-软件群组-全系统更新"><a href="#yum的使用-安装-搜索-软件群组-全系统更新" class="headerlink" title=" yum的使用:安装/搜索/软件群组/全系统更新"></a><a name="ch2.3"> yum的使用:安装/搜索/软件群组/全系统更新</a></h3><p>yum除了可以安装升级软件外,其还提供了软件搜索以及软件群组等功能</p>
+<p>yum指令的用法如下</p>
+<ul>
+<li>基本格式  <code>yum [options] [相关参数]</code><ul>
+<li>一般options<ul>
+<li><code>install</code>  安装指定的软件</li>
+<li><code>update</code>  升级软件,后接软件名时,表指升级该软件,否则是全系统升级</li>
+<li><code>remove</code>  移出软件</li>
+<li><code>list</code>  列出所有可获得以及已安装的软件</li>
+<li><code>search</code>  在RPM清单中搜索软件(即yum服务器上搜索)  本机搜索用<code>rpm -qa | grep &quot;keyword&quot;</code></li>
+<li><code>info</code> 显示软件详细信息</li>
+<li><code>clean</code> 清除<code>/var/cache/yum</code>中的安装包</li>
+</ul>
+</li>
+<li>软件组options<ul>
+<li><code>grouplist</code>  列出可使用的软件组</li>
+<li><code>groupinfo</code> 显示软件组的详细信息</li>
+<li><code>groupinstall</code> 安装软件组</li>
+<li><code>groupremove</code> 移出软件组</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="选择特定的镜像网站-修改yum配置文件以及清除yum缓存"><a href="#选择特定的镜像网站-修改yum配置文件以及清除yum缓存" class="headerlink" title=" 选择特定的镜像网站:修改yum配置文件以及清除yum缓存"></a><a name="ch2.4"> 选择特定的镜像网站:修改yum配置文件以及清除yum缓存</a></h3><h4 id="找到镜像网站"><a href="#找到镜像网站" class="headerlink" title="找到镜像网站"></a>找到镜像网站</h4><p>首先我们要知道什么样的网站才是镜像网站,比如CentOS的镜像网站列表<a href="https://www.centos.org/download/mirrors/" target="_blank" rel="external">https://www.centos.org/download/mirrors/</a></p>
+<p>但是我进入这个镜像网站里有好多目录,我该怎么做,比如下面这个北京理工大学的CentOS镜像网站
+<a href="http://mirror.bit.edu.cn/centos/" target="_blank" rel="external">http://mirror.bit.edu.cn/centos/</a></p>
+<p>我们先找到相对应的系统版本,比如我是CentOS7,进入后发现有好多目录,其实这些目录称为容器,提供某类型软件,比如操作系统软件<code>os</code>与一般软件<code>updates</code>这两个容器,其下面有一个<code>repodata</code>目录,那就是我们软件列表清单相关数据存放处</p>
+<p>经过以上操作,我可以找到一个更新CentOS7的系统的容器<a href="http://mirror.bit.edu.cn/centos/7/os/x86_64/" target="_blank" rel="external">http://mirror.bit.edu.cn/centos/7/os/x86_64/</a></p>
+<h4 id="修改配置文件-etc-yum-repos-d-repo"><a href="#修改配置文件-etc-yum-repos-d-repo" class="headerlink" title="修改配置文件/etc/yum.repos.d/*.repo"></a>修改配置文件<code>/etc/yum.repos.d/*.repo</code></h4><p>在<code>/etc/yum.repos.d</code>目录下新建或修改repo文件,比如我这个CentOS-Bit-Base.repo文件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">[bit-base]  #容器名 不能同名</div><div class="line">name=CentOS-$releasever -Bit-Base  # 说明容器</div><div class="line">baseurl=http://mirror.bit.edu.cn/centos/7/os/x86_64/  #容器地址</div><div class="line">gpgcheck=1 #公匙相关</div><div class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7   </div><div class="line">enable=1   #启动这个容器</div><div class="line"></div><div class="line">#released updates </div><div class="line">[bit-updates]</div><div class="line">name=CentOS-$releasever -Bit-Updates</div><div class="line">baseurl=http://mirror.bit.edu.cn/centos/7/updates/x86_64/</div><div class="line">gpgcheck=1</div><div class="line">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7</div><div class="line">enable=1</div></pre></td></tr></table></figure></p>
+<h4 id="查看容器是否启动与清除历史缓存"><a href="#查看容器是否启动与清除历史缓存" class="headerlink" title="查看容器是否启动与清除历史缓存"></a>查看容器是否启动与清除历史缓存</h4><ul>
+<li>查看容器是否启动  <code>yum repolist all</code></li>
+<li>清除历史缓存  <code>yum clean all</code></li>
+</ul>
+<h2 id="限制服务端口"><a href="#限制服务端口" class="headerlink" title=" 限制服务端口"></a><a name="ch3"> 限制服务端口</a></h2><h3 id="什么是端口-port"><a href="#什么是端口-port" class="headerlink" title=" 什么是端口(port)"></a><a name="ch3.1"> 什么是端口(port)</a></h3><p>当你启动一个服务时,这个服务根据TCP/IP相关协议启动一个端口(port)在监听,也就是说端口提供服务
+端口有以下特点</p>
+<ul>
+<li>服务器启动的端口以及对应的服务是固定的,<code>/etc/services</code>可以查看</li>
+<li>客户端连接服务器端口时,随机启动一个大于1024的端口连接</li>
+<li>一个服务器可以同时提供多种服务</li>
+<li>一共有65536个端口,TCP/UDP包中端口号占16位,固一台主机有2^16个端口<ul>
+<li>只有root才能启动小于1024端口</li>
+<li>大于1024端口用于客户端请求</li>
+</ul>
+</li>
+<li>服务器端可以启用非正规端口提供服务,客户端连接时须指定端口</li>
+<li>是否要可靠连接TCP</li>
+</ul>
+<h3 id="查看端口-netstat-nmap"><a href="#查看端口-netstat-nmap" class="headerlink" title=" 查看端口:netstat/nmap"></a><a name="ch3.2"> 查看端口:netstat/nmap</a></h3><ul>
+<li><code>netstat</code> ： 查看本机上面启动的端口<ul>
+<li>列出正在监听的网络服务 <code>netstat -tulnp</code></li>
+<li>列出已连线的网络服务连线状态 <code>netstat -tun</code></li>
+<li>删除已连线的网络服务的连线 <code>netstat -tunp</code>+<code>kill -9 pid</code></li>
+</ul>
+</li>
+<li><code>nmap</code> 侦测网络上其他主机启动的端口,通常是同子网内主机的检测(不要去扫其他人主机,会违法的)<ul>
+<li>以TCP中的ping扫描主机状态 <code>nmap [ip|hostname|(network/netIDNum)]  -PT</code></li>
+<li>以ICMP扫描主机状态  <code>nmap [ip|hostname|(network/netIDNum)]  -sP</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="服务的启动-关闭"><a href="#服务的启动-关闭" class="headerlink" title=" 服务的启动/关闭"></a><a name="ch3.3"> 服务的启动/关闭</a></h3><p>请查看<a href="https://github.com/HiKumho/blog/issues/28" target="_blank" rel="external">Linux 学习之认识系统服务(daemon)</a></p>
+<h2 id="被攻击后主机修复工作"><a href="#被攻击后主机修复工作" class="headerlink" title=" 被攻击后主机修复工作"></a><a name="ch4"> 被攻击后主机修复工作</a></h2><h3 id="网管应具备的能力"><a href="#网管应具备的能力" class="headerlink" title=" 网管应具备的能力"></a><a name="ch4.1"> 网管应具备的能力</a></h3><ul>
+<li>了解什么时需要保护的内容</li>
+<li>预防黑客的入侵</li>
+<li>主机环境安全化</li>
+<li>防火墙规则的设置</li>
+<li>即时维护主机</li>
+<li>良好的教育训练课程</li>
+<li>完善的备份计划</li>
+</ul>
+<h3 id="主机受攻击后复原工作流程"><a href="#主机受攻击后复原工作流程" class="headerlink" title=" 主机受攻击后复原工作流程"></a><a name="ch4.2"> 主机受攻击后复原工作流程</a></h3><ul>
+<li>立即拔除网线</li>
+<li>分析日志文件,搜索可能的入侵途径</li>
+<li>重要资料备份</li>
+<li>重新安装系统</li>
+<li>软件漏洞修补</li>
+<li>关闭/移出不需要的服务</li>
+<li>资料的恢复与服务设置</li>
+<li>连上Internet</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/web/" rel="tag">#web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-服务器篇-常用的网络指令/" rel="next" title="Linux 服务器篇 常用的网络指令">
+                <i class="fa fa-chevron-left"></i> Linux 服务器篇 常用的网络指令
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-服务器篇-路由概念与路由协议/" rel="prev" title="Linux 服务器篇 路由概念与路由协议">
+                Linux 服务器篇 路由概念与路由协议 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/"
+           data-title="Linux 服务器篇 网络安全与主机基本防护:网络升级/限制端口/SELinux" data-url="http://yoursite.com/2016/09/06/Linux-服务器篇-网络安全与主机基本防护-网络升级-限制端口-SELinux/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络数据包连线进入主机的过程"><span class="nav-number">1.</span> <span class="nav-text"> 网络数据包连线进入主机的过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据包进入主机的过程"><span class="nav-number">1.1.</span> <span class="nav-text"> 数据包进入主机的过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#网络常见攻击手段及保护措施"><span class="nav-number">1.2.</span> <span class="nav-text"> 网络常见攻击手段及保护措施</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主机保护：软件更新-减少网络服务-启动SElinux"><span class="nav-number">1.3.</span> <span class="nav-text"> 主机保护：软件更新/减少网络服务/启动SElinux</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网络自动更新软件"><span class="nav-number">2.</span> <span class="nav-text"> 网络自动更新软件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#如何进行软件更新"><span class="nav-number">2.1.</span> <span class="nav-text"> 如何进行软件更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum软件更新-镜像网站使用的原理"><span class="nav-number">2.2.</span> <span class="nav-text"> yum软件更新/镜像网站使用的原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#yum的使用-安装-搜索-软件群组-全系统更新"><span class="nav-number">2.3.</span> <span class="nav-text"> yum的使用:安装/搜索/软件群组/全系统更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择特定的镜像网站-修改yum配置文件以及清除yum缓存"><span class="nav-number">2.4.</span> <span class="nav-text"> 选择特定的镜像网站:修改yum配置文件以及清除yum缓存</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#找到镜像网站"><span class="nav-number">2.4.1.</span> <span class="nav-text">找到镜像网站</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#修改配置文件-etc-yum-repos-d-repo"><span class="nav-number">2.4.2.</span> <span class="nav-text">修改配置文件/etc/yum.repos.d/*.repo</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看容器是否启动与清除历史缓存"><span class="nav-number">2.4.3.</span> <span class="nav-text">查看容器是否启动与清除历史缓存</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#限制服务端口"><span class="nav-number">3.</span> <span class="nav-text"> 限制服务端口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是端口-port"><span class="nav-number">3.1.</span> <span class="nav-text"> 什么是端口(port)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看端口-netstat-nmap"><span class="nav-number">3.2.</span> <span class="nav-text"> 查看端口:netstat/nmap</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务的启动-关闭"><span class="nav-number">3.3.</span> <span class="nav-text"> 服务的启动/关闭</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#被攻击后主机修复工作"><span class="nav-number">4.</span> <span class="nav-text"> 被攻击后主机修复工作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#网管应具备的能力"><span class="nav-number">4.1.</span> <span class="nav-text"> 网管应具备的能力</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主机受攻击后复原工作流程"><span class="nav-number">4.2.</span> <span class="nav-text"> 主机受攻击后复原工作流程</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

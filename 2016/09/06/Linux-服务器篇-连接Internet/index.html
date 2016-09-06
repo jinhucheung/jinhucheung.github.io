@@ -1,0 +1,933 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Linux 连接Internet : 驱动网卡当我们想要连接上Internet时,首先需要确保Linux已经驱动了网卡,之后才是设置网络参数
+ 查看Linux是否驱动网卡要确保自己机器上已经有网卡了,之后使用dmesg | grep eth查看网卡信息(注意有线网卡设备名是eth0…ethN)
+比如我机器上的RTL8105e螃蟹卡,而对应的内核模块(驱动程序)是r8169
+1[  1.22355">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 服务器篇 连接Internet">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-服务器篇-连接Internet/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="Linux 连接Internet : 驱动网卡当我们想要连接上Internet时,首先需要确保Linux已经驱动了网卡,之后才是设置网络参数
+ 查看Linux是否驱动网卡要确保自己机器上已经有网卡了,之后使用dmesg | grep eth查看网卡信息(注意有线网卡设备名是eth0…ethN)
+比如我机器上的RTL8105e螃蟹卡,而对应的内核模块(驱动程序)是r8169
+1[  1.22355">
+<meta property="og:updated_time" content="2016-09-06T14:41:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 服务器篇 连接Internet">
+<meta name="twitter:description" content="Linux 连接Internet : 驱动网卡当我们想要连接上Internet时,首先需要确保Linux已经驱动了网卡,之后才是设置网络参数
+ 查看Linux是否驱动网卡要确保自己机器上已经有网卡了,之后使用dmesg | grep eth查看网卡信息(注意有线网卡设备名是eth0…ethN)
+比如我机器上的RTL8105e螃蟹卡,而对应的内核模块(驱动程序)是r8169
+1[  1.22355">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-服务器篇-连接Internet/"/>
+
+  <title> Linux 服务器篇 连接Internet | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 服务器篇 连接Internet
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T22:39:54+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-服务器篇-连接Internet/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-服务器篇-连接Internet/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Linux-连接Internet-驱动网卡"><a href="#Linux-连接Internet-驱动网卡" class="headerlink" title=" Linux 连接Internet : 驱动网卡"></a><a name="ch1"> Linux 连接Internet : 驱动网卡</a></h2><p>当我们想要连接上Internet时,首先需要确保Linux已经驱动了网卡,之后才是设置网络参数</p>
+<h3 id="查看Linux是否驱动网卡"><a href="#查看Linux是否驱动网卡" class="headerlink" title=" 查看Linux是否驱动网卡"></a><a name="ch1.1"> 查看Linux是否驱动网卡</a></h3><p>要确保自己机器上已经有网卡了,之后使用<code>dmesg | grep eth</code>查看网卡信息(注意有线网卡设备名是eth0…ethN)</p>
+<p>比如我机器上的<code>RTL8105e</code>螃蟹卡,而对应的内核模块(驱动程序)是<code>r8169</code>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[  1.223558] r8169 0000:09:00.0 eth0: RTL8105e at 0xf845c000, e0:db:55:ab:6b:29, XID 00c00000 IRQ 27</div></pre></td></tr></table></figure></p>
+<p>可以通过<code>lsmod | grep r8169</code>查看是否该模块有加载至内核中,如果要查看详细模块信息可以<code>modinfo r8169</code></p>
+<h3 id="编译驱动网卡模块"><a href="#编译驱动网卡模块" class="headerlink" title=" 编译驱动网卡模块"></a><a name="ch1.2"> 编译驱动网卡模块</a></h3><p>一般来说,如果我们的网卡被Linux驱动,可能就要去找此张网卡相对的驱动程序,再自行编译。</p>
+<p>不太推荐自行编译网卡驱动,毕竟升级内核时,又需要重新编译一次自行编译的程序,通常都是购买Linux支持的网卡</p>
+<p>以下说明自行编译网卡驱动程序的过程</p>
+<h4 id="取得官方驱动程序包"><a href="#取得官方驱动程序包" class="headerlink" title="取得官方驱动程序包"></a>取得官方驱动程序包</h4><p>比如这里取得的是驱动程序源码</p>
+<h4 id="解压缩与编译安装"><a href="#解压缩与编译安装" class="headerlink" title="解压缩与编译安装"></a>解压缩与编译安装</h4><p>解压源码包,通过读README等文件知道编译过程,通常使用config与make编译安装程序(这里是内核模块)</p>
+<h4 id="加载内核模块"><a href="#加载内核模块" class="headerlink" title="加载内核模块"></a>加载内核模块</h4><p>利用<code>depmod</code>与<code>modprobe</code>加载内核模块至内核</p>
+<p>详细过程请看</p>
+<ul>
+<li><a href="https://github.com/HiKumho/blog/issues/31#ch1.4" target="_blank" rel="external">什么是软件的tarball及其安装过程</a></li>
+<li><a href="https://github.com/HiKumho/blog/issues/30#ch4" target="_blank" rel="external">内核与内核模块</a></li>
+</ul>
+<h2 id="Linux-连接Internet-设置网络参数"><a href="#Linux-连接Internet-设置网络参数" class="headerlink" title=" Linux 连接Internet : 设置网络参数"></a><a name="ch2"> Linux 连接Internet : 设置网络参数</a></h2><p>我们知道TCP/IP的重要参数主要有:IP/Netmask/Gateway/DNS IP 此外还有主机名(hostname)与本地保存的域名与IP对应关系(host)</p>
+<h3 id="Linux的网络参数配置文件"><a href="#Linux的网络参数配置文件" class="headerlink" title=" Linux的网络参数配置文件"></a><a name="ch2.1"> Linux的网络参数配置文件</a></h3><p>CentOS下,它们的配置文件如下表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">设置的网络参数</th>
+<th style="text-align:center">文件名</th>
+<th style="text-align:center">重要参数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IP/Netmask/DHCP/Gateway等</td>
+<td style="text-align:center">/etc/sysconfig/network-scripts/ifcfg-eth0</td>
+<td style="text-align:center">DEVICE=网卡设备名(这里是eth0)<br>BOOTPROTO=是否使用dhcp(自动获取网络参数)<br>HWADDR=网卡MAC<br>IPADDR=IP地址<br>NETMASK=子网掩码<br>ONBOOT=预设使用此文件设置的参数<br>GATEWAY=网关IP<br>NM_CONTROLLED=额外的网管软件</td>
+</tr>
+<tr>
+<td style="text-align:center">主机名称</td>
+<td style="text-align:center">/etc/sysconfig/network</td>
+<td style="text-align:center">NETWORKING=要不要有网络<br>NETWORKING_IPV6=支持IPV6<br>HOSTNAME=主机名</td>
+</tr>
+<tr>
+<td style="text-align:center">DNS IP</td>
+<td style="text-align:center">/etc/resolv.conf</td>
+<td style="text-align:center">nameserver DNS的IP</td>
+</tr>
+<tr>
+<td style="text-align:center">本地保存的主机名与IP对应表</td>
+<td style="text-align:center">/etc/hosts</td>
+<td style="text-align:center">IP 主机名称 别名</td>
+</tr>
+</tbody>
+</table>
+<p>Ubuntu下,它们的配置文件如上相似,主要是</p>
+<ul>
+<li><code>IP/Netmask等</code>  在<code>/etc/network/interfaces(默认设置)</code>与<code>/etc/NetworkManager/system-connections/(各网络接口的设置)</code></li>
+<li><code>主机名称</code>  在<code>/etc/hostname</code>中</li>
+</ul>
+<p>以下是一个/etc/network/interfaces配置文件,可以配置dns/路由表/网络接口等参数
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"># This file describes the network interfaces available on your system</div><div class="line"># and how to activate them. For more information, see interfaces(5).</div><div class="line"></div><div class="line"># The loopback network interface</div><div class="line">auto lo</div><div class="line">iface lo inet loopback</div><div class="line"></div><div class="line"># The primary network interface</div><div class="line">auto eth0</div><div class="line">iface eth0 inet static</div><div class="line">address xxx.xxx.xxx.xxx</div><div class="line">netmask xxx.xxx.xxx.xxx</div><div class="line">gateway xxx.xxx.xxx.xxx</div><div class="line"></div><div class="line">auto eth0:0</div><div class="line">iface eth0:0 inet static</div><div class="line">address xxx.xxx.xxx.xxx</div><div class="line">netmask xxx.xxx.xxx.xxx</div><div class="line"></div><div class="line">#dns-nameservers 202.102.224.68 202.102.227.68</div><div class="line">up route add -net xxx.xxx.xxx.xxx netmask xxx.xxx.xxx.xxx gw xxx.xxx.xxx.xxx eth0</div><div class="line">up route add -net xxx.xxx.xxx.xxx netmask xxx.xxx.xxx.xxx gw xxx.xxx.xxx.xxx eth0</div><div class="line">up route add -net xxx.xxx.xxx.xxx netmask xxx.xxx.xxx.xxx gw xxx.xxx.xxx.xxx eth0</div></pre></td></tr></table></figure></p>
+<p>除了上面的文件外,还有以下较重要的文件</p>
+<ul>
+<li><code>/etc/services</code>  定义服务与端口对应</li>
+<li><code>/etc/protocols</code>  定义IP包相关协议资料</li>
+</ul>
+<h3 id="启动网络服务"><a href="#启动网络服务" class="headerlink" title=" 启动网络服务"></a><a name="ch2.2"> 启动网络服务</a></h3><p>当我们更新好网络参数配置文件后,当然要重启网络服务啦！
+有以下两种方式</p>
+<ul>
+<li><code>/etc/init.d/network restart</code> 重启整个网络服务</li>
+<li><code>ifup eth0(ifdown eth0)</code>  只启动或关闭某个网络接口</li>
+</ul>
+<h3 id="手动设置固定IP参数"><a href="#手动设置固定IP参数" class="headerlink" title=" 手动设置固定IP参数"></a><a name="ch2.3"> 手动设置固定IP参数</a></h3><p>如上面我们可以知道要手动设置固定IP参数,就是修改其的配置文件,以下是修改网络参数涉及到的配置文件/启动脚本和测试命令表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">修改的参数</th>
+<th style="text-align:center">配置文件与启动脚本</th>
+<th style="text-align:center">测试命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">IP相关参数</td>
+<td style="text-align:center">/etc/sysconfig/network-scripts/ifcfg-eth0<br>/etc/init.d/network restart</td>
+<td style="text-align:center">ifconfig(查看IP参数)<br>route(查看网关)<br>ping 网关IP</td>
+</tr>
+<tr>
+<td style="text-align:center">DNS IP</td>
+<td style="text-align:center">/etc/reslov.conf</td>
+<td style="text-align:center">dig www.google.com</td>
+</tr>
+<tr>
+<td style="text-align:center">主机名称</td>
+<td style="text-align:center">/etc/sysconfig/network<br>/etc/hosts</td>
+<td style="text-align:center">hostname (获取主机名)<br> ping $(hostname)<br> reboot</td>
+</tr>
+</tbody>
+</table>
+<p>这里注意的是IP相关参数时设置的网关,每个接口都有一样(或者只设置一个),避免互相干扰</p>
+<h3 id="自动取得IP参数-DHCP"><a href="#自动取得IP参数-DHCP" class="headerlink" title=" 自动取得IP参数:DHCP"></a><a name="ch2.4"> 自动取得IP参数:DHCP</a></h3><p>DHCP就是有一部主机提供DHCP服务给整个网域下的主机,比如IP分享器就是一个DHCP主机,其会提供IP参数与DNS参数,所以不需要额外设置</p>
+<p>将<code>/etc/sysconfig/network-scripts/ifcfg-eth0</code>中<code>BOOTPROTO</code>设置为<code>dhcp</code>就启动了<code>eth0</code>为DHCP连接,然后将IP/子网掩码/网关等都去掉(特别是网关)</p>
+<h3 id="ADSL拨号连网"><a href="#ADSL拨号连网" class="headerlink" title=" ADSL拨号连网"></a><a name="ch2.5"> ADSL拨号连网</a></h3><p>ADSL拨号连网需要使用<code>rp-pppoe</code>这个软件帮忙,其拨号成功后会产生一个<code>ppp0</code>接口,其是架设在以太网卡(<code>eth0</code>)上的,所以<code>eth0</code>不能关闭,但是要一定要将eth0设置的网关去掉,<code>ppp0</code>会提供一个网关</p>
+<ul>
+<li>当网卡有Private IP又要拨号上网时<ul>
+<li>仍是使用此预设启动网卡<code>ONBOOT=yes</code></li>
+<li>仍设置IP与子网掩码,都是局域网的参数</li>
+<li>不设置网关</li>
+<li>之后设置<code>pppoe-setup</code>拨号参数</li>
+<li><code>pppoe-start</code>来进行拨号上网</li>
+<li>这样局域网内的主机可以通过此网卡连上Internet</li>
+</ul>
+</li>
+<li>如果要两张网卡,就可以<ul>
+<li>对外网卡预设不启动<code>ONBOOT=no</code></li>
+<li>对外网卡进行拨号</li>
+<li>对内网卡设置局域网IP参数</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/web/" rel="tag">#web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-服务器篇-局域网架设简介/" rel="next" title="Linux 服务器篇 局域网架设简介">
+                <i class="fa fa-chevron-left"></i> Linux 服务器篇 局域网架设简介
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-服务器篇-常用的网络指令/" rel="prev" title="Linux 服务器篇 常用的网络指令">
+                Linux 服务器篇 常用的网络指令 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-服务器篇-连接Internet/"
+           data-title="Linux 服务器篇 连接Internet" data-url="http://yoursite.com/2016/09/06/Linux-服务器篇-连接Internet/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-连接Internet-驱动网卡"><span class="nav-number">1.</span> <span class="nav-text"> Linux 连接Internet : 驱动网卡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看Linux是否驱动网卡"><span class="nav-number">1.1.</span> <span class="nav-text"> 查看Linux是否驱动网卡</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译驱动网卡模块"><span class="nav-number">1.2.</span> <span class="nav-text"> 编译驱动网卡模块</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#取得官方驱动程序包"><span class="nav-number">1.2.1.</span> <span class="nav-text">取得官方驱动程序包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解压缩与编译安装"><span class="nav-number">1.2.2.</span> <span class="nav-text">解压缩与编译安装</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#加载内核模块"><span class="nav-number">1.2.3.</span> <span class="nav-text">加载内核模块</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux-连接Internet-设置网络参数"><span class="nav-number">2.</span> <span class="nav-text"> Linux 连接Internet : 设置网络参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux的网络参数配置文件"><span class="nav-number">2.1.</span> <span class="nav-text"> Linux的网络参数配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动网络服务"><span class="nav-number">2.2.</span> <span class="nav-text"> 启动网络服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动设置固定IP参数"><span class="nav-number">2.3.</span> <span class="nav-text"> 手动设置固定IP参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#自动取得IP参数-DHCP"><span class="nav-number">2.4.</span> <span class="nav-text"> 自动取得IP参数:DHCP</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ADSL拨号连网"><span class="nav-number">2.5.</span> <span class="nav-text"> ADSL拨号连网</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

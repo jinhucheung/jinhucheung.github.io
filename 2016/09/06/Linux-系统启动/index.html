@@ -1,0 +1,980 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Linux启动流程Linux启动的过程如下:
+
+加载BIOS的硬件信息与进行自我测试,并依据设置取得第一个可启动的设备
+读取并执行硬盘第一扇区中MBR的boot loader程序(即grub,spfdisk等)
+依据boot loader的设置加载内核,内核会再次检测硬件信息与加载驱动程序
+在硬件驱动成功后,内核会主动调用init进程,并对init初始化配置(/etc/inittab)
+init">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 系统启动">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-系统启动/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="Linux启动流程Linux启动的过程如下:
+
+加载BIOS的硬件信息与进行自我测试,并依据设置取得第一个可启动的设备
+读取并执行硬盘第一扇区中MBR的boot loader程序(即grub,spfdisk等)
+依据boot loader的设置加载内核,内核会再次检测硬件信息与加载驱动程序
+在硬件驱动成功后,内核会主动调用init进程,并对init初始化配置(/etc/inittab)
+init">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_30_1.jpg?raw=true">
+<meta property="og:updated_time" content="2016-09-06T13:34:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 系统启动">
+<meta name="twitter:description" content="Linux启动流程Linux启动的过程如下:
+
+加载BIOS的硬件信息与进行自我测试,并依据设置取得第一个可启动的设备
+读取并执行硬盘第一扇区中MBR的boot loader程序(即grub,spfdisk等)
+依据boot loader的设置加载内核,内核会再次检测硬件信息与加载驱动程序
+在硬件驱动成功后,内核会主动调用init进程,并对init初始化配置(/etc/inittab)
+init">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_30_1.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-系统启动/"/>
+
+  <title> Linux 系统启动 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 系统启动
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:30:28+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-系统启动/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-系统启动/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Linux启动流程"><a href="#Linux启动流程" class="headerlink" title=" Linux启动流程"></a><a name="ch1"> Linux启动流程</a></h2><p>Linux启动的过程如下:</p>
+<ol>
+<li>加载BIOS的硬件信息与进行自我测试,并依据设置取得第一个可启动的设备</li>
+<li>读取并执行硬盘第一扇区中MBR的boot loader程序(即grub,spfdisk等)</li>
+<li>依据boot loader的设置加载内核,内核会再次检测硬件信息与加载驱动程序</li>
+<li>在硬件驱动成功后,内核会主动调用init进程,并对init初始化配置(/etc/inittab)</li>
+<li>init执行/etc/rc.d/rc.sysinit文件来准备操作系统环境(如网络/时区等)</li>
+<li>init执行run-level的各服务启动</li>
+<li>init执行/etc/rc.d/rc.local</li>
+<li>init执行终端模拟程序mingetty来启动login进程,等待用户登录</li>
+</ol>
+<p>详细描述:</p>
+<ul>
+<li>BIOS,开机自我测试与MBR<ul>
+<li>系统加载BIOS,通过BIOS去加载CMOS信息,获取各项硬件的配置信息</li>
+<li>BIOS检测硬件,定义出可启动的设备顺序,读取MBR中的数据(boot loader)</li>
+</ul>
+</li>
+<li>Boot loader的功能<ul>
+<li>不同操作系统的文件格式不一致,其有属于自己的boot loader</li>
+<li>必须要通过其的boot loader才能加载内核,boot loader可以识别多个文件系统</li>
+<li>boot loader只能安装在MBR或分区的启动扇区中</li>
+<li>安装操作系统时,会将其的boot loader都写在MBR和其启动扇区中</li>
+<li>boot loader提供菜单/加载内核/转交其他loader的功能</li>
+</ul>
+</li>
+<li>加载内核,检测硬件与initrd功能<ul>
+<li>boot loader读取内核后,内核开始测试与驱动设备,并重新检测硬件(内核文件放置/boot/vmlinuz)</li>
+<li>内核还会动态加载独立出来的内核模块,其在/lib/modules中(/lib不能与根目录不同分区)</li>
+<li>一些内核模块有USB,SATA等硬盘设备驱动等,但是我们要读取硬盘中/lib/modules,这里形成了个悖论</li>
+<li>Linux使用虚拟文件系统(initrd)解决上述的问题,其在/boot/initrd中,包含有Linux启动所需的模块(如硬盘驱动),通过先启动系统,在挂载根目录,读取硬盘中模块,再加载实际系统</li>
+</ul>
+</li>
+</ul>
+<p>下图是BIOS/Boot loader/内核的启动阶段
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_30_1.jpg?raw=true" alt=""></p>
+<h2 id="Boot-loader-Grub"><a href="#Boot-loader-Grub" class="headerlink" title=" Boot loader:Grub"></a><a name="ch2"> Boot loader:Grub</a></h2><h3 id="boot-loader的两个阶段"><a href="#boot-loader的两个阶段" class="headerlink" title=" boot loader的两个阶段"></a><a name="ch2.1"> boot loader的两个阶段</a></h3><p>由于MBR只有446字节,boot loader的代码与配置数据就大于446字节,所以Linux将loader的启动分为两个阶段</p>
+<h4 id="执行loader的主程序"><a href="#执行loader的主程序" class="headerlink" title="执行loader的主程序"></a>执行loader的主程序</h4><p>MBR仅安装boot loader的最小主程序,并没有安装loader的相关配置文件</p>
+<h4 id="主程序加载配置文件"><a href="#主程序加载配置文件" class="headerlink" title="主程序加载配置文件"></a>主程序加载配置文件</h4><p>主程序加载所有配置文件与相关环境参数(/boot/grub)中</p>
+<h3 id="grub的配置文件"><a href="#grub的配置文件" class="headerlink" title=" grub的配置文件"></a><a name="ch2.2"> grub的配置文件</a></h3><p>grub可以动态查找配置,无需在修改grub配置文件后重新安装grub</p>
+<p>####grub1的配置文件/boot/grub/menu.lst
+grub中硬盘与分区的代号的规则</p>
+<ul>
+<li>硬盘代号以()括起来</li>
+<li>以hd表示硬盘,后面会接一组数字</li>
+<li>以“查找顺序”作为硬盘的编号,而不是依照硬盘插入的接口排序</li>
+<li>第一块找到的硬盘为0,第二个为1号,以此类推</li>
+<li>每个硬盘的第一个分区为0,以此类推</li>
+<li>比如(hd0,0)表示查找的第一块硬盘第一分区,(hd1,1)查找到的第二块硬盘第二分区</li>
+</ul>
+<p>/boot/grub/menu.lst配置文件:
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">default=0  #默认启动的菜单项</div><div class="line">timeout=5  #若5秒内不动键盘,则用默认菜单项启动</div><div class="line">title CentOS  # 第1个菜单项</div><div class="line">   root (hd0,0)  # /boot所在的硬盘分区</div><div class="line">   kernel /vmlinuz-2.6.18-92 root=/dev/sda2 rhgb quiet  #内核文件(相对与/boot所在) 以及 根目录所在分区 与启动参数</div><div class="line">   initrd /intrd-2.6.18-92.img  # initrd文件(相对与/boot所在)</div></pre></td></tr></table></figure></p>
+<p>####grub2的配置文件/boot/grub/grub.cfg
+grub2不希望用户直接修改grub.cfg文件,而是通过修改/etc/default/grub文件后,调用grub-mkconfig来影响grub.cfg</p>
+<p>grub2的硬盘分区号从1开始,菜单项关键字不是title 而是menuentry</p>
+<p>关于grub2详细介绍请看以下链接
+<a href="http://linux.vbird.org/linux_basic/0510osloader.php#grub" target="_blank" rel="external">鸟哥的Linux私房菜-Grub2</a></p>
+<h3 id="grub的安装"><a href="#grub的安装" class="headerlink" title=" grub的安装"></a><a name="ch2.3"> grub的安装</a></h3><p>如果要从其他boot loader转到grub时,需要进行以下步骤:</p>
+<ol>
+<li>先使用grub-install安装grub(安装第二阶段需要的配置文件)</li>
+<li>编写grub的配置文件menu.lst或grub.cfg</li>
+<li>通过grub shell将主程序安装到系统中,如MBR(hd0),或分区启动扇区(hd0,0)等(安装第一阶段需要的主程序),以下是执行grub 进入grub shell的命令<ul>
+<li>用root (hdx,x)选择含有grub目录的分区代号</li>
+<li>用 find /boot/vmlinuz 测试内核文件是否存在</li>
+<li>用 setup (hdx,x) 或setup (hdx),将ggrub安装在启动扇区或者MBR中</li>
+<li>quit 退出grub shell</li>
+</ul>
+</li>
+</ol>
+<h3 id="initrd文件的创建"><a href="#initrd文件的创建" class="headerlink" title=" initrd文件的创建"></a><a name="ch2.4"> initrd文件的创建</a></h3><p>initrd包含Linux系统启动必要的内核模块,当原本的initrd含有的模块不能满足我们需要时,可以通过重新创建一个含有新模块的initrd文件
+<code>mkinitrd --with=模块名称 initrd文件名 内核版本</code> </p>
+<h2 id="init进程"><a href="#init进程" class="headerlink" title=" init进程"></a><a name="ch3"> init进程</a></h2><p>在内核加载驱动完成后,内核会主动调用init进程(/sbin/init),来完成系统的初始化,init会参考配置文件/etc/inittab来工作,inittab可以设置Linux的运行等级(模块,run level)</p>
+<h3 id="第一进程init的配置文件与run-level"><a href="#第一进程init的配置文件与run-level" class="headerlink" title=" 第一进程init的配置文件与run level"></a><a name="ch3.1"> 第一进程init的配置文件与run level</a></h3><p>####run level
+run level分为7个等级,可以用runlevel显示当前的等级,与init来切换等级</p>
+<ul>
+<li>0 直接关机</li>
+<li>1 单用用维护模式,用在系统出问题时维护</li>
+<li>2 类似3level,无NFS服务</li>
+<li>3 完整含有网络功能的纯文本模式</li>
+<li>4 系统保留</li>
+<li>5 类似3level X window</li>
+<li>6 重启</li>
+</ul>
+<p>Ubuntu默认的[2-5]level是一样功能的</p>
+<h4 id="etc-inittab配置文件"><a href="#etc-inittab配置文件" class="headerlink" title="/etc/inittab配置文件"></a>/etc/inittab配置文件</h4><p>/etc/inittab每行用：分隔字段,一共有4个字段,如下格式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[设置选项]:[run level]:[init的操作行为]:[命令选项]</div></pre></td></tr></table></figure></p>
+<ul>
+<li>设置选项:最多4个字符,代表init的主要工作选项,只是一个简单的代表说明</li>
+<li>run level:此选项在哪个run level执行,如35就是在3/5level下执行</li>
+<li>init操作行为:<ul>
+<li><code>initdefault</code>：代表默认的run level设置值</li>
+<li><code>sysinit</code> : 系统初始化的操作选项</li>
+<li><code>ctrlaltdel</code> : 代表[ctl]+[alt]+[del]是否可以重新启动的设置</li>
+<li><code>wait</code> : 代表后面接的命令须执行完才能继续做下面的选项设置</li>
+<li><code>respawn</code> 代表后面接的命令可以无限重新启动</li>
+</ul>
+</li>
+<li>命令选项 ： 即将要执行的命令</li>
+</ul>
+<p>一个/etc/inittab的例子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">id：5：initdefault：     #设置默认的run level</div><div class="line"></div><div class="line">si：：syinit：/etc/rc.d/rc.sysinit   # 准备操作系统的环境</div><div class="line"></div><div class="line">10：0：wait：/etc/rc.d/rc 0   #设置run level 0 需要启动/关闭的服务文件在哪</div><div class="line">11：1：wait：/etc/rc.d/rc 1</div><div class="line"></div><div class="line">1 ： 2345 ：respawn：/sbin/mingetty tty1 #设置tty1的终端</div><div class="line">2 ： 2345 ：respawn：/sbin/mingetty tty2 #设置tty2的终端</div><div class="line"></div><div class="line">x : 5：respawn :/etc/X11/prefdm -nodaemon # 设置x window服务</div></pre></td></tr></table></figure></p>
+<h3 id="init准备操作系统环境-etc-rc-d-rc-sysinit"><a href="#init准备操作系统环境-etc-rc-d-rc-sysinit" class="headerlink" title=" init准备操作系统环境:/etc/rc.d/rc.sysinit"></a><a name="ch3.2"> init准备操作系统环境:/etc/rc.d/rc.sysinit</a></h3><p>init在开始加载各项系统服务之前,得先设置好整个系统环境，主要利用/etc/rc.d/rc.sysinit这个script来设置系统环境,有以下的工作:</p>
+<ul>
+<li>取得网络环境与主机类型</li>
+<li>测试与挂载内存设备/proc及USB设备/sys</li>
+<li>决定是否启动SELinux</li>
+<li>启动随机数生成器,做一些密码加密的演算</li>
+<li>设置终端的字体</li>
+<li>设置显示启动中的欢迎界面</li>
+<li>设置系统时间与时区</li>
+<li>用户自定义模块的加载</li>
+<li>加载内核相关设置</li>
+<li>设置主机名与初始化电源管理模块</li>
+<li>初始化磁盘阵列</li>
+<li>初始化LVM</li>
+<li>以fsck检测磁盘文件系统</li>
+<li>进行磁盘配额(quota)</li>
+<li>重新以可读写模式挂载磁盘</li>
+<li>清除启动过程产生的临时文件</li>
+<li>将启动信息写到日志文件</li>
+</ul>
+<h3 id="Upstart方式的init"><a href="#Upstart方式的init" class="headerlink" title=" Upstart方式的init"></a><a name="ch3.3"> Upstart方式的init</a></h3><p>前面介绍的init是System V方式启动的,现在的init是基于Upstart方式启动,所以你在查找/etc/inittab与/etc/rc.d/rc.sysinit应该找不到,只不过你新建/etc/inittab,upstart的init会优先参考其设置</p>
+<p>详细的请看以下链接
+<a href="http://www.cnblogs.com/cassvin/archive/2011/12/25/ubuntu_init_analysis.html" target="_blank" rel="external">upstart的init</a></p>
+<h3 id="启动系统服务-etc-rcN-d"><a href="#启动系统服务-etc-rcN-d" class="headerlink" title=" 启动系统服务(/etc/rcN.d/)"></a><a name="ch3.4"> 启动系统服务(/etc/rcN.d/)</a></h3><p>各run level的需要启动/关闭的系统服务都在各自的/etc/rcN.d/下,比如/etc/rc5.d这个目录</p>
+<p>其下会含有以K或S开头的文件,其是连接文件,连接到实际的服务启动脚本文件
+K或S后接的数字是其执行顺序,系统会先执行K文件，再执行S文件
+实际的执行操作会以/etc/rc5.d/K<em>  stop 或/etc/rc5.d/S</em> start 进行</p>
+<h3 id="定义系统开机执行命令-etc-rc-d-rc-local"><a href="#定义系统开机执行命令-etc-rc-d-rc-local" class="headerlink" title=" 定义系统开机执行命令(/etc/rc.d/rc.local)"></a><a name="ch3.5"> 定义系统开机执行命令(/etc/rc.d/rc.local)</a></h3><p>我们只需将命令或脚本文件的绝对路径写入/etc/rc.d/rc.local中,系统在完成系统服务工作后,将会执行rc.local中的命令</p>
+<h2 id="内核与内核模块"><a href="#内核与内核模块" class="headerlink" title=" 内核与内核模块"></a><a name="ch4"> 内核与内核模块</a></h2><p>内核与内核模块放在哪？</p>
+<ul>
+<li>内核:/boot-vmlinuz</li>
+<li>内核解压所需RAM Disk：/boot/initrd</li>
+<li>内核模块：/lib/modules/version/kernel</li>
+<li>内核源码：/usr/src/linux或/usr/src/kernels</li>
+<li>内核版本 ： /proc/version</li>
+<li>系统内核功能：/proc/sys/kernel</li>
+</ul>
+<h3 id="查看目前内核加载的模块-lsmod"><a href="#查看目前内核加载的模块-lsmod" class="headerlink" title=" 查看目前内核加载的模块:lsmod"></a><a name="ch4.1"> 查看目前内核加载的模块:lsmod</a></h3><p>lsmod会列出目前内核加载了的模块,显示的内容包括模块名称,大小以及此模块是否被其他模块使用</p>
+<h3 id="内核模块的依赖性"><a href="#内核模块的依赖性" class="headerlink" title=" 内核模块的依赖性"></a><a name="ch4.2"> 内核模块的依赖性</a></h3><p>内核模块目录基本上会依照下面几个子目录来分类：</p>
+<ul>
+<li>arch 与硬件平台有关,如CPU等级等</li>
+<li>crypto 内核所支持的加密技术,如MD5</li>
+<li>drivers 一些硬件驱动程序,如显卡,网卡,PCI等</li>
+<li>fs  内核所支持的文件系统</li>
+<li>lib 函数库</li>
+<li>net 与网络有关的各项协议数据,还有防火墙模块</li>
+<li>sound 与音效有关的各项模块</li>
+</ul>
+<p>当我们需要添加内核模块时,将内模模块放置相应的分类目录下,在利用depmod制作一个modules.dep文件来描述内核模块的依赖性,为接下来的处理内核模块操作</p>
+<h3 id="内核模块的添加删除-modprobe"><a href="#内核模块的添加删除-modprobe" class="headerlink" title=" 内核模块的添加删除:modprobe"></a><a name="ch4.3"> 内核模块的添加删除:modprobe</a></h3><p>添加内核模块：modprobe 模块名
+删除内核模块 ： modprobe -r 模块名
+modprobe会去参考modules.dep文件</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-认识与分析日志文件/" rel="next" title="Linux 认识与分析日志文件">
+                <i class="fa fa-chevron-left"></i> Linux 认识与分析日志文件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-软件安装-源码与Tarball/" rel="prev" title="Linux 软件安装:源码与Tarball">
+                Linux 软件安装:源码与Tarball <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-系统启动/"
+           data-title="Linux 系统启动" data-url="http://yoursite.com/2016/09/06/Linux-系统启动/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux启动流程"><span class="nav-number">1.</span> <span class="nav-text"> Linux启动流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Boot-loader-Grub"><span class="nav-number">2.</span> <span class="nav-text"> Boot loader:Grub</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#boot-loader的两个阶段"><span class="nav-number">2.1.</span> <span class="nav-text"> boot loader的两个阶段</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#执行loader的主程序"><span class="nav-number">2.1.1.</span> <span class="nav-text">执行loader的主程序</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主程序加载配置文件"><span class="nav-number">2.1.2.</span> <span class="nav-text">主程序加载配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grub的配置文件"><span class="nav-number">2.2.</span> <span class="nav-text"> grub的配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#grub的安装"><span class="nav-number">2.3.</span> <span class="nav-text"> grub的安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#initrd文件的创建"><span class="nav-number">2.4.</span> <span class="nav-text"> initrd文件的创建</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#init进程"><span class="nav-number">3.</span> <span class="nav-text"> init进程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#第一进程init的配置文件与run-level"><span class="nav-number">3.1.</span> <span class="nav-text"> 第一进程init的配置文件与run level</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#etc-inittab配置文件"><span class="nav-number">3.1.1.</span> <span class="nav-text">/etc/inittab配置文件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#init准备操作系统环境-etc-rc-d-rc-sysinit"><span class="nav-number">3.2.</span> <span class="nav-text"> init准备操作系统环境:/etc/rc.d/rc.sysinit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Upstart方式的init"><span class="nav-number">3.3.</span> <span class="nav-text"> Upstart方式的init</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动系统服务-etc-rcN-d"><span class="nav-number">3.4.</span> <span class="nav-text"> 启动系统服务(/etc/rcN.d/)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#定义系统开机执行命令-etc-rc-d-rc-local"><span class="nav-number">3.5.</span> <span class="nav-text"> 定义系统开机执行命令(/etc/rc.d/rc.local)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#内核与内核模块"><span class="nav-number">4.</span> <span class="nav-text"> 内核与内核模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看目前内核加载的模块-lsmod"><span class="nav-number">4.1.</span> <span class="nav-text"> 查看目前内核加载的模块:lsmod</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核模块的依赖性"><span class="nav-number">4.2.</span> <span class="nav-text"> 内核模块的依赖性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内核模块的添加删除-modprobe"><span class="nav-number">4.3.</span> <span class="nav-text"> 内核模块的添加删除:modprobe</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

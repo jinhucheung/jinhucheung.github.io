@@ -1,0 +1,1244 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="认识Bash  硬件/内核/Shell硬件/内核/Shell三者关系如下图:
+
+就是说:Shell是一个应用程序,解析用户输入(点击鼠标/键盘)的命令,然后去调用相应的应用程序完成功能
+  系统上的Shell一个Linux下支持多种的Shell,它们在/etc/shells这个文件中
+1234/bin/sh  (第一个流行的Shell,已被Bash代替)/bin/bash (兼容sh,Linu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 认识Bash">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-认识Bash/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="认识Bash  硬件/内核/Shell硬件/内核/Shell三者关系如下图:
+
+就是说:Shell是一个应用程序,解析用户输入(点击鼠标/键盘)的命令,然后去调用相应的应用程序完成功能
+  系统上的Shell一个Linux下支持多种的Shell,它们在/etc/shells这个文件中
+1234/bin/sh  (第一个流行的Shell,已被Bash代替)/bin/bash (兼容sh,Linu">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_21_1.jpg?raw=true">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/bash%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B%20.png?raw=true">
+<meta property="og:updated_time" content="2016-09-06T05:26:35.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 认识Bash">
+<meta name="twitter:description" content="认识Bash  硬件/内核/Shell硬件/内核/Shell三者关系如下图:
+
+就是说:Shell是一个应用程序,解析用户输入(点击鼠标/键盘)的命令,然后去调用相应的应用程序完成功能
+  系统上的Shell一个Linux下支持多种的Shell,它们在/etc/shells这个文件中
+1234/bin/sh  (第一个流行的Shell,已被Bash代替)/bin/bash (兼容sh,Linu">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_21_1.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-认识Bash/"/>
+
+  <title> Linux 认识Bash | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 认识Bash
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T13:23:44+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-认识Bash/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-认识Bash/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="认识Bash"><a href="#认识Bash" class="headerlink" title="  认识Bash"></a><a name="ch1">  认识Bash</a></h2><h3 id="硬件-内核-Shell"><a href="#硬件-内核-Shell" class="headerlink" title="  硬件/内核/Shell"></a><a name="ch1.1">  硬件/内核/Shell</a></h3><p>硬件/内核/Shell三者关系如下图:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_21_1.jpg?raw=true" alt=""></p>
+<p>就是说:Shell是一个应用程序,解析用户输入(点击鼠标/键盘)的命令,然后去调用相应的应用程序完成功能</p>
+<h3 id="系统上的Shell"><a href="#系统上的Shell" class="headerlink" title="  系统上的Shell"></a><a name="ch1.2">  系统上的Shell</a></h3><p>一个Linux下支持多种的Shell,它们在/etc/shells这个文件中
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">/bin/sh  (第一个流行的Shell,已被Bash代替)</div><div class="line">/bin/bash (兼容sh,Linux默认的Shell)</div><div class="line">/bin/tcsh  (整合C shell)</div><div class="line">/bin/ksh  (兼容Bash)</div></pre></td></tr></table></figure><br>系统会为每个登陆的用户指定一个Shell,当然也有no-login的Shell,我们可以在/etc/passwd中查看到用户指定的Shell</p>
+<h3 id="Bash的功能"><a href="#Bash的功能" class="headerlink" title="  Bash的功能"></a><a name="ch1.3">  Bash的功能</a></h3><ul>
+<li>命令记忆能力(history)<ul>
+<li>历史命令记录在~/.bash_history里中,默认记录$HISTSIZE条,当用户注销系统后,历史命令才会写到~/.bash_history(强制写入history -w)</li>
+</ul>
+</li>
+<li>命令与文件补齐([TAB])</li>
+<li>命令别名设置(alias)</li>
+<li>作业控制/前台与后台控制(job control/foreground/background)</li>
+<li>程序脚本(shell script)</li>
+</ul>
+<h3 id="查看命令的类型-type"><a href="#查看命令的类型-type" class="headerlink" title="  查看命令的类型(type)"></a><a name="ch1.4">  查看命令的类型(type)</a></h3><p>当我们在终端执行命令时,命令可分为alias别名命令,bash内置命令,外部程序</p>
+<p>我们可以使用<code>type 命令名</code>查看此命令的类型</p>
+<h2 id="Shell的变量"><a href="#Shell的变量" class="headerlink" title="  Shell的变量"></a><a name="ch2">  Shell的变量</a></h2><h3 id="变量的显示与设置"><a href="#变量的显示与设置" class="headerlink" title="  变量的显示与设置"></a><a name="ch2.1">  变量的显示与设置</a></h3><blockquote>
+<p>变量的显示 : echo
+echo $varname 或者 echo ${varname}       </p>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>变量的设置规则</p>
+<ol>
+<li>变量与变量值以一个等号”=”连接,如<code>var=value</code></li>
+<li>等号两边不能直接接空格,如<code>var= value</code>(错误的)</li>
+<li>变量名只能是英文或数字,不能以数字开头</li>
+<li>变量值若有空格可以用””或’’括起来,其中””保持特殊字符的原本特性,’’则将特殊字符视为一般字符</li>
+<li>可以使用转义字符”\”转义特殊字符</li>
+<li>如要定义变量时引用另一个变量的值,如<code>path=&quot;$path:other&quot;</code>或<code>path=${path}:other</code></li>
+<li>定义变量时引用命令处理结果,可以使用$(command)</li>
+<li>环境变量(子进程可以使用的变量,通过bash开启子进程)用export来定义变量</li>
+<li>自定义变量名用小写,系统变量用大写</li>
+</ol>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>变量的取消: unset varname</p>
+</blockquote>
+<h3 id="变量的有效范围"><a href="#变量的有效范围" class="headerlink" title="  变量的有效范围"></a><a name="ch2.2">  变量的有效范围</a></h3><p>变量分为一般变量与环境变量,环境变量可以在子进程中引用,也叫全局变量.
+当启动一个Shell,操作系统会分配一个内存记录块给Shell的进程维护.
+进程使用<code>export</code>,将一般变量写到其的内存记录块中.
+当启动子进程,子进程将父进程的内存记录块中的信息导入自己的环境变量块中.</p>
+<p>我们使用<code>export</code>将一般变量转出环境变量
+<code>bash</code>启动子进程后,父进程会sleep</p>
+<h3 id="查看系统的变量"><a href="#查看系统的变量" class="headerlink" title="  查看系统的变量"></a><a name="ch2.3">  查看系统的变量</a></h3><blockquote>
+<p>查看环境变量 : env</p>
+<ul>
+<li>HOME :  用户主文件夹</li>
+<li>SHELL: 用户使用的Shell</li>
+<li>HISTSIZE: 历史命令条数</li>
+<li>PATH : 执行文件查找路径</li>
+<li>LANG : 语系</li>
+<li>RANDOM: 生成随机数</li>
+</ul>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>查看所有变量(含环境变量及自定义变量) : set</p>
+<ul>
+<li>PS1 : 命令提示符</li>
+<li>$ : 关于此Shell的PID</li>
+<li>? : 上个命令的回传码,0表示执行成功</li>
+<li><ul>
+<li>: 被unset的变量</li>
+</ul>
+</li>
+<li>OSTYPE: 操作系统类型</li>
+<li>HOSTTYPE: 主机架构,i686 x86_64等</li>
+</ul>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>查看系统当前支持的语系 : locale</p>
+<ul>
+<li>如果用户需要设置shell的语系,可以设置LANG或LC_ALL的值(注销后失效)</li>
+<li>如果要设置系统的语系,需要在/etc/sysconfig/i18n(CentOS)或/etc/default/locale(ubuntu)设置</li>
+</ul>
+</blockquote>
+<h3 id="变量值键盘读取-声明变量类型"><a href="#变量值键盘读取-声明变量类型" class="headerlink" title="  变量值键盘读取/声明变量类型"></a><a name="ch2.4">  变量值键盘读取/声明变量类型</a></h3><blockquote>
+<p>变量值键盘读取 : read</p>
+<ul>
+<li>格式 : read [-pt] varname</li>
+<li><code>p</code>: 接提示符  </li>
+<li><code>t</code>:等待时限</li>
+</ul>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>声明变量类型: declare/typeset</p>
+<ul>
+<li>格式: declare [-aixr] varname</li>
+<li><code>a</code> 定义数组变量</li>
+<li><code>i</code> 定义整型变量</li>
+<li><code>x</code> 定义环境变量</li>
+<li><code>r</code> 定义readonly变量<br>注意: 我们读取数组变量值时,需要使用${varname[1]},${varname[2]}这种格式(所以我们读取变量时最好习惯成${varname})</li>
+</ul>
+</blockquote>
+<h3 id="变量值的删除-替换-测试"><a href="#变量值的删除-替换-测试" class="headerlink" title="  变量值的删除/替换/测试"></a><a name="ch2.5">  变量值的删除/替换/测试</a></h3><p>变量值的删除与替换设置方式如下表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">变量设置方式</th>
+<th style="text-align:center">说明</th>
+<th style="text-align:center">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">${变量#关键字}</td>
+<td style="text-align:center">若变量值从头开始的数据,则将符合的最短数据删除</td>
+<td style="text-align:center">从头开始,最短匹配</td>
+</tr>
+<tr>
+<td style="text-align:center">${变量##关键字}</td>
+<td style="text-align:center">若变量值从头开始的数据,则将符合的最长数据删除</td>
+<td style="text-align:center">从头开始,最长匹配</td>
+</tr>
+<tr>
+<td style="text-align:center">${变量%关键字}</td>
+<td style="text-align:center">若变量值从尾开始的数据,则将符合的最短数据删除</td>
+<td style="text-align:center">从尾开始,最短匹配</td>
+</tr>
+<tr>
+<td style="text-align:center">${变量%%关键字}</td>
+<td style="text-align:center">若变量值从尾开始的数据,则将符合的最长数据删除</td>
+<td style="text-align:center">从尾开始,最长匹配</td>
+</tr>
+<tr>
+<td style="text-align:center">${变量/旧字符/新字符}</td>
+<td style="text-align:center">将变量值中第一个符合旧字符的数据替换</td>
+<td style="text-align:center">第一个替换</td>
+</tr>
+<tr>
+<td style="text-align:center">${变量//旧字符/新字符}</td>
+<td style="text-align:center">将变量值中全部符合旧字符的数据替换</td>
+<td style="text-align:center">全部替换</td>
+</tr>
+</tbody>
+</table>
+<p>测试变量值的测试方式如下表</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">变量设置方式</th>
+<th style="text-align:center">var没有设置</th>
+<th style="text-align:center">var为空字符</th>
+<th style="text-align:center">var已设置非空字符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">testvar=${var?tipstr}</td>
+<td style="text-align:center">将tipstr输出至stderr</td>
+<td style="text-align:center">testvar=</td>
+<td style="text-align:center">testvar=var</td>
+</tr>
+<tr>
+<td style="text-align:center">testvar=${var:?tipstr}</td>
+<td style="text-align:center">将tipstr输出至stderr</td>
+<td style="text-align:center">将tipstr输出至stderr</td>
+<td style="text-align:center">testvar=var</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Bash的操作环境"><a href="#Bash的操作环境" class="headerlink" title="  Bash的操作环境"></a><a name="ch3">  Bash的操作环境</a></h2><h3 id="命令查找顺序"><a href="#命令查找顺序" class="headerlink" title="  命令查找顺序"></a><a name="ch3.1">  命令查找顺序</a></h3><ol>
+<li>以相对/绝对路径执行的命令alias</li>
+<li>由alias找到此别名命令来执行</li>
+<li>由bash内置的builitin命令执行</li>
+<li>通过$PATH查找执行</li>
+</ol>
+<h3 id="命令别名与历史命令"><a href="#命令别名与历史命令" class="headerlink" title="  命令别名与历史命令"></a><a name="ch3.2">  命令别名与历史命令</a></h3><blockquote>
+<p>命令别名: alias</p>
+<ul>
+<li>查看当前系统内的别名命令 : <code>alias</code></li>
+<li>设置别名命令 : <code>alias name=commad</code></li>
+<li>取消别名命令 : <code>unalias name</code></li>
+</ul>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>历史命令: history</p>
+<ul>
+<li>列出目前内存中的历史命令 : hitory ([-n]:表示最近n条命令)</li>
+<li>历史命令默认保存在~/.bash_history中,最大保存$HISTSIZE条,当Shell注销时,就会将内存中的历史命令写入~/.bash_history(强制写入hitory -w) </li>
+</ul>
+</blockquote>
+<h3 id="Bash的欢迎与登录信息"><a href="#Bash的欢迎与登录信息" class="headerlink" title="  Bash的欢迎与登录信息"></a><a name="ch3.3">  Bash的欢迎与登录信息</a></h3><p><code>/etc/issue</code>  记录Bash的欢迎信息
+<code>/etc/issue.net</code> 记录远程Bash的欢迎信息
+<code>/etc/motd</code>  记录用户登录后提示的信息</p>
+<h3 id="Bash的环境配置文件"><a href="#Bash的环境配置文件" class="headerlink" title="  Bash的环境配置文件"></a><a name="ch3.4">  Bash的环境配置文件</a></h3><p>我们需要将设置好的环境(如命令别名,自定义变量)写入到bash的环境配置文件中才能持久生效,否则在注销后都会失效.</p>
+<p>那要写入到哪个bash的环境配置文件?
+bash分为”login shell” 与”non-login shell”,两者读取的环境配置文件有差异,如下图所示:
+<img src="https://github.com/HiKumho/blog/blob/master/img/bash%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%B5%81%E7%A8%8B%20.png?raw=true" alt=""></p>
+<p>当我们需要设置bash环境时,可以在~/.bashrc中设置</p>
+<p>其他的bash配置文件:</p>
+<ul>
+<li>~/.bash_logout: 用户注销后所执行的操作</li>
+<li>~/.bash_history: 记录历史命令</li>
+<li>/etc/man.config: 关于man手册查找路径</li>
+</ul>
+<h3 id="Bash的通配符与特殊符号"><a href="#Bash的通配符与特殊符号" class="headerlink" title="  Bash的通配符与特殊符号"></a><a name="ch3.5">  Bash的通配符与特殊符号</a></h3><p>常用通配符如下表:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">*</td>
+<td style="text-align:center">代表0到无穷多个任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">?</td>
+<td style="text-align:center">一定有1个任意字符</td>
+</tr>
+<tr>
+<td style="text-align:center">[]</td>
+<td style="text-align:center">代表一定有一个[]内的字符</td>
+</tr>
+<tr>
+<td style="text-align:center">[-]</td>
+<td style="text-align:center">代表编码顺序内的所有字符</td>
+</tr>
+<tr>
+<td style="text-align:center">[^]</td>
+<td style="text-align:center">代表含有非[]内的字符</td>
+</tr>
+</tbody>
+</table>
+<p>bash的特殊符号如下表:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">符号</th>
+<th style="text-align:center">意义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">#</td>
+<td style="text-align:center">注释符号</td>
+</tr>
+<tr>
+<td style="text-align:center">\</td>
+<td style="text-align:center">转义符号</td>
+</tr>
+<tr>
+<td style="text-align:center"></td>
+<td style="text-align:center"></td>
+<td>管道</td>
+</tr>
+<tr>
+<td style="text-align:center">;</td>
+<td style="text-align:center">连续命令执行分隔符</td>
+</tr>
+<tr>
+<td style="text-align:center">~</td>
+<td style="text-align:center">用户主目录</td>
+</tr>
+<tr>
+<td style="text-align:center">$</td>
+<td style="text-align:center">变量前导符</td>
+</tr>
+<tr>
+<td style="text-align:center">&amp;</td>
+<td style="text-align:center">作业控制,将命令变成后台工作</td>
+</tr>
+<tr>
+<td style="text-align:center">!</td>
+<td style="text-align:center">逻辑非</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center">目录符号</td>
+</tr>
+<tr>
+<td style="text-align:center">&gt;,&gt;&gt;</td>
+<td style="text-align:center">数据重定向,输出导向,分别是’替换’与’累加’</td>
+</tr>
+<tr>
+<td style="text-align:center">&lt;,&lt;&lt;</td>
+<td style="text-align:center">数据重定向,输入导向,&lt;&lt;后接一个尾符,表示遇到此尾符,结束输入</td>
+</tr>
+<tr>
+<td style="text-align:center">‘’</td>
+<td style="text-align:center">单引号,特殊字符转为一般字符</td>
+</tr>
+<tr>
+<td style="text-align:center">“”</td>
+<td style="text-align:center">双引号,特殊字符保持殊性</td>
+</tr>
+<tr>
+<td style="text-align:center">``</td>
+<td style="text-align:center">先执行的命令,可使用$()代替</td>
+</tr>
+<tr>
+<td style="text-align:center">{}</td>
+<td style="text-align:center">命令块组合</td>
+</tr>
+</tbody>
+</table>
+<h2 id="数据重定向"><a href="#数据重定向" class="headerlink" title="  数据重定向"></a><a name="ch4">  数据重定向</a></h2><p>当我们执行一个命令是输出结果信息或错误信息都是输到屏幕上的,这两个流我们称为标准输出(stdout)与标准错误输出(stderr),此外还有一个从文件读入数据的流称为标准输入(stdin)</p>
+<p>可是当我们想将输出信息输出到文件时,此时不能使用stdout/stderr流,我们需要将它们导向,故称为数据重定向</p>
+<p>数据重定向的特殊字符规则如下:</p>
+<ol>
+<li>标准输入(stdin),代码为0,使用&lt;或&lt;&lt;</li>
+<li>标准输出(stdout),代码为1,使用&gt;或&gt;&gt;</li>
+<li>标准错误输出(stderr),代码为2,使用2&gt;或2&gt;&gt;</li>
+</ol>
+<p>例子:</p>
+<ol>
+<li>查看根目录文件信息并输出到~/rootfile中: <code>ll / &gt; ~/rootfile</code> (文件不存在,会自动创建)</li>
+<li>查找/home中文件名为.bashrc并添加至~/rootfile中 : <code>find /home -name .bashrc &gt;&gt; ~/rootfile</code></li>
+<li>将ll filename的错误信息丢弃 : <code>ll filename 2&gt; /dev/null</code></li>
+<li>将ll filename的结果信息及错误信息一同显示在~/rootfile中 <code>ll filename &gt; ~/rootfile 2&gt;&amp;1</code></li>
+<li>将~/.bashrc的数据导进~/rootfile中 : <code>cat &gt; ~/rootfile &lt; ~/.bashrc</code></li>
+<li>从键盘输入信息到~/rootfile,并以”eof”表示结束输入 : <code>cat &gt; ~/rootfile &lt;&lt;&quot;eof&quot;</code></li>
+</ol>
+<h2 id="命令执行次序判断"><a href="#命令执行次序判断" class="headerlink" title="  命令执行次序判断"></a><a name="ch5">  命令执行次序判断</a></h2><p>当我们有一批命令需依次执行时,需要判断命令执行的次序.</p>
+<ul>
+<li>多命令不存在相关性: cmd;cmd;cmd;<ul>
+<li>连续执行多个不相关的命令,使用<code>;</code>分隔命令</li>
+</ul>
+</li>
+<li>多命令存在相关性: &amp;&amp;与||<ul>
+<li>连续执行多个相关命令时,存在且与或的情况</li>
+<li><code>cmd1&amp;&amp;cmd2</code>  表示cmd1正确执行($?=0)时,才会执行cmd2</li>
+<li><code>cmd1||cmd2</code> 表示cmd1正确执行($?=0)时,就不会去执行cmd2</li>
+</ul>
+</li>
+</ul>
+<h2 id="管道命令"><a href="#管道命令" class="headerlink" title="  管道命令"></a><a name="ch6">  管道命令</a></h2><p>管道命令仅能处理stdout流传来的数据,对于stderr流会忽视,其将前一个命令的stdout流作为stdin输入,处理加工后再作为stdout输出,其中管道命令中用<code>-</code>表示stdin或stdout</p>
+<h3 id="选取命令-cut-grep"><a href="#选取命令-cut-grep" class="headerlink" title="  选取命令:cut/grep"></a><a name="ch6.1">  选取命令:cut/grep</a></h3><ul>
+<li><code>cut</code> : 选段命令(先分段)<ul>
+<li>格式  <code>cut -d &#39;分隔符&#39; -f num -c 字符范围</code>  (num是段号 字符范围表示第几个字符到第几个字符,通常分段后,不用c)</li>
+<li>例子: 选择PATH中的第1个目录 : <code>echo $PATH | cut -d &quot;:&quot; -f 1</code></li>
+</ul>
+</li>
+<li><code>grep</code> : 正则选行命令,利用正则分析一行的数据,满足则选择<ul>
+<li>格式 <code>grep [-acinv] 查找字符 filename</code></li>
+<li>参数<ul>
+<li><code>a</code>  将二进制文件以文本文件方式查找</li>
+<li><code>c</code>  统计满足查找字符的次数</li>
+<li><code>i</code>  忽视大小写</li>
+<li><code>n</code> 输出行号</li>
+<li><code>v</code> 反向选择</li>
+<li>例子 : 查找root的登录信息 <code>last | grep &#39;root&#39;</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="排序命令-sort-wc-uniq"><a href="#排序命令-sort-wc-uniq" class="headerlink" title="  排序命令:sort/wc/uniq"></a><a name="ch6.2">  排序命令:sort/wc/uniq</a></h3><ul>
+<li><code>sort</code> : 排序命令<ul>
+<li>格式 : <code>sort [-fbnrutk] file或stdin</code></li>
+<li>参数:<ul>
+<li><code>f</code> 忽略大小写</li>
+<li><code>b</code> 忽略最前面空格</li>
+<li><code>n</code> 比较数值进行排序</li>
+<li><code>r</code> 反向排序</li>
+<li><code>u</code> uniq 唯一行</li>
+<li><code>t</code> 分隔符</li>
+<li><code>k</code> 进行比较的分隔区间</li>
+</ul>
+</li>
+<li>例子 : 将/etc/passwd以”:”分割,并以第3个分隔区间进行比较排序 <code>cat /etc/passwd | sort -t &#39;:&#39; -k 3</code></li>
+</ul>
+</li>
+<li><code>wc</code> : 统计命令<ul>
+<li>格式 : wc [-lwm] stdin 或 file</li>
+<li>参数 : <ul>
+<li><code>l</code>  列出行数</li>
+<li><code>m</code> 列出字符数</li>
+<li><code>w</code> 列出单字数</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>uniq</code> : 唯一命令<ul>
+<li>格式 : <code>uniq [-ic]</code></li>
+<li>参数:<ul>
+<li><code>i</code> 忽略大小写</li>
+<li><code>c</code> 进行计数</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="双向重定向-tee"><a href="#双向重定向-tee" class="headerlink" title="  双向重定向:tee"></a><a name="ch6.3">  双向重定向:tee</a></h3><p><code>tee</code>可以将stdout转存到文件,并以同样的数据往下传递(即 tee可以将数据同时流向文件和屏幕)</p>
+<p>例子:将用户登录信息存到last.list并显示在屏幕上<br><code>last | tee ~/last.list | more</code></p>
+<h3 id="字符转换命令"><a href="#字符转换命令" class="headerlink" title="  字符转换命令"></a><a name="ch6.4">  字符转换命令</a></h3><ul>
+<li><code>tr</code> : 字符串删除与替换,默认是替换,加<code>-d</code>表示删除字符</li>
+<li><code>col</code> : 将[TAB]转换为空格键</li>
+<li><code>expand</code> : 将[TAB]转换为空格</li>
+<li><code>join</code> :  比较两个文件,并将其比较字段相同的行,拼接在一起</li>
+<li><code>paste</code> : 将两个文件的每一行对于行号,拼接在一起</li>
+</ul>
+<h3 id="切割命令"><a href="#切割命令" class="headerlink" title="  切割命令"></a><a name="ch6.5">  切割命令</a></h3><ul>
+<li><code>split</code> : 可以将一个文件切割成多个小文件<ul>
+<li>格式 : <code>split [bl] file PREFIX</code></li>
+<li>参数:<ul>
+<li><code>b</code> 切割小文件的大小,单位可是b,k,m</li>
+<li><code>l</code>  以行数来切割文件</li>
+<li><code>PREFIX</code> 小文件的前缀文件名<ul>
+<li>例子:<br>将50M的文件file1切割成10个以a开头的小文件 <code>split -b 5M file1 a</code><br>将这10个小文件复原 <code>cat a* &gt; file1</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="参数代换-xargs"><a href="#参数代换-xargs" class="headerlink" title="  参数代换:xargs"></a><a name="ch6.6">  参数代换:xargs</a></h3><ul>
+<li><code>xargs</code> : 将stdin流分隔成参数给其他命令执行(使得这些命令可以在管道后处理)<ul>
+<li>例子 : 查找/sbin中权限包含7000的文件并以ls -l形式输出<br><code>find /sbin -perm +7000 | xargs ls -l</code></li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Android-事件处理/" rel="next" title="Android 事件处理">
+                <i class="fa fa-chevron-left"></i> Android 事件处理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-正则表达式/" rel="prev" title="Linux 正则表达式">
+                Linux 正则表达式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-认识Bash/"
+           data-title="Linux 认识Bash" data-url="http://yoursite.com/2016/09/06/Linux-认识Bash/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#认识Bash"><span class="nav-number">1.</span> <span class="nav-text">  认识Bash</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#硬件-内核-Shell"><span class="nav-number">1.1.</span> <span class="nav-text">  硬件/内核/Shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#系统上的Shell"><span class="nav-number">1.2.</span> <span class="nav-text">  系统上的Shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bash的功能"><span class="nav-number">1.3.</span> <span class="nav-text">  Bash的功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看命令的类型-type"><span class="nav-number">1.4.</span> <span class="nav-text">  查看命令的类型(type)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shell的变量"><span class="nav-number">2.</span> <span class="nav-text">  Shell的变量</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#变量的显示与设置"><span class="nav-number">2.1.</span> <span class="nav-text">  变量的显示与设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量的有效范围"><span class="nav-number">2.2.</span> <span class="nav-text">  变量的有效范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统的变量"><span class="nav-number">2.3.</span> <span class="nav-text">  查看系统的变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量值键盘读取-声明变量类型"><span class="nav-number">2.4.</span> <span class="nav-text">  变量值键盘读取/声明变量类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#变量值的删除-替换-测试"><span class="nav-number">2.5.</span> <span class="nav-text">  变量值的删除/替换/测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bash的操作环境"><span class="nav-number">3.</span> <span class="nav-text">  Bash的操作环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#命令查找顺序"><span class="nav-number">3.1.</span> <span class="nav-text">  命令查找顺序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令别名与历史命令"><span class="nav-number">3.2.</span> <span class="nav-text">  命令别名与历史命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bash的欢迎与登录信息"><span class="nav-number">3.3.</span> <span class="nav-text">  Bash的欢迎与登录信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bash的环境配置文件"><span class="nav-number">3.4.</span> <span class="nav-text">  Bash的环境配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bash的通配符与特殊符号"><span class="nav-number">3.5.</span> <span class="nav-text">  Bash的通配符与特殊符号</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据重定向"><span class="nav-number">4.</span> <span class="nav-text">  数据重定向</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令执行次序判断"><span class="nav-number">5.</span> <span class="nav-text">  命令执行次序判断</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#管道命令"><span class="nav-number">6.</span> <span class="nav-text">  管道命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#选取命令-cut-grep"><span class="nav-number">6.1.</span> <span class="nav-text">  选取命令:cut/grep</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#排序命令-sort-wc-uniq"><span class="nav-number">6.2.</span> <span class="nav-text">  排序命令:sort/wc/uniq</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双向重定向-tee"><span class="nav-number">6.3.</span> <span class="nav-text">  双向重定向:tee</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符转换命令"><span class="nav-number">6.4.</span> <span class="nav-text">  字符转换命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切割命令"><span class="nav-number">6.5.</span> <span class="nav-text">  切割命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数代换-xargs"><span class="nav-number">6.6.</span> <span class="nav-text">  参数代换:xargs</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

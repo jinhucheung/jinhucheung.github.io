@@ -1,0 +1,1008 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="Linux中的文件  Linux中，文件有特别重要的意义，他们为操作系统和设备提供了一个简单而统一的接口。在Linux中,一切都可以看做是文件 。
+ Linux文件属性我们执行ls -al查看当前目录下的文件信息.输出的信息部分如下.
+1234567891011总用量 132-rw-r--r--  1 root root  3106  2月 20  2014 .bashrcdrwx------">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 文件权限与目录配置">
+<meta property="og:url" content="http://yoursite.com/2016/09/05/Linux-文件权限与目录配置/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="Linux中的文件  Linux中，文件有特别重要的意义，他们为操作系统和设备提供了一个简单而统一的接口。在Linux中,一切都可以看做是文件 。
+ Linux文件属性我们执行ls -al查看当前目录下的文件信息.输出的信息部分如下.
+1234567891011总用量 132-rw-r--r--  1 root root  3106  2月 20  2014 .bashrcdrwx------">
+<meta property="og:updated_time" content="2016-09-05T04:59:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 文件权限与目录配置">
+<meta name="twitter:description" content="Linux中的文件  Linux中，文件有特别重要的意义，他们为操作系统和设备提供了一个简单而统一的接口。在Linux中,一切都可以看做是文件 。
+ Linux文件属性我们执行ls -al查看当前目录下的文件信息.输出的信息部分如下.
+1234567891011总用量 132-rw-r--r--  1 root root  3106  2月 20  2014 .bashrcdrwx------">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/05/Linux-文件权限与目录配置/"/>
+
+  <title> Linux 文件权限与目录配置 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 文件权限与目录配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-05T12:46:53+08:00" content="2016-09-05">
+              2016-09-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/05/Linux-文件权限与目录配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/05/Linux-文件权限与目录配置/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Linux中的文件"><a href="#Linux中的文件" class="headerlink" title=" Linux中的文件 "></a><a name="ch1"> Linux中的文件 </a></h2><p> Linux中，文件有特别重要的意义，他们为操作系统和设备提供了一个简单而统一的接口。在Linux中,一切都可以看做是文件 。</p>
+<h3 id="Linux文件属性"><a href="#Linux文件属性" class="headerlink" title=" Linux文件属性"></a><a name="ch1.1"> Linux文件属性</a></h3><p>我们执行<code>ls -al</code>查看当前目录下的文件信息.输出的信息部分如下.
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">总用量 132</div><div class="line">-rw-r--r--  1 root root  3106  2月 20  2014 .bashrc</div><div class="line">drwx------  6 root root  4096  7月 13 22:35 .cache</div><div class="line">drwx------ 11 root root  4096  7月 12 21:59 .config</div><div class="line">drwx------  3 root root  4096  6月 28 20:43 .dbus</div><div class="line">drwxr-xr-x  2 root root  4096  6月 30 09:45 Desktop</div><div class="line">drwx------  2 root root  4096  7月 12 21:57 .gconf</div><div class="line">-rw-r--r--  1 root root    57  6月 30 09:50 .gitconfig</div><div class="line">drwxrwxrwx  6 root root  4096  7月 10 23:39 .gradle</div><div class="line">drwx------  2 root root  4096  6月 30 09:46 .gvfs</div><div class="line">drwxr-xr-x  4 root root  4096  7月 10 22:19 .java</div></pre></td></tr></table></figure>
+我们观察以下一行
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">drwxr-xr-x    2    root   root    4096 6月 30 09:45  Desktop</div><div class="line">[类型与权限][连接数][所有者][用户组][文件容量][修改日期][文件名]</div></pre></td></tr></table></figure>
+其每一列描述如下:</p>
+<ul>
+<li>第一列:代表文件类型与权限(共有10个字符)<ul>
+<li>第1个字符:代表文件类型,[d]是目录,[-]是文件,更多请看<a href="#ch1.4">Linux文件类型</a></li>
+<li>第2-4个字符:代表文件所有者的权限,权限分为[r]可读,[w]可编辑,[x]可执行,三者顺序固定,无某项权限用”-“表示.关于”rwx”的具体意义请看<a href="#ch1.3">目录与文件权限的意义</a></li>
+<li>第5-7个字符:代表文件所属用户组的权限</li>
+<li>第8-10个字符:代表其他人对文件的权限</li>
+</ul>
+</li>
+<li>第二列:代表文件连接数<ul>
+<li>含义:就是指在目录树中,当前文件节点所直接连接的其他节点数+自身节点(1)就是连接数,若文件不是目录,则连接数是1</li>
+<li>例子:上面的”Desktop”目录连接是2,在ls后刚好输出两个文件信息<code>drwxr-xr-x  2 root root 4096  6月 30 09:45 .
+drwx------ 24 root root 4096  7月 14 10:02 ..</code>,这两个文件分别表示当前目录与其父级目录.</li>
+</ul>
+</li>
+<li>第三列:代表文件所有者</li>
+<li>第四列:代表文件所属用户组</li>
+<li>第五列:代表文件容量,默认单位是字节</li>
+<li>第六列:代表文件修改时间</li>
+<li>第七列:代表文件名,以’.’开头的文件名代表隐藏文件(查看隐藏文件可以使用<code>ls -sl</code>)</li>
+</ul>
+<h3 id="改变文件权限与其所属"><a href="#改变文件权限与其所属" class="headerlink" title=" 改变文件权限与其所属"></a><a name="ch1.2"> 改变文件权限与其所属</a></h3><p>这里介绍几个常用于改变文件权限与其所属的命令:</p>
+<ul>
+<li>chmod:改变文件权限</li>
+<li>chgrp:改变文件所属用户组</li>
+<li>chown:改变文件所有者(也可以改变用户组)</li>
+</ul>
+<p>详细介绍</p>
+<blockquote>
+<p> chmod:改变文件权限</p>
+<ul>
+<li>方法1(数字类型): <ul>
+<li>描述:用数字来代表各项权限[r]:4,[w]:2,[x]:1,[-]:0每种身份(owner/group/others)都有各自的权限值要累加.</li>
+<li>例子:要改变为[-rwxr-xr–]这种权限,分数则是owner=rwx=7,group=r-x=5,others=r–=4,即权限数字是754</li>
+<li>命令:这种方法改变权限使用<code>chmod [-R] 权限数字 文件或目录名</code>,其中[-R]表示修改连同子目录下的所有目录,文件</li>
+</ul>
+</li>
+<li>方法2(符号类型): <ul>
+<li>描述:用字符’r’,’w’,’x’代表相应的权限,用’u’,’g’,’o’代表3种身份以及用’a’代表所有身份,用符号’=’,’+’,’-‘分别代表”设置”,”添加”,”减去”权限操作<ul>
+<li>例子:要改变[-rwxr-xr–]这种权限,权限字符可以是”u=rwx,g=rx,o=r”或”a+r,u+wx,g+x”等</li>
+<li>命令:这种方法改变权限使用<code>chmod [-R] 权限字符 文件或目录名</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>chgrp:改变文件所属用户组</p>
+<ul>
+<li>命令:<code>chgrp [-R] 修改的用户组名 文件/目录名</code>(注意修改的用户组名需在/etc/group文件内存在)</li>
+</ul>
+</blockquote>
+<p>.</p>
+<blockquote>
+<p>chown:改变文件所有者</p>
+<pre><code>- 命令:`chown [-R] 用户名[:用户组名] 文件/目录名`(注意修改的用户名需在/etc/passwd文件内存在)
+- 例子:将install.log的所有者与用户组都改成root `chown root:root install.log`
+</code></pre></blockquote>
+<h3 id="目录与文件权限的意义"><a href="#目录与文件权限的意义" class="headerlink" title=" 目录与文件权限的意义"></a><a name="ch1.3"> 目录与文件权限的意义</a></h3><ul>
+<li>权限对文件的意义<ul>
+<li>r(Read):可读取此文件的实际内容<b>(文件读操作并不指执行操作,这里要分清)</b></li>
+<li>w(Write):可编辑此文件的内容 <b>(但不含删除该文件)</b></li>
+<li>x(eXecute):此文件具有可被系统执行的权限</li>
+<li>x的一些说明:<br>文件能否可执行由[x]权限决定,能否成功执行取决与文件是否是执行类型的文件,这些都与文件”扩展名”无关,Liunx的”扩展名”只是给用户区别文件类型<ul>
+<li>执行文件:<em>.sh(脚本/批处理文件),</em>Z/<em>.tar/</em>.tar.gz等经打包的压缩文件,<em>.html/</em>.php等网页相关文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>权限对目录的意义<ul>
+<li>r(Read contents in directory):可读取目录的结构列表</li>
+<li>w(modify contents of direcotry):可修改目录结构(对目录或文件的增加/删除/重命名/转移等),这些操作无视了子文件的权限</li>
+<li>x(access directory):表示用户能否进入该目录,将其作为工作目录(比如<code>cd</code>不能作用)</li>
+<li>关于可访问的目录:至少需指定目录[rx]权限,<b>只有[r]权限用户只能获取目录的文件名列表,其子文件/目录都变成二进制文件隐藏数据,只有再加上[x]权限才能正常访问</b></li>
+</ul>
+</li>
+<li>其他:新建目录使用<code>mkdir</code>,新建文件使用<code>touch</code></li>
+</ul>
+<p><b>注意: root用户有无上的权利,无视文件权限</b></p>
+<h3 id="Linux文件类型"><a href="#Linux文件类型" class="headerlink" title=" Linux文件类型"></a><a name="ch1.4"> Linux文件类型</a></h3><p>Linux文件类型有以下:</p>
+<ul>
+<li>普通文件[-]:<ul>
+<li>纯文本文件(ASCII)</li>
+<li>二进制文件(binary): 可执行文件</li>
+<li>数据格式文件(data):某些程序运行需要的特定格式文件,不能执行</li>
+</ul>
+</li>
+<li>目录[d]</li>
+<li>连接文件[l]:类似Windows下的快捷方式</li>
+<li>设备文件<ul>
+<li>块设备文件[b]:可存取的接口设备,如硬盘,U盘等</li>
+<li>字符设备文件[c]:串行接口设备,如键盘,鼠标等(为什么是串行?一次性读取,不能截断输出)</li>
+</ul>
+</li>
+<li>套接字[s]:数据接口文件,网络数据连接</li>
+<li>管道[p]:解决进程同步通信</li>
+</ul>
+<h2 id="Linux目录配置"><a href="#Linux目录配置" class="headerlink" title=" Linux目录配置"></a><a name="ch2"> Linux目录配置</a></h2><h3 id="Linux目录配置标准-FHS"><a href="#Linux目录配置标准-FHS" class="headerlink" title=" Linux目录配置标准:FHS"></a><a name="ch2.1"> Linux目录配置标准:FHS</a></h3><p>文件系统层次结构标准(Filesytem Hierachy Standard,FHS)重点在于规范每个特定目录下应该放置什么样的数据</p>
+<p><b>FHS制定出4种目录特征:可分享的(shareable),不可分享的(unshareble),不变的(static),可变动的(variable)</b>.</p>
+<ul>
+<li>可分享:   可以分享给其他系统挂载使用的目录,比如分享给网络上其他主机使用的.</li>
+<li>不可分享的:    与自身机器有关,比如设备文件/程序有关的socket文件等,不适合分享给其他主机.</li>
+<li>不变的:    有些数据不会经常变动,比如函数库,文件说明,主机服务配置文件等</li>
+<li>可变动的:   经常变动的数据,比如登录文件等</li>
+</ul>
+<p>举例说明如下表</p>
+<table>
+    <th></th><th>可分享</th><th>不可分享</th>
+    <tr>
+       <td rowspan="2"><b>不变的</b></td>
+       <td>/usr(软件放置处)</td>
+       <td>/etc(配置文件)</td>
+    </tr>
+    <tr>
+       <td>/opt(第三方软件)</td>
+       <td>/boot(开机与内核文件)</td>
+    </tr>
+    <tr>
+       <td rowspan="2"><b>可变动的</b></td>
+       <td>/var/mail(用户邮件信箱)</td>
+       <td>/var/run(程序相关)</td>
+    </tr>
+    <tr>
+       <td>/var/spool/news(新闻组)</td>
+       <td>/var/lock(程序相关)</td>
+    </tr>
+</table>
+
+<h3 id="FHS三层主目录"><a href="#FHS三层主目录" class="headerlink" title=" FHS三层主目录"></a><a name="ch2.2"> FHS三层主目录</a></h3><p>事实上,FHS对目录树架构仅定义初三层目录下面应该放置什么数据,分别是下面三个目录的定义:</p>
+<ul>
+<li>/ : 根目录,与开机系统有关</li>
+<li>/usr:Unix software resouce,与软件安装/执行有关</li>
+<li>/var:variable,与系统运作过程有关</li>
+</ul>
+<h4 id="根目录的意义"><a href="#根目录的意义" class="headerlink" title="  根目录的意义"></a><a name="ch2.2.1">  根目录的意义</a></h4><ul>
+<li>根目录是整个系统最重要的一个目录,不仅目录树上的文件节点由根目录衍生出来,同时根目录也与开机/还原/系统修复等操作有关.</li>
+<li>FHS标准建议:根目录所在分区应越小越好,且软件最好不要与根目录放在同一个分区内.这样根目录性能较好,文件系统也不容易发生问题(分区越大,软件越多,根目录所在分区出错机率也越大)</li>
+<li>根目录与开机有关,开机过程中仅有根目录会被挂载,其他分区是在完成开机后才持续进行挂载.因此有些与开机有关的目录须与根目录同分区,有以下这些:<ul>
+<li>/etc:系统配置文件,如人员账号密码,各种服务起始文件等</li>
+<li>/bin:重要执行文件(可以被root与一般用户使用)</li>
+<li>/dev:任何设备文件都存放在此</li>
+<li>/lib:在开机时会用到的函数库,/bin或/sbin下面命令调用的函数库以及内核所需的模块(/lib/modules)</li>
+<li>/sbin:开机过程所需要的,包括开机/修复/还原系统所需的执行文件</li>
+</ul>
+</li>
+<li>其他一些子目录:<ul>
+<li>/boot:开机引导程序/内核文件所需的配置文件/开机配置文件</li>
+<li>/home:用户主文件夹,每个一般用户都会在此目录下有一个对应的目录</li>
+<li>/root:root的主目录,最好与根目录同分区(单用户维护模式下可使用root文件夹)</li>
+<li>/mnt:暂时挂载额外设备用</li>
+</ul>
+</li>
+</ul>
+<h4 id="usr的意义"><a href="#usr的意义" class="headerlink" title="  /usr的意义"></a><a name="ch2.2.2">  /usr的意义</a></h4><ul>
+<li>管理员存放安装程序相关目录</li>
+<li>/usr会占用较大的硬盘容量</li>
+<li>/usr的子目录<ul>
+<li>/usr/X11R6:存放X Window的数据目录(X Window最后版本是11,第6次释出)</li>
+<li>/usr/bin:平时用户可使用命令(与/bin区别是:/bin与开机有关)</li>
+<li>/usr/include:C/C++程序语言的头文件(header)与包含文件(include)</li>
+<li>/usr/local:系统管理员安装的软件</li>
+<li>/usr/sbin:非系统正常运行所需的命令,比如网络服务器的命令等</li>
+<li>/usr/share:放置共享文件的地方</li>
+<li>/usr/src:源码放置,<b>内核源码在/usr/src/linux下</b></li>
+</ul>
+</li>
+</ul>
+<h4 id="var的意义"><a href="#var的意义" class="headerlink" title="  /var的意义"></a><a name="ch2.2.3">  /var的意义</a></h4><ul>
+<li>/var针对常态性变动文件,如缓存,登录文件以及某些软件运行产生的文件</li>
+<li>/var随系统运行bianda后逐渐变大</li>
+<li>/var的子目录<ul>
+<li>/var/cache:程序运行时暂存文件</li>
+<li>/var/lib:程序运行时使用的数据文件</li>
+<li>/var/lock:设备/文件资源锁</li>
+<li>/var/log:登录文件,比如/var/log/messages,/var/log/wtmp(记录登录者信息)</li>
+<li>/var/mail:个人email目录</li>
+<li>/var/run:某些程序或服务启动后,会将其PID放置在此目录</li>
+<li>/var/spool:放置队列数据</li>
+</ul>
+</li>
+</ul>
+<h2 id="目录树"><a href="#目录树" class="headerlink" title="目录树"></a><a name="ch3">目录树</a></h2><p>所有文件/目录由根目录开启,再往下分支扩展,呈树状,故称”目录树”</p>
+<p>目录树特性:</p>
+<ul>
+<li>目录树起始点是根目录(/)</li>
+<li>每个目录不只能使用本地的文件系统,也可以是网络的文件系统</li>
+<li>目录树文件节点名称唯一</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/05/Android-像素单位说明-dp-px-sp/" rel="next" title="Android 像素单位说明(dp/px/sp)">
+                <i class="fa fa-chevron-left"></i> Android 像素单位说明(dp/px/sp)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/05/Android-AdapterView与Adapter/" rel="prev" title="Android AdapterView与Adapter">
+                Android AdapterView与Adapter <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/05/Linux-文件权限与目录配置/"
+           data-title="Linux 文件权限与目录配置" data-url="http://yoursite.com/2016/09/05/Linux-文件权限与目录配置/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux中的文件"><span class="nav-number">1.</span> <span class="nav-text"> Linux中的文件 </span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux文件属性"><span class="nav-number">1.1.</span> <span class="nav-text"> Linux文件属性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改变文件权限与其所属"><span class="nav-number">1.2.</span> <span class="nav-text"> 改变文件权限与其所属</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#目录与文件权限的意义"><span class="nav-number">1.3.</span> <span class="nav-text"> 目录与文件权限的意义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux文件类型"><span class="nav-number">1.4.</span> <span class="nav-text"> Linux文件类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux目录配置"><span class="nav-number">2.</span> <span class="nav-text"> Linux目录配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux目录配置标准-FHS"><span class="nav-number">2.1.</span> <span class="nav-text"> Linux目录配置标准:FHS</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FHS三层主目录"><span class="nav-number">2.2.</span> <span class="nav-text"> FHS三层主目录</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#根目录的意义"><span class="nav-number">2.2.1.</span> <span class="nav-text">  根目录的意义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#usr的意义"><span class="nav-number">2.2.2.</span> <span class="nav-text">  /usr的意义</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#var的意义"><span class="nav-number">2.2.3.</span> <span class="nav-text">  /var的意义</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#目录树"><span class="nav-number">3.</span> <span class="nav-text">目录树</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

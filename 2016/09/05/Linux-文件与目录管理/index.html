@@ -1,0 +1,1220 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="目录与路径  相对路径与绝对路径
+相对路径：路径一定由根目录／写起
+绝对路径：路径不是由根目录／写起
+
+  特殊的目录符号
+.   : 代表当前目录
+..  :代表上一层目录
+-  :代表前一个工作目录
+~ :代表当前用户的主目录
+~username:代表username用户的主目录
+
+注意 : 根目录的上层目录(..)就是其本身
+  关于执行文件路径的变量1. 环境变量PATH的含义
+当我们">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 文件与目录管理">
+<meta property="og:url" content="http://yoursite.com/2016/09/05/Linux-文件与目录管理/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="目录与路径  相对路径与绝对路径
+相对路径：路径一定由根目录／写起
+绝对路径：路径不是由根目录／写起
+
+  特殊的目录符号
+.   : 代表当前目录
+..  :代表上一层目录
+-  :代表前一个工作目录
+~ :代表当前用户的主目录
+~username:代表username用户的主目录
+
+注意 : 根目录的上层目录(..)就是其本身
+  关于执行文件路径的变量1. 环境变量PATH的含义
+当我们">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_16_1.gif?raw=true">
+<meta property="og:updated_time" content="2016-09-05T05:43:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 文件与目录管理">
+<meta name="twitter:description" content="目录与路径  相对路径与绝对路径
+相对路径：路径一定由根目录／写起
+绝对路径：路径不是由根目录／写起
+
+  特殊的目录符号
+.   : 代表当前目录
+..  :代表上一层目录
+-  :代表前一个工作目录
+~ :代表当前用户的主目录
+~username:代表username用户的主目录
+
+注意 : 根目录的上层目录(..)就是其本身
+  关于执行文件路径的变量1. 环境变量PATH的含义
+当我们">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_16_1.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/05/Linux-文件与目录管理/"/>
+
+  <title> Linux 文件与目录管理 | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 文件与目录管理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-05T13:20:35+08:00" content="2016-09-05">
+              2016-09-05
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/05/Linux-文件与目录管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/05/Linux-文件与目录管理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="目录与路径"><a href="#目录与路径" class="headerlink" title="  目录与路径"></a><a name="ch1">  目录与路径</a></h2><h3 id="相对路径与绝对路径"><a href="#相对路径与绝对路径" class="headerlink" title="  相对路径与绝对路径"></a><a name="ch1.1">  相对路径与绝对路径</a></h3><ul>
+<li>相对路径：路径一定由根目录／写起</li>
+<li>绝对路径：路径不是由根目录／写起</li>
+</ul>
+<h3 id="特殊的目录符号"><a href="#特殊的目录符号" class="headerlink" title="  特殊的目录符号"></a><a name="ch1.2">  特殊的目录符号</a></h3><ul>
+<li><b>.</b>   : 代表当前目录</li>
+<li><b>..</b>  :代表上一层目录</li>
+<li><b>-</b>  :代表前一个工作目录</li>
+<li><b>~</b> :代表当前用户的主目录</li>
+<li><b>~username</b>:代表username用户的主目录</li>
+</ul>
+<p><em>注意</em> : 根目录的上层目录(<b>..</b>)就是其本身</p>
+<h3 id="关于执行文件路径的变量"><a href="#关于执行文件路径的变量" class="headerlink" title="  关于执行文件路径的变量"></a><a name="ch1.3">  关于执行文件路径的变量</a></h3><p>1. 环境变量PATH的含义
+当我们在执行一个命令时,可以直接输入命令名执行,即使不在此命令的目录下又没有输入命令的绝对路径,为什么?
+原因是:当我们直接输入命令名时,系统会去搜索PATH变量下包含的目录,找到第一匹配的命令程序就调用.        </p>
+<p>2. PATH的结构
+PATH由一堆目录所组成,每个目录中间用:隔开,每个目录有顺序之分.</p>
+<p>3.  查看环境变量PATH
+首先我们来查看当前用户的环境变量PATH是什么?执行以下命令
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># echo $PATH</span></div><div class="line">/usr/<span class="built_in">local</span>/sbin:/usr/<span class="built_in">local</span>/bin:/usr/sbin:/usr/bin:/sbin:/bin</div><div class="line"></div><div class="line">kumho@kumho-Inspiron-3421:~$ <span class="built_in">echo</span> <span class="variable">$PATH</span></div><div class="line">/usr/<span class="built_in">local</span>/bin:/usr/bin:/bin:/usr/<span class="built_in">local</span>/games:/usr/games</div></pre></td></tr></table></figure> 
+从上面可以知道,不同用户的PATH可以不一样
+echo命令有打印的功能, $代表后面接变量,不然echo PATH直接输出PATH</p>
+<p>4. 修改PATH路径中
+下面将/root加入到PATH路径中
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">PATH=<span class="string">"<span class="variable">$PATH</span>"</span>:/root</div></pre></td></tr></table></figure></p>
+<p>5. PATH的总结</p>
+<ul>
+<li>不同身份用户默认PATH不同,默认能够执行的命令也不同</li>
+<li>PATH可以修改</li>
+<li>使用绝对路径或相对路径直接执行某个命令,比PATH更准确</li>
+<li>命令应该放到正确的目录下,执行较方便</li>
+<li>从安全考虑,本目录(.)最好不要加到PATH当中</li>
+</ul>
+<h2 id="文件与目录管理"><a href="#文件与目录管理" class="headerlink" title="  文件与目录管理"></a><a name="ch2">  文件与目录管理</a></h2><h3 id="切换目录与显示当前目录"><a href="#切换目录与显示当前目录" class="headerlink" title="  切换目录与显示当前目录"></a><a name="ch2.1">  切换目录与显示当前目录</a></h3><ul>
+<li><code>cd</code> : 切换目录</li>
+<li><code>pwd</code> : 显示当前目录<br><code>pwd [-P]</code> <code>-P</code>可以获取正确的目录路径,即使目标文件是连接文件,也会显示实际文件的路径</li>
+</ul>
+<h3 id="新建目录与删除目录"><a href="#新建目录与删除目录" class="headerlink" title="  新建目录与删除目录"></a><a name="ch2.2">  新建目录与删除目录</a></h3><ul>
+<li><code>mkdir</code> : 新建一个新目录<br><code>mkdir [-mp] 目录名</code> <code>-m</code>直接设置目录权限 <code>-p</code>级联创建目录</li>
+<li><code>rmdir</code> : 删除空目录<br><code>rmdir [-p] 目录名</code> <code>-p</code>级联删除空目录,注意一定是要空目录</li>
+</ul>
+<h3 id="查看文件与目录"><a href="#查看文件与目录" class="headerlink" title="  查看文件与目录"></a><a name="ch2.3">  查看文件与目录</a></h3><ul>
+<li><code>ls</code>: 查看目录与文件信息        <ul>
+<li>格式: <code>ls [-aAdfFhilnrRst] [--time={atime,ctime,mtime}] 目录名称</code></li>
+<li>常用参数: <ul>
+<li><code>-a</code>: 列出全部文件(包含 . , .. , 隐藏文件 , 一般文件/目录)      </li>
+<li><code>-d</code>: 仅列出本目录或者本文件的信息</li>
+<li><code>-l</code>:  以长数据串形式列出目录/文件信息,包含文件属性与权限等</li>
+<li><code>-s</code>: 列出全部隐藏文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="复制文件-目录以及创建连接文件"><a href="#复制文件-目录以及创建连接文件" class="headerlink" title="  复制文件/目录以及创建连接文件"></a><a name="ch2.4">  复制文件/目录以及创建连接文件</a></h3><ul>
+<li><code>cp</code>: 复制文件或目录/创建连接文件(快捷方式)<ul>
+<li>格式:  <code>cp [options] source1 source2 source3... direcotry</code></li>
+<li>常用参数: <ul>
+<li><code>-r</code>: 级联复制,用于目录的复制行为</li>
+<li><code>-p</code>: 连同文件属性一起复制,而非使用默认属性(常用备份),注意ctime不会复制源文件,ctime会记录当前时间 atime及mtime会复制源文件</li>
+<li><code>-d</code>: 若源文件是连接文件,则复制连接文件而不是实际文件</li>
+<li><code>-i</code> : 若目标文件已存在,则询问是否复制</li>
+<li><code>-a</code>:相当与<code>-pdr</code></li>
+<li><code>-s</code>:复制文件成为连接文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="移除文件-目录"><a href="#移除文件-目录" class="headerlink" title="  移除文件/目录"></a><a name="ch2.5">  移除文件/目录</a></h3><ul>
+<li><code>rm</code>: 移除文件/目录(不进回收站)<ul>
+<li>格式: <code>rm [-fir] 文件/目录名</code></li>
+<li>常用参数: <ul>
+<li><code>-r</code>: 级联删除</li>
+<li><code>-i</code>: 删除前询问用户是否执行</li>
+<li><code>-f</code>: 忽略不存在的文件</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="移动文件-目录或者更名"><a href="#移动文件-目录或者更名" class="headerlink" title="  移动文件/目录或者更名"></a><a name="ch2.6">  移动文件/目录或者更名</a></h3><ul>
+<li><code>mv</code>: 移动文件/目录或者更名<ul>
+<li>格式: <code>mv [options] source1 source2 source3...direcotry</code>|<code>mv [options] source destiantion</code></li>
+<li>常用参数: <ul>
+<li><code>-i</code>:若目标文件存在,询问覆盖</li>
+<li><code>-u</code>:若目标文件存在,且比目标文件新,才会覆盖</li>
+<li><code>-f</code>:直接覆盖,不理会目标文件是否存在</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="取得路径的文件-目录名"><a href="#取得路径的文件-目录名" class="headerlink" title="  取得路径的文件/目录名"></a><a name="ch2.7">  取得路径的文件/目录名</a></h3><ul>
+<li><code>basename</code> : 取得路径的文件<ul>
+<li>格式 : <code>basename path</code></li>
+</ul>
+</li>
+<li><code>dirname</code>: 取得路径的目录名<ul>
+<li>格式 : <code>dirname path</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="新建文件与修改文件-目录的时间"><a href="#新建文件与修改文件-目录的时间" class="headerlink" title="  新建文件与修改文件/目录的时间"></a><a name="ch2.8">  新建文件与修改文件/目录的时间</a></h3><ul>
+<li>文件/目录时间属性<ul>
+<li>mtime: modiricaiton time,表示文件内容更改的时间</li>
+<li>ctime: status time,表示文件状态更改的时间(比如属性与权限)</li>
+<li>atime: access time,表示文件内容被取用的时间</li>
+</ul>
+</li>
+<li><code>touch</code>:常用与创建一个空文件,修改某个文件/目录时间(只能修改mtime,atime)<ul>
+<li>格式: `touch [-acdmt] 文件``</li>
+<li>常用参数:<ul>
+<li><code>-a</code>:  仅修改atime</li>
+<li><code>-m</code>: 仅修改mtime</li>
+<li><code>-t</code>: 修改atime和mtime 格式为[YYMMDDhhmm]</li>
+</ul>
+</li>
+<li>例子: 创建一个时间为07-11-22 06:44的文件temp1  命令<code>$ touch -t 0711220644 temp1</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="查看文件类型"><a href="#查看文件类型" class="headerlink" title="  查看文件类型"></a><a name="ch2.9">  查看文件类型</a></h3><ul>
+<li><code>file</code>:可以查看文件的基本类型以及数据描述,比如是属于ASCII或者data文件,二进制文件,有没使用动态函数库等信息<ul>
+<li>格式 : <code>file 文件名</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="文件内容查阅"><a href="#文件内容查阅" class="headerlink" title="  文件内容查阅"></a><a name="ch3">  文件内容查阅</a></h2><p>文件分为纯文本文件/二进制文件/数据格式文件,当我们查阅文件内容时,需要以合适的命令去查阅,以下分为纯文本与二进制文件查阅</p>
+<ul>
+<li>纯文本文件查阅 :<ul>
+<li><code>cat</code>: concatenate,由第一行开始显示文件内容<ul>
+<li>格式: <code>cat [-AbenTv] 文件名</code></li>
+<li>常用参数:<ul>
+<li><code>-n</code>:打印出行号,连同空白行</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>tac</code>: 从最后一行开始显示</li>
+<li><code>nl</code>:  显示时候,顺便输出行号(默认不显示空白行的行号)<ul>
+<li>格式: <code>nl [-bnw] 文件</code></li>
+</ul>
+</li>
+<li><code>more</code>:一页一页地显示文件内容,不能向前翻页,上面的<code>cat</code>/<code>tac</code>/<code>nl</code>都是一次性将文件全部内容显示,文件内容多的时候会不便</li>
+<li><code>less</code>: 与more类似,但比more好,它可以向前翻页和向前搜索</li>
+<li><code>head</code>:只看头几行<ul>
+<li>格式: <code>head [-n num] 文件</code><ul>
+<li>num不带符号: 表示显示前num行</li>
+<li>num带负号:表示文件后面num行的数据不显示</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>tail</code>:只看尾几行<ul>
+<li>格式:与<code>head</code>类似<ul>
+<li>num不带符号:表示显示后num行</li>
+<li>num带正号:表示文件前面num行的数据不显示(不包括第num行)</li>
+</ul>
+</li>
+<li>例子: 显示/etc/man.config的第11到第20行的数据  使用命令<code>head -n 20 /etc/man.config|tail -n 10</code>或者<code>tail -n +11 /etc/man.config|head -n 10</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>二进制文件查阅:<ul>
+<li><code>od</code>:读取二进制文件内容</li>
+<li>格式: <code>od [-t TYPE] 文件</code></li>
+<li>TYPE类型:<ul>
+<li><code>a</code>:利用默认的字符输出</li>
+<li><code>c</code>:使用ASCII字符输出</li>
+<li><code>d</code>:使用十进制来输出</li>
+<li><code>f</code>:利用浮点数来输出</li>
+<li><code>o</code>:利用八进制来输出</li>
+<li><code>x</code>:利用十六进制来输出</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="文件与目录的默认权限-隐藏属性-特殊权限"><a href="#文件与目录的默认权限-隐藏属性-特殊权限" class="headerlink" title="文件与目录的默认权限/隐藏属性/特殊权限"></a><a name="ch4">文件与目录的默认权限/隐藏属性/特殊权限</a></h2><h3 id="文件默认权限：umask"><a href="#文件默认权限：umask" class="headerlink" title="文件默认权限：umask"></a><a name="ch4.1">文件默认权限：umask</a></h3><p>当我们新建一个新的文件/目录时,其默认权限是怎么指定的,这与<code>umask</code>有关
+<code>umask</code>:指定目前用户在新建文件/目录时的权限默认值(不同用户的权限默认值不同)</p>
+<ul>
+<li>用户创建文件/目录时的最大权限默认值<ul>
+<li>用户创建文件最大权限默认值是666<ul>
+<li>用户创建文件时系统默认不分配[x]权限,最大值是666,即<code>-rw-rw-rw-</code></li>
+</ul>
+</li>
+<li>用户创建目录最大权限默认值是777<ul>
+<li>默认开放全部权限</li>
+</ul>
+</li>
+<li>注意,这里不同用户创建文件/目录最大权限默认值都是一样的,文件666,目录777
+<br>
+<br>
+<br></li>
+</ul>
+</li>
+<li><p>查看目前用户权限默认值</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># umask</span></div><div class="line">0022</div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># umask -S</span></div><div class="line">u=rwx,g=rx,o=rx</div></pre></td></tr></table></figure>
+<ol>
+<li>第一种方式:是分数查询,第1个数字表示特殊权限,第2-4个数字一般权限,这组分值表示最大权限默认值需要减掉的权限,比如root用户的umask是0022,那么root新建文件时的默认权限是666去掉022,即644(不要认为是单纯的相减)</li>
+<li>第二种方式:是字符查询,这里的每组分值就是当前用户新建<b>目录</b>时的默认权限值</li>
+</ol>
+</li>
+<li><p>设置目前用户的权限默认值
+执行<code>umask 默认分值</code></p>
+</li>
+<li><p>例子
+假设某用户的umask是003,请问该用户新建文件/目录的权限是什么?
+1) 新建文件的权限是664
+2) 新建目录的权限是774</p>
+</li>
+</ul>
+<h3 id="文件隐藏属性-chattr-lsattr"><a href="#文件隐藏属性-chattr-lsattr" class="headerlink" title="文件隐藏属性 : chattr/lsattr"></a><a name="ch4.2">文件隐藏属性 : chattr/lsattr</a></h3><ul>
+<li><p><code>chattr</code>:设置文件隐藏属性,<code>chattr</code>只能在Ext2/Ext3以上的文件系统生效</p>
+<ul>
+<li>格式: <code>chattr [+-=][ASacdistu] 文件/目录名</code></li>
+<li>常用参数:<ul>
+<li><code>+</code>   增加属性</li>
+<li><code>-</code>   删除属性</li>
+<li><code>=</code>  设置属性</li>
+<li><code>A</code>  文件/目录的访问时间atime不会被修改</li>
+<li><code>S</code>   对文件任何的修改,都会同步写入磁盘中(原本是异步写入磁盘的)</li>
+<li><code>a</code>   只能添加数据,不能修改/删除数据,只有root才能设置此属性</li>
+<li><code>i</code>    不能删除/改名/不能读写数据,只有root才能设置此属性(连root用户也无法对文件/目录进行操作)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><code>lsattr</code> : 显示文件隐藏属性</p>
+<ul>
+<li>格式 : <code>lsattr [-adR] 文件/目录</code></li>
+<li>常用参数: <ul>
+<li><code>a</code>  将隐藏文件属性也显示出来</li>
+<li><code>d</code>  如果是目录,仅列出目录本身属性</li>
+<li><code>R</code> 连同子目录/文件也一并列出 </li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="文件特殊权限：SUID-SGID-SBIT"><a href="#文件特殊权限：SUID-SGID-SBIT" class="headerlink" title="文件特殊权限：SUID/SGID/SBIT"></a><a name="ch4.3">文件特殊权限：SUID/SGID/SBIT</a></h3><p>请先观察下面3个文件属性
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">-rwsr-xr-x 1 root root 45420  1月 27 08:51 /usr/bin/passwd</div><div class="line">-rwxr-sr-x 1 root mlocate 34452  6月 20  2013 /usr/bin/mlocate</div><div class="line">drwxrwxrwt 6 root root 20480  7月 19 16:31 /tmp</div></pre></td></tr></table></figure>
+发现了吗?
+<code>/usr/bin/passwd</code>的user权限是<code>rws</code>
+<code>/usr/bin/mlocate</code>的group权限是<code>r-s</code>
+<code>/tmp</code>的others权限是<code>rwt</code>
+这里的<code>s</code>以及<code>t</code>就是特殊权限,每个身份对应的特殊权限是固定的,不可能出现<code>rwt</code>这情况.</p>
+<ul>
+<li>SUID :  setUID,<code>s</code>出现在user的<code>x</code>权限上,代表当用户执行此二进制程序时,在执行过程中用户会暂时具有程序所有者的权限.(只能是二进制程序)<ul>
+<li>例子:        <ol>
+<li>一般用户对于/usr/bin/passwd这个程序是具有<code>x</code>,表示一般用户可以执行passwd,passwd会去修改<code>/etc/shadow</code>这个文件对应的密码,但<code>/etc/shadow</code>这个文件的权限是<code>-rw-r----- 1 root shadow 1292  7月 18 22:03 /etc/shadow</code>,这代表一般用户无权修改密码,可实际上每个用户都可以修改自己的密码</li>
+<li>passwd的所有者是root</li>
+<li>由于这个程序具有SUID的特权权限,一般用户执行程序时暂时获得root的权限</li>
+<li>所有<code>/etc/shadow</code>可以被一般用户所执行的passwd修改
+<br>
+<br>
+<br></li>
+</ol>
+</li>
+</ul>
+</li>
+<li>SGID: setGID,<code>s</code>出现在group的<code>x</code>权限上.<ul>
+<li>含义:<ul>
+<li>当SGID是文件时,代表当用户执行此二进制程序时,在执行过程中用户暂时获得用户组的权限</li>
+<li>当SGID是目录时,代表用户在这个目录下新建的文件/目录,用户组都会与该目录的用户组相同
+<br>
+<br>
+<br></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>SBIT: sticky Bit,SBIT只针对目录,<code>t</code>出现在others的<code>x</code>权限上<ul>
+<li>含义: 一个目录具有SBIT的权限后,某用户在此目录上具有<code>wx</code>权限,此用户创建的文件/目录,只有此用户与root才能删除,目录所有者也不能删除
+<br>
+<br>
+<br></li>
+</ul>
+</li>
+<li>SUID/SGID/SBIT权限设置<br>只要在我们一般权限数值前加上一个代表特殊权限的数值(这是分值设置法,符号设置法跟一般权限类似,在之前加上<code>s</code>/<code>t</code>)<br>其中 SUID:4 SGID:2 SBIT:1<ul>
+<li>例子 : 将某文件权限改为<code>-rwsr-xr-x</code>,设置命令是<code>chmod 4755 filename</code></li>
+<li>问题: 如果文件或目录没有<code>x</code>权限,相应的特殊权限即使设置了,也无效,而且会有大写<code>S</code>或<code>T</code>标明为<code>x</code>为空</li>
+</ul>
+</li>
+</ul>
+<h2 id="命令与文件查找"><a href="#命令与文件查找" class="headerlink" title="命令与文件查找"></a><a name="ch5">命令与文件查找</a></h2><h3 id="查找命令"><a href="#查找命令" class="headerlink" title="查找命令"></a><a name="ch5.1">查找命令</a></h3><p>查找命令完整的文件名可用which或type,这两个命令都是通过PATH变量来查找文件名.(正是通过PATH,不同的用户可能找到的结果不一样)</p>
+<h3 id="查找文件"><a href="#查找文件" class="headerlink" title="查找文件"></a><a name="ch5.2">查找文件</a></h3><p>查找文件的完整文件名可以使用whereis/locate/find,其中whereis/locate会到数据库文件去查找(所有查找文件前,最好更新下数据库<code>updatedb</code>),find会直接查找文件系统(在硬盘中查找,较慢)</p>
+<ul>
+<li>whereis/locate的区别<ul>
+<li>whereis会根据文件/目录名去查找,并不是关键字查找,需要输入完整的名称</li>
+<li>locate是关键字查找,只要查找的完整文件名上有这个关键字就会被列出</li>
+</ul>
+</li>
+</ul>
+<h3 id="find的使用"><a href="#find的使用" class="headerlink" title="find的使用"></a><a name="ch5.3">find的使用</a></h3><ul>
+<li>基本格式:<code>find [path] [opt] [action]</code> 其中每组[opt]和[action]可以用[-a][-o][-not]连接词来连接,组成复合选项</li>
+<li>根据时间查找<ul>
+<li>格式: <code>find [path] {-mtime,-ctime,-atime} [+,-]n</code> 其中n为数字,表示天数</li>
+<li>find时间参数说明<br><img src="https://github.com/HiKumho/blog/blob/master/img/blog_16_1.gif?raw=true" alt=""><br>  n:在n天之前的”24小时内”被改过的文件<br> +n:n天之前(不包含n天)被改动的文件<br>  -n:n天之内(含n天)被改动的文件     <ul>
+<li>例子:列出过去系统上面24小时内改动过的文件:<code>find / -mtime 0</code>        </li>
+</ul>
+</li>
+</ul>
+</li>
+<li>根据用户/用户组信息查找<ul>
+<li>参数:<ul>
+<li><code>-uid n</code> 根据用户ID,n代表用户ID</li>
+<li><code>-gid n</code> 根据用户组ID,n代表用户组ID</li>
+<li><code>-user name</code>  指定用户名</li>
+<li><code>-group name</code> 指定用户组名</li>
+<li><code>-nouser</code> 无用户文件</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>根据文件属性查找<ul>
+<li><code>-name filename</code> 指定文件名 可以使用通配符<code>*</code>表示任意 如<code>*httpd*</code>指文件名包含httpd</li>
+<li><code>-size [+-]SIZE</code> 指定文件大小 比如小于50k大于10k的文件 <code>- size -50k+10k</code></li>
+<li><code>-type TYPE</code> 指定文件类型 TYPE:一般文件(f),设备文件(b,c)等文件类型</li>
+<li><code>-perm mode</code> 指定文件权限是mode的文件 比如<code>-perm 777</code>指定查找文件权限为777的文件</li>
+<li><code>-perm -mode</code> 指定文件权限包含mode全部属性的文件</li>
+<li><code>-perm +mode</code> 指定文件权限包含mode任一属性的文件 <ul>
+<li>并行命令:在查找结果后并接上其他命令,执行</li>
+<li>格式 :<code>-exec command \;</code></li>
+<li>例子: 查找文件当中包含SGID或SUID或SBIT的文件,并以列表输出<br>命令<code>find / -perm +7000 -exec ls -l {} \;</code>   其中<code>{}</code>表示查找的结果集</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="权限与命令间关系"><a href="#权限与命令间关系" class="headerlink" title="权限与命令间关系"></a><a name="ch6">权限与命令间关系</a></h2><ul>
+<li>让用户能进入某目录成为”可工作目录”的基本权限<ul>
+<li>可使用命令:<code>cd</code>切换目录</li>
+<li>目录所需权限:用户对这目录至少需要<code>x</code>权限</li>
+<li>额外需求:如果用户想要在这目录利用<code>ls</code>查阅文件名,这目录还需要<code>r</code>权限</li>
+</ul>
+</li>
+<li>用户在某个目录内读取一个文件的基本权限是什么<ul>
+<li>可使用命令:<code>cat</code>/<code>more</code>/<code>less</code>等</li>
+<li>目录所需权限: 用户对这个目录至少需要<code>x</code>权限</li>
+<li>文件所需权限: 用户对文件至少需要有<code>r</code>权限</li>
+</ul>
+</li>
+<li>让用户可以修改一个文件的基本权限<ul>
+<li>可使用命令:nano编辑器/vi编辑其</li>
+<li>目录所需权限:用户对该文件所在目录至少需要<code>x</code>权限</li>
+<li>文件所需权限:用户对该文件至少需要<code>rw</code>权限</li>
+</ul>
+</li>
+<li>让一个用户可以创建一个文件的基本权限<ul>
+<li>目录所需权限:用户在该目录要具有<code>wx</code>权限</li>
+</ul>
+</li>
+<li>让用户进入某目录并执行该目录下的某个命令的基本权限<ul>
+<li>目录所需权限:用户在该目录至少需要有<code>x</code>权限</li>
+<li>文件所需权限:用户对该文件至少需要<code>x</code>权限</li>
+</ul>
+</li>
+<li>例子:让一个一般用户能够进行<code>cp dir1/file1 dir2</code>的命令是,请说明dir1,file1,dir2的最小所需权限<ul>
+<li>dir1 : 至少需要<code>x</code>权限</li>
+<li>dir2 : 至少需要<code>wx</code>权限</li>
+<li>file1: 至少需要<code>r</code>权限 </li>
+</ul>
+</li>
+</ul>
+<h2 id="情景模拟"><a href="#情景模拟" class="headerlink" title="情景模拟"></a><a name="ch7">情景模拟</a></h2><p>假设系统有两个账号,分别是kumho与jinhu,这两个人除了自己用户组之外还共同支持一个名为project的用户组.假设这两个用户共同拥有/home/project目录的开发权,而且该目录不许其他人进入查阅.请问该目录权限应设置为什么?</p>
+<p>1. 新建用户及用户组
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># groupadd project</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># useradd -G project jinhu</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># id jinhu</span></div><div class="line">uid=1001(jinhu) gid=1002(jinhu) 组=1002(jinhu),1001(project)</div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># id kumho</span></div><div class="line">uid=1000(kumho) gid=1000(kumho) 组=1000(kumho),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare)</div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># user</span></div><div class="line">useradd  userdel  usermod  users    </div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># man usermod</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># usermod -aG project kumho</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># id kumho</span></div><div class="line">uid=1000(kumho) gid=1000(kumho) 组=1000(kumho),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),108(lpadmin),124(sambashare),1001(project)</div></pre></td></tr></table></figure></p>
+<p>2. 创建目录及修改权限
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># mkdir /home/project</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># ls -dl /home/project/</span></div><div class="line">drwxr-xr-x 2 root root 4096  7月 18 21:53 /home/project/</div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># chgrp project /home/project</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># ls -dl /home/project/</span></div><div class="line">drwxr-xr-x 2 root project 4096  7月 18 21:53 /home/project/</div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># chmod 2770 /home/project</span></div><div class="line">root@kumho-Inspiron-3421:~<span class="comment"># ls -dl /home/project</span></div><div class="line">drwxrws--- 2 root project 4096  7月 18 21:53 /home/project</div></pre></td></tr></table></figure></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/05/Android-AdapterView与Adapter/" rel="next" title="Android AdapterView与Adapter">
+                <i class="fa fa-chevron-left"></i> Android AdapterView与Adapter
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Android-UI组件/" rel="prev" title="Android UI组件">
+                Android UI组件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/05/Linux-文件与目录管理/"
+           data-title="Linux 文件与目录管理" data-url="http://yoursite.com/2016/09/05/Linux-文件与目录管理/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目录与路径"><span class="nav-number">1.</span> <span class="nav-text">  目录与路径</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相对路径与绝对路径"><span class="nav-number">1.1.</span> <span class="nav-text">  相对路径与绝对路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊的目录符号"><span class="nav-number">1.2.</span> <span class="nav-text">  特殊的目录符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关于执行文件路径的变量"><span class="nav-number">1.3.</span> <span class="nav-text">  关于执行文件路径的变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件与目录管理"><span class="nav-number">2.</span> <span class="nav-text">  文件与目录管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#切换目录与显示当前目录"><span class="nav-number">2.1.</span> <span class="nav-text">  切换目录与显示当前目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建目录与删除目录"><span class="nav-number">2.2.</span> <span class="nav-text">  新建目录与删除目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看文件与目录"><span class="nav-number">2.3.</span> <span class="nav-text">  查看文件与目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制文件-目录以及创建连接文件"><span class="nav-number">2.4.</span> <span class="nav-text">  复制文件/目录以及创建连接文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移除文件-目录"><span class="nav-number">2.5.</span> <span class="nav-text">  移除文件/目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#移动文件-目录或者更名"><span class="nav-number">2.6.</span> <span class="nav-text">  移动文件/目录或者更名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#取得路径的文件-目录名"><span class="nav-number">2.7.</span> <span class="nav-text">  取得路径的文件/目录名</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建文件与修改文件-目录的时间"><span class="nav-number">2.8.</span> <span class="nav-text">  新建文件与修改文件/目录的时间</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看文件类型"><span class="nav-number">2.9.</span> <span class="nav-text">  查看文件类型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件内容查阅"><span class="nav-number">3.</span> <span class="nav-text">  文件内容查阅</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件与目录的默认权限-隐藏属性-特殊权限"><span class="nav-number">4.</span> <span class="nav-text">文件与目录的默认权限/隐藏属性/特殊权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件默认权限：umask"><span class="nav-number">4.1.</span> <span class="nav-text">文件默认权限：umask</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件隐藏属性-chattr-lsattr"><span class="nav-number">4.2.</span> <span class="nav-text">文件隐藏属性 : chattr/lsattr</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文件特殊权限：SUID-SGID-SBIT"><span class="nav-number">4.3.</span> <span class="nav-text">文件特殊权限：SUID/SGID/SBIT</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令与文件查找"><span class="nav-number">5.</span> <span class="nav-text">命令与文件查找</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查找命令"><span class="nav-number">5.1.</span> <span class="nav-text">查找命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找文件"><span class="nav-number">5.2.</span> <span class="nav-text">查找文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find的使用"><span class="nav-number">5.3.</span> <span class="nav-text">find的使用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#权限与命令间关系"><span class="nav-number">6.</span> <span class="nav-text">权限与命令间关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#情景模拟"><span class="nav-number">7.</span> <span class="nav-text">情景模拟</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

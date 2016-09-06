@@ -1,0 +1,944 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="开放源码的软件安装及升级 什么是源码/编译程序/可执行文件
+源码：遵循某些编译器能识别的语法,编写的一种特殊的纯文本文件
+编译程序：源文件到目标文件到可执行文件的过程。
+编译：源文件→目标文件(机器代码或接近机器代码)
+链接：目标文件与调用函数或其他目标文件链接整合成可执行文件
+
+
+可执行文件：二进制程序(shell script并不是程序，其可执行,但只是调用shell的命令或外部的程序)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 软件安装:源码与Tarball">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-软件安装-源码与Tarball/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="开放源码的软件安装及升级 什么是源码/编译程序/可执行文件
+源码：遵循某些编译器能识别的语法,编写的一种特殊的纯文本文件
+编译程序：源文件到目标文件到可执行文件的过程。
+编译：源文件→目标文件(机器代码或接近机器代码)
+链接：目标文件与调用函数或其他目标文件链接整合成可执行文件
+
+
+可执行文件：二进制程序(shell script并不是程序，其可执行,但只是调用shell的命令或外部的程序)">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_31_1.gif?raw=true">
+<meta property="og:updated_time" content="2016-09-06T13:37:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 软件安装:源码与Tarball">
+<meta name="twitter:description" content="开放源码的软件安装及升级 什么是源码/编译程序/可执行文件
+源码：遵循某些编译器能识别的语法,编写的一种特殊的纯文本文件
+编译程序：源文件到目标文件到可执行文件的过程。
+编译：源文件→目标文件(机器代码或接近机器代码)
+链接：目标文件与调用函数或其他目标文件链接整合成可执行文件
+
+
+可执行文件：二进制程序(shell script并不是程序，其可执行,但只是调用shell的命令或外部的程序)">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_31_1.gif?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-软件安装-源码与Tarball/"/>
+
+  <title> Linux 软件安装:源码与Tarball | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 软件安装:源码与Tarball
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:34:27+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-软件安装-源码与Tarball/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-软件安装-源码与Tarball/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="开放源码的软件安装及升级"><a href="#开放源码的软件安装及升级" class="headerlink" title=" 开放源码的软件安装及升级"></a><a name="ch1"> 开放源码的软件安装及升级</a></h2><h3 id="什么是源码-编译程序-可执行文件"><a href="#什么是源码-编译程序-可执行文件" class="headerlink" title=" 什么是源码/编译程序/可执行文件"></a><a name="ch1.1"> 什么是源码/编译程序/可执行文件</a></h3><ul>
+<li>源码：遵循某些编译器能识别的语法,编写的一种特殊的纯文本文件</li>
+<li>编译程序：源文件到目标文件到可执行文件的过程。<ul>
+<li>编译：源文件→目标文件(机器代码或接近机器代码)</li>
+<li>链接：目标文件与调用函数或其他目标文件链接整合成可执行文件</li>
+</ul>
+</li>
+<li>可执行文件：二进制程序(shell script并不是程序，其可执行,但只是调用shell的命令或外部的程序)</li>
+</ul>
+<h3 id="什么是函数库"><a href="#什么是函数库" class="headerlink" title=" 什么是函数库"></a><a name="ch1.2"> 什么是函数库</a></h3><p>函数库：类似子程序的角色，用来调用其某个功能，Linux中一般位于<code>/usr/include</code> <code>/lib</code> <code>/usr/lib</code>中，可以分为静态函数库与动态函数库</p>
+<ul>
+<li>静态函数库：<ul>
+<li>扩展名为.a</li>
+<li>编译过程，直接整合到执行文件中，使用静态函数库编译成的文件较大</li>
+<li>静态函数库编译成的文件可独立运行</li>
+<li>只有静态函数库升级了，使用静态函数库编译出的文件要升级时，只能重新编译</li>
+</ul>
+</li>
+<li>动态函数库<ul>
+<li>扩展名为.so</li>
+<li>编译过程，不整合到文件中，只提供执行程序一个指向</li>
+<li>动态函数编译成的程序不可独立运行，需要动态库</li>
+<li>升级动态库，不影响编译出来的程序</li>
+</ul>
+</li>
+</ul>
+<p>Linux 倾向使用动态函数库，这样升级方便。</p>
+<h4 id="动态函数库加载至内存"><a href="#动态函数库加载至内存" class="headerlink" title=" 动态函数库加载至内存"></a><a name="ch1.2.1"> 动态函数库加载至内存</a></h4><p>我们可以使用ldconfig将动态函数库加载至内存中，这样其他程序调用其函数时，更加有效率
+首先将需要加载至内存中的动态函数库目录写到<code>/etc/ld.so.conf</code>中，再执行<code>ldconfig</code>，如果要查看当前内存加载的动态函数库可以使用<code>ldconfig -p</code></p>
+<h4 id="解析程序的动态函数库：ldd"><a href="#解析程序的动态函数库：ldd" class="headerlink" title=" 解析程序的动态函数库：ldd"></a><a name="ch1.2.2"> 解析程序的动态函数库：ldd</a></h4><p>当我们想了解一个程序使用什么动态函数库时，可以调用<code>ldd 程序的绝对路径</code>
+想了解一个动态函数库的详细信息（比如依赖关系，版本等），可以调用<code>ldd -v 函数库的绝对路径</code></p>
+<h3 id="什么是make与configure"><a href="#什么是make与configure" class="headerlink" title=" 什么是make与configure"></a><a name="ch1.3"> 什么是make与configure</a></h3><ul>
+<li>make：是编译源文件的一个工具，我们按照一定的规则编写makefile文件，make将按照makefile把程序源文件编译成可执行文件。当然其需要编译器（如gcc）的支持</li>
+<li>configure：会检测操作系统环境，是否能支持此程序安装，如果支持则是写出makefile文件，供make使用。（通常开放源码的软件后，提供configure这个shell script）</li>
+</ul>
+<h3 id="什么是软件的tarball及其安装过程"><a href="#什么是软件的tarball及其安装过程" class="headerlink" title=" 什么是软件的tarball及其安装过程"></a><a name="ch1.4"> 什么是软件的tarball及其安装过程</a></h3><h4 id="软件的tarball"><a href="#软件的tarball" class="headerlink" title=" 软件的tarball"></a><a name="ch1.4.1"> 软件的tarball</a></h4><p>软件释出时使用tar工具进行打包压缩项目文件，形成的打包文件我们称为tarball，一般这个tarball文件会有</p>
+<ul>
+<li>源文件</li>
+<li>检测程序文件（config或configure等）</li>
+<li>本软件的简要说明（INSTALL或README）</li>
+</ul>
+<h4 id="软件的tarball安装过程"><a href="#软件的tarball安装过程" class="headerlink" title=" 软件的tarball安装过程"></a><a name="ch1.4.2"> 软件的tarball安装过程</a></h4><ol>
+<li>从软件官网下载tarball文件</li>
+<li>解压tarball文件</li>
+<li>以gcc进行源码的编译（生成目标文件）</li>
+<li>以gcc进行函数库，目标文件的链接，形成主要的执行程序</li>
+<li>将执行程序和相关的配置文件放置合适的目录内</li>
+</ol>
+<p>因为我们可以使用make与configure来简化上面的第3与第4个步骤，所以安装过程变为</p>
+<ol>
+<li>下载tarball，并解压</li>
+<li>在解压的目录里找到configure或config，并执行，通常是<code>config --prefix=安装目录</code>，生成makefile文件</li>
+<li>make根据makefile文件执行相应的操作，如<code>make clean</code> <code>make main</code> <code>make install</code>等</li>
+<li>安装完毕，目标执行文件已安装到第2步执行的安装目录中</li>
+</ol>
+<p>如下图描述通过configure与make进行安装的过程
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_31_1.gif?raw=true" alt=""></p>
+<h4 id="ntp的tarball安装例子"><a href="#ntp的tarball安装例子" class="headerlink" title=" ntp的tarball安装例子"></a><a name="ch1.4.3"> ntp的tarball安装例子</a></h4><p>以ntp这个时间服务软件为例子，验算安装tarball的过程
+1. 下载解压ntp的tarball文件，并查看README/INSTALL
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">tar -zxv <span class="_">-f</span> ntp-4.2.8p8.tar.gz -C ./</div></pre></td></tr></table></figure></p>
+<p>2. 检查configure支持的参数，并生成makefile文件
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">cd</span> ntp</div><div class="line">./configure --help</div><div class="line">./configure --prefix=/usr/<span class="built_in">local</span>/ntp --enable-all-clocks --enable-parse-clocks <span class="comment">#--prefix指定安装目录</span></div></pre></td></tr></table></figure></p>
+<p>3. 最后编译安装
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">make clean <span class="comment">#清除之前编译的文件</span></div><div class="line">make </div><div class="line">make install <span class="comment"># 将编译好的程序移到指定目录</span></div></pre></td></tr></table></figure></p>
+<p>make与makefile请看<a href="#ch2.2">2.1 make的宏编译</a></p>
+<h3 id="软件的tarball的升级"><a href="#软件的tarball的升级" class="headerlink" title=" 软件的tarball的升级"></a><a name="ch1.5"> 软件的tarball的升级</a></h3><p>因为软件以tarball的形式释出，所以我们升级软件时，有很大的自由度。我们可以通过官方释出的补丁文件，再利用patch文件来升级软件</p>
+<h4 id="怎么制作补丁文件"><a href="#怎么制作补丁文件" class="headerlink" title=" 怎么制作补丁文件"></a><a name="ch1.5.1"> 怎么制作补丁文件</a></h4><p>我们以hellov1.c与其v2版的hellov2.c为例，通过调用diff工具即可 <code>diff -Naur fromFile toFile</code>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">diff -Naur hellov1.c hellov2.c &gt; hellov1Tov2.patch</div></pre></td></tr></table></figure>
+这样我们就成功做出hellov1升级到v2的补丁文件</p>
+<h4 id="文件打补丁"><a href="#文件打补丁" class="headerlink" title=" 文件打补丁"></a><a name="ch1.5.2"> 文件打补丁</a></h4><p>我们以hellov1Tov2.patch补丁更新hellov1.c，我们先查看hellov1Tov2.patch的内容
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">--- helloV1.c 2016-08-21 21:30:19.038816459 +0800</div><div class="line">+++ helloV2.c 2016-08-21 21:31:18.262816949 +0800</div><div class="line">@@ -2,6 +2,7 @@</div><div class="line"> </div><div class="line"> int main()</div><div class="line"> &#123;</div><div class="line">+ printf(&quot;This 2nd Version\n&quot;);</div><div class="line">  printf(&quot;Hello World!\n&quot;);</div><div class="line">  return 0;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+因为我们是在helloV1.c与helloV2.c的目录下做出这个补丁文件的，所以其描述的文件都是相对路径
+如果我们在使用diff时用其他路径来描述这两个文件，比如<code>diff /home/user/helloV1.c /home/usr/helloV2.c</code>,那其做出来的补丁文件应该会用绝对路径来描述文件，这里会影响patch</p>
+<p>我们还是以之前的patch文件为例，我们cd到helloV1.c的目录，通过调用<code>patch -p0 &lt;hellov1Tov2.patch</code>,就将helloV1升级到V2，如果要还原，则使用<code>patch -R &lt;hellov1Tov2.patch</code></p>
+<p>如果补丁文件是使用绝对路径来描述的，我们可以通过<code>patch -pNum</code>来描述这个原文件的所在，比如/home/user/helloV1.C <code>-p1</code>表示当前工作目录下<code>home/user/helloV1.C</code> <code>-p2</code>表示当前工作目录下<code>user/helloV1.C</code> <code>-pNum</code>的Num是表示去掉多少层父目录</p>
+<h2 id="gcc编译器与make的宏编译"><a href="#gcc编译器与make的宏编译" class="headerlink" title=" gcc编译器与make的宏编译"></a><a name="ch2"> gcc编译器与make的宏编译</a></h2><h3 id="gcc编译器的常见命令"><a href="#gcc编译器的常见命令" class="headerlink" title=" gcc编译器的常见命令"></a><a name="ch2.1"> gcc编译器的常见命令</a></h3><p><code>gcc -c hello.c</code>  # 对hello.c进行编译，生成目标文件hello.o</p>
+<p><code>gcc -O -c hello.c</code> # 在上面操作的基础上，进行优化</p>
+<p><code>gcc -o hello hello.o hello2.o</code> # 对hello.o hello2.o进行链接，生成执行程序hello</p>
+<p><code>gcc -o hello hello.o hello2.o -lm -L /usr/lib -I /usr/include</code> # 在上面操作的基础上，<code>-lm</code>表示添加函数库或头文件 <code>-L</code>是函数库所在的路径 <code>-I</code>是头文件所在的路径</p>
+<p><code>gcc -o hello hello.c -Wall</code> # 对hello.c进行编译链接成hello，并将警告信息显示出来</p>
+<h3 id="make的宏编译"><a href="#make的宏编译" class="headerlink" title=" make的宏编译"></a><a name="ch2.2"> make的宏编译</a></h3><p><code>make</code>会参考<code>makefile</code>文件来进行编译链接，make有这些特点</p>
+<ul>
+<li>简化编译时所需的执行命令</li>
+<li>若编译完成后，修改某源文件，则make仅会针对被修改的文件进行编译，其他目标文件不会被更改</li>
+<li>最后依照相关性来更新执行文件</li>
+<li>而且还有使用shell的命令</li>
+</ul>
+<h4 id="makefile的基本语法与变量"><a href="#makefile的基本语法与变量" class="headerlink" title=" makefile的基本语法与变量"></a><a name="ch2.2.1"> makefile的基本语法与变量</a></h4><p><b>makefile的基本语法是这样的</b>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"># 备注</div><div class="line">target : 目标文件1 目标文件2....</div><div class="line">&lt;TAB&gt; 执行命令</div></pre></td></tr></table></figure>
+target是我们make可执行的一个操作名，target为main是make的默认操作名</p>
+<p>例如下面这个例子
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">main ： hello.o hellov2.o</div><div class="line">      gcc -o hello hello.o hellov2.o</div><div class="line"></div><div class="line">clean : </div><div class="line">       rm -r hello hello.o hellov2.o</div></pre></td></tr></table></figure>
+我们可以通过<code>make main</code>来编译<code>hello.c</code>与<code>hellov2.c</code>，通过<code>make clean</code>来删除执行文件与目标文件</p>
+<p><b>makefile的变量语法与shell类似，但有区别：</b></p>
+<ul>
+<li>定义变量时，变量名与内容以<code>=</code>隔开，同时两边都要有空格，而且不能有<code>：</code>，变量名左边不能有<tab></tab></li>
+<li>调用变量时，以${变量名}或$(变量名)使用</li>
+<li>习惯上，变量名以大写</li>
+<li>特殊的变量：<ul>
+<li><code>$@</code> 表示当前的target</li>
+<li><code>CFLAGS</code> gcc的操作选项标识符</li>
+</ul>
+</li>
+<li>环境变量优先度：<ul>
+<li>make命令行后面接的环境变量为最优先</li>
+<li>其次是makefile指定的环境变量</li>
+<li>最后是shell原本具有的环境变量</li>
+</ul>
+</li>
+</ul>
+<p>将上面的makefile例子用变量重写
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">LIBS = -lm</div><div class="line">OBJS = hello.o hellov2.o</div><div class="line">CFLAGS = -Wall</div><div class="line">main ： $&#123;OBJS&#125;</div><div class="line">    gcc -o hello $&#123;OBJS&#125; $&#123;LIBS&#125;</div><div class="line">clean :</div><div class="line">    rm -r hello $&#123;OBJS&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="检验软件或文件的正确性"><a href="#检验软件或文件的正确性" class="headerlink" title=" 检验软件或文件的正确性"></a><a name="ch3"> 检验软件或文件的正确性</a></h2><p>当我们下载一个软件时，官网若提供了MD5或SHA1的指纹编码，我们可以下载好软件，通过md5sum或sha1sum来检验这个下载完的软件的正确性，用<code>md5sum 文件名</code>或<code>sha1sum 文件名</code>，其会返回一个指纹码，然后我们把这个指纹码与官网的指纹码进行匹配，一样则下载的文件无误。</p>
+<p>我们也可以用md5sum 或sha1sum来获取文件某一时刻的指纹，当文件在我们不知情时被改动，只有再此获取其指纹，与之前的指纹匹配，就可以知道其文件有误</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-系统启动/" rel="next" title="Linux 系统启动">
+                <i class="fa fa-chevron-left"></i> Linux 系统启动
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-软件安装-软件管理-RPM-yum与DKPG-apt/" rel="prev" title="Linux 软件安装:软件管理(RPM/yum与DKPG/apt)">
+                Linux 软件安装:软件管理(RPM/yum与DKPG/apt) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-软件安装-源码与Tarball/"
+           data-title="Linux 软件安装:源码与Tarball" data-url="http://yoursite.com/2016/09/06/Linux-软件安装-源码与Tarball/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#开放源码的软件安装及升级"><span class="nav-number">1.</span> <span class="nav-text"> 开放源码的软件安装及升级</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是源码-编译程序-可执行文件"><span class="nav-number">1.1.</span> <span class="nav-text"> 什么是源码/编译程序/可执行文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是函数库"><span class="nav-number">1.2.</span> <span class="nav-text"> 什么是函数库</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#动态函数库加载至内存"><span class="nav-number">1.2.1.</span> <span class="nav-text"> 动态函数库加载至内存</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#解析程序的动态函数库：ldd"><span class="nav-number">1.2.2.</span> <span class="nav-text"> 解析程序的动态函数库：ldd</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是make与configure"><span class="nav-number">1.3.</span> <span class="nav-text"> 什么是make与configure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#什么是软件的tarball及其安装过程"><span class="nav-number">1.4.</span> <span class="nav-text"> 什么是软件的tarball及其安装过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的tarball"><span class="nav-number">1.4.1.</span> <span class="nav-text"> 软件的tarball</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#软件的tarball安装过程"><span class="nav-number">1.4.2.</span> <span class="nav-text"> 软件的tarball安装过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#ntp的tarball安装例子"><span class="nav-number">1.4.3.</span> <span class="nav-text"> ntp的tarball安装例子</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软件的tarball的升级"><span class="nav-number">1.5.</span> <span class="nav-text"> 软件的tarball的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#怎么制作补丁文件"><span class="nav-number">1.5.1.</span> <span class="nav-text"> 怎么制作补丁文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件打补丁"><span class="nav-number">1.5.2.</span> <span class="nav-text"> 文件打补丁</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#gcc编译器与make的宏编译"><span class="nav-number">2.</span> <span class="nav-text"> gcc编译器与make的宏编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#gcc编译器的常见命令"><span class="nav-number">2.1.</span> <span class="nav-text"> gcc编译器的常见命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#make的宏编译"><span class="nav-number">2.2.</span> <span class="nav-text"> make的宏编译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#makefile的基本语法与变量"><span class="nav-number">2.2.1.</span> <span class="nav-text"> makefile的基本语法与变量</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#检验软件或文件的正确性"><span class="nav-number">3.</span> <span class="nav-text"> 检验软件或文件的正确性</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

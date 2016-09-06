@@ -1,0 +1,891 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="什么是daemondaemon是在后台运行,并提供某项服务的程序,通过以服务名+字符d来规定daemon的名称
+ daemon的主要分类daemon根据启动与管理方式,可分为独立启动的stand_alone,与通过一个super daemon来统一管理
+
+stand_alone:此类型daemon可自行独立启动一直在内存中持续提供服务,对于客服端的请求,响应较快,常见的此类型daemon有提供W">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 认识系统服务(daemon)">
+<meta property="og:url" content="http://yoursite.com/2016/09/06/Linux-认识系统服务-daemon/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="什么是daemondaemon是在后台运行,并提供某项服务的程序,通过以服务名+字符d来规定daemon的名称
+ daemon的主要分类daemon根据启动与管理方式,可分为独立启动的stand_alone,与通过一个super daemon来统一管理
+
+stand_alone:此类型daemon可自行独立启动一直在内存中持续提供服务,对于客服端的请求,响应较快,常见的此类型daemon有提供W">
+<meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_28_1.png?raw=true">
+<meta property="og:updated_time" content="2016-09-06T13:23:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 认识系统服务(daemon)">
+<meta name="twitter:description" content="什么是daemondaemon是在后台运行,并提供某项服务的程序,通过以服务名+字符d来规定daemon的名称
+ daemon的主要分类daemon根据启动与管理方式,可分为独立启动的stand_alone,与通过一个super daemon来统一管理
+
+stand_alone:此类型daemon可自行独立启动一直在内存中持续提供服务,对于客服端的请求,响应较快,常见的此类型daemon有提供W">
+<meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_28_1.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/06/Linux-认识系统服务-daemon/"/>
+
+  <title> Linux 认识系统服务(daemon) | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 认识系统服务(daemon)
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-06T21:19:41+08:00" content="2016-09-06">
+              2016-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/06/Linux-认识系统服务-daemon/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/06/Linux-认识系统服务-daemon/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="什么是daemon"><a href="#什么是daemon" class="headerlink" title=" 什么是daemon"></a><a name="ch1"> 什么是daemon</a></h2><p>daemon是在后台运行,并提供某项服务的程序,通过以服务名+字符<code>d</code>来规定daemon的名称</p>
+<h3 id="daemon的主要分类"><a href="#daemon的主要分类" class="headerlink" title=" daemon的主要分类"></a><a name="ch1.1"> daemon的主要分类</a></h3><p>daemon根据启动与管理方式,可分为独立启动的stand_alone,与通过一个super daemon来统一管理</p>
+<ul>
+<li>stand_alone:此类型daemon可自行独立启动<br>一直在内存中持续提供服务,对于客服端的请求,响应较快,常见的此类型daemon有提供WWW服务的daemon(httpd)与FTP服务的daemon(vsftpd)等</li>
+<li>super daemon：一个stand_alone的daemon(xinetd,早期是inetd)管理<br>其内部提供多种服务,当客服端请求时,xinetd才会去唤醒相应的daemon提供服务,请求结束后,此唤醒的daemon也会关闭</li>
+</ul>
+<p>super daemon运行示意图如下:
+<img src="https://github.com/HiKumho/blog/blob/master/img/blog_28_1.png?raw=true" alt=""></p>
+<p>daemon根据对请求的处理可分为单进程和多进程</p>
+<p>daemon根据提供服务的工作状态可分为singal-control与interval-control</p>
+<ul>
+<li>singal-control:此类daemon通过信号管理<br>接收到客服端的请求,daemon就会去处理</li>
+<li>interval-control:此类daemon每隔一段时间就主动去执行工作,我们需要在配置文件指定daemon的服务时间与工作内容,如周期例行工作调度的crond</li>
+</ul>
+<h3 id="服务与端口"><a href="#服务与端口" class="headerlink" title=" 服务与端口"></a><a name="ch1.2"> 服务与端口</a></h3><p>因为我们主机仅有一个IP,当要提供各种服务时,应该如何处理,我们想要的是用户可访问的是主机上的某项服务,而不是直接开放主机资源出来</p>
+<p>如果我们在指定通道上提供一个服务,用户只要访问我们主机上的这个通道,就可以使用服务.那么这个通道(窗口)就是端口.</p>
+<p>为了规范服务与端口的对应,所以我们有了协议,约定某服务的指定端口,我们可以查看<code>/etc/services</code>的内容,里面有各服务的协议端口信息</p>
+<h3 id="daemon相关文件"><a href="#daemon相关文件" class="headerlink" title=" daemon相关文件"></a><a name="ch1.3"> daemon相关文件</a></h3><p>daemon不同与一般的进程,其启动除了需要执行文件外,还需配置文件,执行环境,运行数据存储等.
+一个daemon的相关文件如下:</p>
+<ul>
+<li><code>/etc/init.d/*</code> : 放置stand_alone的daemon启动脚本<br>该脚本会进行环境检测,配置文件分析等工作,可以用来管理daemon的状态</li>
+<li><code>/etc/sysconfig/*(RedHat) /etc/default/*(Debian)</code>:服务初始化环境配置文件
+存放服务初始化的参数设置的文件,比如网络设置写在/etc/sysconfig/network中</li>
+<li><code>/etc/*</code>：各服务的配置文件</li>
+<li><code>/etc/xinetd.conf  /etc/xinetd.d/*</code>:super daemon及所属daemon的配置文件<br>/etc/xinted.conf是super daemon的配置文件,其是所属daemon最上级的配置文件,当所属daemon的配置文件(/etc/xinetd.d/*)中与xinetd.conf有相同项的配置,参考所属daemon</li>
+<li><code>/var/lib/*</code>: 各服务产生的数据<br>一些会产生数据的服务将其数据写入/var/lib中,比如Mysql</li>
+<li><code>/var/run/*</code>: 各服务的PID记录<br>为了能简单地管理各服务的进程,所以daemon会将其PID写入/var/run中</li>
+</ul>
+<h3 id="daemon的启动-关闭"><a href="#daemon的启动-关闭" class="headerlink" title=" daemon的启动/关闭"></a><a name="ch1.4"> daemon的启动/关闭</a></h3><h4 id="stand-alone的-etc-init-d-的启动-关闭"><a href="#stand-alone的-etc-init-d-的启动-关闭" class="headerlink" title="stand_alone的/etc/init.d/*的启动/关闭"></a>stand_alone的/etc/init.d/*的启动/关闭</h4><p>因为daemon的启动脚本帮我们完成了很多工作(检测环境,查找配置文件等),所以我们直接使用启动脚本来管理daemon
+直接输入/etc/init.d/daemon名,会提示此脚本能接受的参数
+比如启动/关闭syslog这个服务可以<code>/etc/init.d/syslog start</code>   <code>/etc/init.d/syslog stop</code></p>
+<p>我们也可以用<code>services</code>来管理daemon,其用法如下:</p>
+<ul>
+<li><code>service [service name] (start|stop|restart...)</code></li>
+<li><code>service --status-all</code>  //查看目前系统所有stand_alone服务状态</li>
+</ul>
+<h4 id="super-daemon所属daemon的启动-关闭"><a href="#super-daemon所属daemon的启动-关闭" class="headerlink" title="super daemon所属daemon的启动/关闭"></a>super daemon所属daemon的启动/关闭</h4><p>super daemon所属daemon在/etc/xinetd.d/*中有配置文件,当要启动daemon时,需要将其配置文件中的<code>disable</code>属性设置<code>no</code>,在通过/etc/init.d/xinetd重启xinetd,要关闭daemon也是这样做,将<code>disable</code>设为<code>yes</code></p>
+<h2 id="super-daemon的配置"><a href="#super-daemon的配置" class="headerlink" title=" super daemon的配置"></a><a name="ch2"> super daemon的配置</a></h2><h3 id="解析super-daemon配置文件"><a href="#解析super-daemon配置文件" class="headerlink" title=" 解析super daemon配置文件"></a><a name="ch2.1"> 解析super daemon配置文件</a></h3><p>super daemon配置文件(/etc/xinetd.conf)与其属的daemon的配置文件(/etc/xinetd.d/*)格式上类似.</p>
+<p>xinetd.conf的配置文件形如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">defaults</div><div class="line">&#123;</div><div class="line">    instaces  =  50  #同一服务的最大同时连接数</div><div class="line">    per_source = 10 #同一来源的客服端最大连接数</div><div class="line">    cap  =  50 10 #同一秒内的最大连接数为50个,若超过则暂停服务10秒</div><div class="line">&#125;</div><div class="line"></div><div class="line">includedir /etc/xinetd.d   # 更多设置值在/etc/xinetd.d目录内</div></pre></td></tr></table></figure></p>
+<p>而/etc/xinetd.d下的服务配置文件形如
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">service &lt;service name&gt;</div><div class="line">&#123;</div><div class="line">    属性       操作符     值</div><div class="line">&#125;</div><div class="line">其中操作符有= +=  -=</div></pre></td></tr></table></figure></p>
+<p>相关的属性与值的说明可以查看 <code>man xinetd.conf</code></p>
+<h3 id="etc-hosts管理"><a href="#etc-hosts管理" class="headerlink" title=" /etc/hosts管理"></a><a name="ch2.2"> /etc/hosts管理</a></h3><p>我们在xinetd配置文件中有两个值<code>only_from</code>与<code>no_access</code>其是用来限制IP访问的,<code>only_from</code>是允许访问的IP,<code>no_access</code>是限制访问的IP</p>
+<p>除此之外,我们也可以通过/etc/hosts.allow与/etc/hosts.deny文件限制IP访问(hosts.allow优先与hosts.deny)
+hosts.allow与hosts.deny的文件格式
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&lt;service name&gt; ： &lt;IP,domain,hostname&gt;：&lt;atcion&gt;</div></pre></td></tr></table></figure></p>
+<ul>
+<li><action> : 有allow/deny(允许/限制) 还有其他额外的操作(比如spawn与twist分析数据包,并加以处理)</action></li>
+<li>特殊的参数(第一/二个字段):<ul>
+<li>ALL : 代表全部的service或IP都接受</li>
+<li>LOCAL:代表本机</li>
+<li>UNKOWN:代表不可解析的IP等</li>
+<li>KNOWN: 可解析的IP等</li>
+</ul>
+</li>
+</ul>
+<h2 id="系统已启动的服务与开机启动服务"><a href="#系统已启动的服务与开机启动服务" class="headerlink" title=" 系统已启动的服务与开机启动服务"></a><a name="ch3"> 系统已启动的服务与开机启动服务</a></h2><h3 id="查看系统已启动的服务"><a href="#查看系统已启动的服务" class="headerlink" title=" 查看系统已启动的服务"></a><a name="ch3.1"> 查看系统已启动的服务</a></h3><h4 id="查看目前系统正在监听的网络服务"><a href="#查看目前系统正在监听的网络服务" class="headerlink" title="查看目前系统正在监听的网络服务"></a>查看目前系统正在监听的网络服务</h4><p>netstat -lnp</p>
+<h4 id="查看目前系统的服务状态"><a href="#查看目前系统的服务状态" class="headerlink" title="查看目前系统的服务状态"></a>查看目前系统的服务状态</h4><p>service –status-all</p>
+<h3 id="开机启动服务"><a href="#开机启动服务" class="headerlink" title=" 开机启动服务"></a><a name="ch3.2"> 开机启动服务</a></h3><p>当我们要设置开机启动的服务时,可以通过<code>chkconfig</code>或<code>sysv-rc-conf</code></p>
+<p>要了解开机的启动服务,需要知道开机的执行等级,执行等级可以理解成Linux的执行模式,共有[0-6]个等级,0为关机 3为命令模式 5为X window 6为重启</p>
+<h4 id="查看系统已设置的开机启动服务"><a href="#查看系统已设置的开机启动服务" class="headerlink" title="查看系统已设置的开机启动服务"></a>查看系统已设置的开机启动服务</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chkconfig --list [服务名]</div></pre></td></tr></table></figure>
+<p>其会列出各服务的不同等级的开启/关闭状态</p>
+<h4 id="设置服务各等级的开机状态"><a href="#设置服务各等级的开机状态" class="headerlink" title="设置服务各等级的开机状态"></a>设置服务各等级的开机状态</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">chkconfig --level [0-6] [服务名] [on|off]</div></pre></td></tr></table></figure>
+<h4 id="Linux开机流程说明"><a href="#Linux开机流程说明" class="headerlink" title="Linux开机流程说明"></a>Linux开机流程说明</h4><ol>
+<li>打开计算机电源,开机读取BIOS并进行主机的自我测试</li>
+<li>通过BIOS取得第一个可开机设备,读取主引导分区(MBR)取得启动装载程序</li>
+<li>通过启动装载程序的设置,取得内核并加载内存且检测系统硬件</li>
+<li>内核主动调用init进程</li>
+<li>init进程开始执行系统初始化(/etc/rc.d/rc.sysinit)</li>
+<li>依据init的设置进行daemon start(/etc/rc.d/rc[0-6].d/*)</li>
+<li>加载本机设置(/etc/rc.d/rc.local)</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/06/Linux-程序管理与SELinux/" rel="next" title="Linux 程序管理与SELinux">
+                <i class="fa fa-chevron-left"></i> Linux 程序管理与SELinux
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/06/Linux-认识与分析日志文件/" rel="prev" title="Linux 认识与分析日志文件">
+                Linux 认识与分析日志文件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/06/Linux-认识系统服务-daemon/"
+           data-title="Linux 认识系统服务(daemon)" data-url="http://yoursite.com/2016/09/06/Linux-认识系统服务-daemon/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是daemon"><span class="nav-number">1.</span> <span class="nav-text"> 什么是daemon</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#daemon的主要分类"><span class="nav-number">1.1.</span> <span class="nav-text"> daemon的主要分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务与端口"><span class="nav-number">1.2.</span> <span class="nav-text"> 服务与端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#daemon相关文件"><span class="nav-number">1.3.</span> <span class="nav-text"> daemon相关文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#daemon的启动-关闭"><span class="nav-number">1.4.</span> <span class="nav-text"> daemon的启动/关闭</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#stand-alone的-etc-init-d-的启动-关闭"><span class="nav-number">1.4.1.</span> <span class="nav-text">stand_alone的/etc/init.d/*的启动/关闭</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#super-daemon所属daemon的启动-关闭"><span class="nav-number">1.4.2.</span> <span class="nav-text">super daemon所属daemon的启动/关闭</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#super-daemon的配置"><span class="nav-number">2.</span> <span class="nav-text"> super daemon的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解析super-daemon配置文件"><span class="nav-number">2.1.</span> <span class="nav-text"> 解析super daemon配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#etc-hosts管理"><span class="nav-number">2.2.</span> <span class="nav-text"> /etc/hosts管理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统已启动的服务与开机启动服务"><span class="nav-number">3.</span> <span class="nav-text"> 系统已启动的服务与开机启动服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#查看系统已启动的服务"><span class="nav-number">3.1.</span> <span class="nav-text"> 查看系统已启动的服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看目前系统正在监听的网络服务"><span class="nav-number">3.1.1.</span> <span class="nav-text">查看目前系统正在监听的网络服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查看目前系统的服务状态"><span class="nav-number">3.1.2.</span> <span class="nav-text">查看目前系统的服务状态</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开机启动服务"><span class="nav-number">3.2.</span> <span class="nav-text"> 开机启动服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查看系统已设置的开机启动服务"><span class="nav-number">3.2.1.</span> <span class="nav-text">查看系统已设置的开机启动服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#设置服务各等级的开机状态"><span class="nav-number">3.2.2.</span> <span class="nav-text">设置服务各等级的开机状态</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux开机流程说明"><span class="nav-number">3.2.3.</span> <span class="nav-text">Linux开机流程说明</span></a></li></ol></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>

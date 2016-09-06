@@ -94,7 +94,8 @@
 设置系统默认JDK
 测试JDK
 
-官网下载JDK网址: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)">
+官网下载JDK网址: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html
+选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Linux 安装JDK">
 <meta property="og:url" content="http://yoursite.com/2016/09/05/Linux-安装JDK/index.html">
@@ -107,7 +108,8 @@
 设置系统默认JDK
 测试JDK
 
-官网下载JDK网址: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)">
+官网下载JDK网址: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html
+选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)">
 <meta property="og:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_9_1.png?raw=true">
 <meta property="og:updated_time" content="2016-09-05T01:59:05.000Z">
 <meta name="twitter:card" content="summary">
@@ -120,7 +122,8 @@
 设置系统默认JDK
 测试JDK
 
-官网下载JDK网址: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)">
+官网下载JDK网址: http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html
+选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)">
 <meta name="twitter:image" content="https://github.com/HiKumho/blog/blob/master/img/blog_9_1.png?raw=true">
 
 
@@ -371,17 +374,26 @@
 <li>设置系统默认JDK</li>
 <li>测试JDK</li>
 </ol>
-<h3 id="官网下载JDK"><a href="#官网下载JDK" class="headerlink" title="官网下载JDK"></a>官网下载JDK</h3><p>网址: <a href="http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html</a><br>选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)</p>
+<h3 id="官网下载JDK"><a href="#官网下载JDK" class="headerlink" title="官网下载JDK"></a>官网下载JDK</h3><p>网址: <a href="http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html" target="_blank" rel="external">http://www.oracle.com/technetwork/articles/javase/index-jsp-138363.html</a>
+选择相应的 .gz包下载  (这里我选择了”jdk-8u92-linux-i586.tar.gz”)</p>
 <h3 id="解压缩-放到指定目录-以jdk-8u92-linux-i586-tar-gz为例"><a href="#解压缩-放到指定目录-以jdk-8u92-linux-i586-tar-gz为例" class="headerlink" title="解压缩,放到指定目录(以jdk-8u92-linux-i586.tar.gz为例)"></a>解压缩,放到指定目录(以jdk-8u92-linux-i586.tar.gz为例)</h3><ol>
-<li><p>创建目录<br><code>sudo mkdir /home/kumho/usr/lib/jvm</code>    </p>
+<li><p>创建目录
+<code>sudo mkdir /home/kumho/usr/lib/jvm</code>    </p>
 </li>
-<li><p>解压文件至目录<br><code>sudo tar -zxvf jdk-8u92-linux-i586.tar.gz -C  /home/kumho/usr/lib/jvm</code>      </p>
+<li><p>解压文件至目录
+<code>sudo tar -zxvf jdk-8u92-linux-i586.tar.gz -C  /home/kumho/usr/lib/jvm</code>      </p>
 </li>
 </ol>
-<h3 id="修改环境变量"><a href="#修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h3><p><code>sudo vim ~/.bashrc</code><br>文件的末尾追加下面内容:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#set oracle jdk environment </div><div class="line">export JAVA_HOME=/home/kumho/usr/lib/jvm/jdk1.8.0_92  ##这里要注意目录要换成自己解压的jdk 目录</div><div class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre </div><div class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</div><div class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure></p>
+<h3 id="修改环境变量"><a href="#修改环境变量" class="headerlink" title="修改环境变量"></a>修改环境变量</h3><p><code>sudo vim ~/.bashrc</code> 
+文件的末尾追加下面内容: 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">#set oracle jdk environment </div><div class="line">export JAVA_HOME=/home/kumho/usr/lib/jvm/jdk1.8.0_92  ##这里要注意目录要换成自己解压的jdk 目录</div><div class="line">export JRE_HOME=$&#123;JAVA_HOME&#125;/jre </div><div class="line">export CLASSPATH=.:$&#123;JAVA_HOME&#125;/lib:$&#123;JRE_HOME&#125;/lib</div><div class="line">export PATH=$&#123;JAVA_HOME&#125;/bin:$PATH</div></pre></td></tr></table></figure></p>
 <p>使环境变量马上生效<code>source ~/.bashrc</code>    </p>
 <h3 id="设置系统默认jdk-版本"><a href="#设置系统默认jdk-版本" class="headerlink" title="设置系统默认jdk 版本"></a>设置系统默认jdk 版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">sudo update-alternatives --install /usr/bin/java java /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/java 300</div><div class="line">sudo update-alternatives --install /usr/bin/javac javac /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/javac 300</div><div class="line">sudo update-alternatives --install /usr/bin/jar jar /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/jar 300</div><div class="line">sudo update-alternatives --install /usr/bin/javah javah /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/javah 300</div><div class="line">sudo update-alternatives --install /usr/bin/javap javap /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/javap 300</div></pre></td></tr></table></figure>
-<p>然后执行:<br><code>sudo update-alternatives --config java</code><br>若是初次安装jdk,会有下面的提示<br> There is only one alternative in link group java (providing /usr/bin/java):<br> /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/java<br>否则,选择合适的jdk</p>
+<p>然后执行:
+<code>sudo update-alternatives --config java</code>
+若是初次安装jdk,会有下面的提示
+ There is only one alternative in link group java (providing /usr/bin/java): 
+ /home/kumho/usr/lib/jvm/jdk1.8.0_92/bin/java<br>否则,选择合适的jdk</p>
 <h3 id="测试jdk"><a href="#测试jdk" class="headerlink" title="测试jdk"></a>测试jdk</h3><p><img src="https://github.com/HiKumho/blog/blob/master/img/blog_9_1.png?raw=true" alt=""></p>
 
       
@@ -498,7 +510,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>

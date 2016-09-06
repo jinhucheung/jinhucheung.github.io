@@ -90,7 +90,8 @@
 
 确认重复行，并在数据内容外的列设置公式形如=IF(A2=A1,1,2) // A2如果=A1 则当前单元格=1  并运行此公式至所有列（光标指向当前单元格右下角出现黑十字往拉下）
 对上述所得的列进行选择性粘贴，粘贴为数据
-然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除参考WPS表格（">
+然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除
+参考WPS表格">
 <meta property="og:type" content="article">
 <meta property="og:title" content="数据库管理 Excel数据导入Mysql">
 <meta property="og:url" content="http://yoursite.com/2016/09/05/数据库管理-Excel数据导入Mysql/index.html">
@@ -99,7 +100,8 @@
 
 确认重复行，并在数据内容外的列设置公式形如=IF(A2=A1,1,2) // A2如果=A1 则当前单元格=1  并运行此公式至所有列（光标指向当前单元格右下角出现黑十字往拉下）
 对上述所得的列进行选择性粘贴，粘贴为数据
-然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除参考WPS表格（">
+然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除
+参考WPS表格">
 <meta property="og:updated_time" content="2016-09-05T00:47:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="数据库管理 Excel数据导入Mysql">
@@ -107,7 +109,8 @@
 
 确认重复行，并在数据内容外的列设置公式形如=IF(A2=A1,1,2) // A2如果=A1 则当前单元格=1  并运行此公式至所有列（光标指向当前单元格右下角出现黑十字往拉下）
 对上述所得的列进行选择性粘贴，粘贴为数据
-然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除参考WPS表格（">
+然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除
+参考WPS表格">
 
 
 
@@ -353,19 +356,23 @@
 <ul>
 <li>确认重复行，并在数据内容外的列设置公式形如=IF(A2=A1,1,2) // A2如果=A1 则当前单元格=1  并运行此公式至所有列（光标指向当前单元格右下角出现黑十字往拉下）</li>
 <li>对上述所得的列进行选择性粘贴，粘贴为数据</li>
-<li>然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除<br>参考<a href="http://jingyan.baidu.com/article/eae078278fbdd81fec54853c.html" target="_blank" rel="external">WPS表格（或EXCEL）如何方便删除重复行</a></li>
+<li>然后对上所得的列进行“筛选”，选择数据为1（可能为2，要实际处理）的行全部删除
+参考<a href="http://jingyan.baidu.com/article/eae078278fbdd81fec54853c.html" target="_blank" rel="external">WPS表格（或EXCEL）如何方便删除重复行</a></li>
 </ul>
-<h2 id="EXCEL导入数据"><a href="#EXCEL导入数据" class="headerlink" title="EXCEL导入数据"></a>EXCEL导入数据</h2><p>我是将EXCEL数据转成TXT文本格式(UTF8编码)<br>方法：</p>
+<h2 id="EXCEL导入数据"><a href="#EXCEL导入数据" class="headerlink" title="EXCEL导入数据"></a>EXCEL导入数据</h2><p>我是将EXCEL数据转成TXT文本格式(UTF8编码)
+方法：</p>
 <ul>
 <li>直接将EXEL数据另存为TXT，这里WPS会有制表符还分割数据项。</li>
 <li>我将数据项间的制表符用,替换</li>
 <li>注意要删除TXT中每行最后的空格</li>
 </ul>
-<h2 id="MySQL中文字符的处理"><a href="#MySQL中文字符的处理" class="headerlink" title="MySQL中文字符的处理"></a>MySQL中文字符的处理</h2><p>如果想MySql导入中文字符，可能会出现乱码、报错等<br>之前在5.1报违反字符的错误，但当将数据库所有字符集设置成utf8后仍出现错误<br>这里原因可能是低版本的MySql不支持多字节的中文字符<br>于是将MySql升级到最新版本<br>关于设置Mysql字符集的方法可以在My.ini中设置Default-characters-set和 sever-characters-set<br><a href="http://my.oschina.net/5365437/blog/142312?fromerr=n6DQp3A3" target="_blank" rel="external">Mysql 插入数据里有中文字符出现 Incorrect string value 的错误</a>;</p>
+<h2 id="MySQL中文字符的处理"><a href="#MySQL中文字符的处理" class="headerlink" title="MySQL中文字符的处理"></a>MySQL中文字符的处理</h2><p>如果想MySql导入中文字符，可能会出现乱码、报错等<br>之前在5.1报违反字符的错误，但当将数据库所有字符集设置成utf8后仍出现错误<br>这里原因可能是低版本的MySql不支持多字节的中文字符<br>于是将MySql升级到最新版本<br>关于设置Mysql字符集的方法可以在My.ini中设置Default-characters-set和 sever-characters-set
+<a href="http://my.oschina.net/5365437/blog/142312?fromerr=n6DQp3A3" target="_blank" rel="external">Mysql 插入数据里有中文字符出现 Incorrect string value 的错误</a>;</p>
 <h3 id="MySql卸装处理"><a href="#MySql卸装处理" class="headerlink" title="MySql卸装处理"></a>MySql卸装处理</h3><ul>
 <li>在Window中”服务”中停止Mysql</li>
 <li>然后在”程序”中卸装Mysql</li>
-<li>最后清除注册表<br>参考<a href="http://materliu.github.io/all/web/database/mysql/2014/04/24/uninstall-mysql-totaly.cm.html" target="_blank" rel="external">windows如何彻底卸载mysql</a></li>
+<li>最后清除注册表
+参考<a href="http://materliu.github.io/all/web/database/mysql/2014/04/24/uninstall-mysql-totaly.cm.html" target="_blank" rel="external">windows如何彻底卸载mysql</a></li>
 </ul>
 <h2 id="MySql数据文件导入"><a href="#MySql数据文件导入" class="headerlink" title="MySql数据文件导入"></a>MySql数据文件导入</h2><p>这里导入的是文本文件 </p>
 <p>使用命令：<br>load data local infile ‘文件路径’ into table 表名<br>fields terminated by ‘,’<br>lines terminated by ‘\r\n’;</p>
@@ -482,7 +489,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">9</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">文章</span>
             </a>
           </div>
