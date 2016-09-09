@@ -1,0 +1,886 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux,web," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Jinhu's Home" type="application/atom+xml" />
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="前言 sshd是一个连线服务,我们可以在远端主机通过ssh访问我们主机,获取shell修改主机设置
+过程十分便利,而且sshd是基于[非对称密钥]加密的通信,数据在其通道上传输较安全
+SSH连线服务SSH(Secure SHell protocol)通过资料封包加密技术,将等待传输的数据包加密后再传输到网络上
+SSH可以用来取代明文传输的finger/telent等连线服务
+连线加密技术：非对称密">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux 服务器篇 远端连接服务器SSH">
+<meta property="og:url" content="http://yoursite.com/2016/09/09/Linux-服务器篇-远端连接服务器SSH/index.html">
+<meta property="og:site_name" content="Jinhu's Home">
+<meta property="og:description" content="前言 sshd是一个连线服务,我们可以在远端主机通过ssh访问我们主机,获取shell修改主机设置
+过程十分便利,而且sshd是基于[非对称密钥]加密的通信,数据在其通道上传输较安全
+SSH连线服务SSH(Secure SHell protocol)通过资料封包加密技术,将等待传输的数据包加密后再传输到网络上
+SSH可以用来取代明文传输的finger/telent等连线服务
+连线加密技术：非对称密">
+<meta property="og:image" content="http://ocz7ifqwi.bkt.clouddn.com/keypair-2.gif">
+<meta property="og:image" content="http://ocz7ifqwi.bkt.clouddn.com/ssh-keypair2.gif">
+<meta property="og:updated_time" content="2016-09-09T13:51:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux 服务器篇 远端连接服务器SSH">
+<meta name="twitter:description" content="前言 sshd是一个连线服务,我们可以在远端主机通过ssh访问我们主机,获取shell修改主机设置
+过程十分便利,而且sshd是基于[非对称密钥]加密的通信,数据在其通道上传输较安全
+SSH连线服务SSH(Secure SHell protocol)通过资料封包加密技术,将等待传输的数据包加密后再传输到网络上
+SSH可以用来取代明文传输的finger/telent等连线服务
+连线加密技术：非对称密">
+<meta name="twitter:image" content="http://ocz7ifqwi.bkt.clouddn.com/keypair-2.gif">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/09/09/Linux-服务器篇-远端连接服务器SSH/"/>
+
+  <title> Linux 服务器篇 远端连接服务器SSH | Jinhu's Home </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-cn">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Jinhu's Home</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup">
+ <span class="search-icon fa fa-search"></span>
+ <input type="text" id="local-search-input">
+ <div id="local-search-result"></div>
+ <span class="popup-btn-close">close</span>
+</div>
+
+
+    </div>
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Linux 服务器篇 远端连接服务器SSH
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发布于</span>
+            <time itemprop="dateCreated" datetime="2016-09-09T14:31:35+08:00" content="2016-09-09">
+              2016-09-09
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/学习/" itemprop="url" rel="index">
+                    <span itemprop="name">学习</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/09/Linux-服务器篇-远端连接服务器SSH/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/09/Linux-服务器篇-远端连接服务器SSH/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言 "></a><a name="ch1">前言 </a></h2><p>sshd是一个连线服务,我们可以在远端主机通过ssh访问我们主机,获取shell修改主机设置
+过程十分便利,而且sshd是基于[非对称密钥]加密的通信,数据在其通道上传输较安全</p>
+<h2 id="SSH连线服务"><a href="#SSH连线服务" class="headerlink" title="SSH连线服务"></a><a name="ch2">SSH连线服务</a></h2><p>SSH(Secure SHell protocol)通过资料封包加密技术,将等待传输的数据包加密后再传输到网络上
+SSH可以用来取代明文传输的finger/telent等连线服务</p>
+<h3 id="连线加密技术：非对称密钥"><a href="#连线加密技术：非对称密钥" class="headerlink" title="连线加密技术：非对称密钥"></a><a name="ch2.1">连线加密技术：非对称密钥</a></h3><p>[资料加密]就是经过运算将原始数据转换成乱码,之后再传输到网络上,到达目标后再进行解密运算</p>
+<p>加解密技术非常多,后面我们来介绍下目前常见的数据包加密技术[非对称密钥]系统,其通过两对不一样的公钥与密钥
+进行加密/解密,在一个连线中,自己的公钥分别传给对方,用于加密数据包,而密钥则保存在本地,用于解密</p>
+<p>非对称密钥系统示意图如下：</p>
+<p><img src="http://ocz7ifqwi.bkt.clouddn.com/keypair-2.gif" alt=""></p>
+<p>ssh具体连线过程：</p>
+<p><img src="http://ocz7ifqwi.bkt.clouddn.com/ssh-keypair2.gif" alt=""></p>
+<ol>
+<li>服务器建立密钥文件 ：<br>  当主机第一次启动sshd服务时,其会计算出公钥/私钥文件,保存在<code>/etc/ssh/ssh_host_*</code> 这些文件根据加密方式不同而分类,其中<code>.pub</code>为公钥文件,否为私钥文件
+  主机下次启动sshd服务时,则主动寻找这些密钥文件</li>
+<li>客服端主动连线要求：<br>  当客服端要连线sshd服务器时,通过ssh/pietty等程序来连接</li>
+<li>服务器回传自己的公钥文件：<br>   服务器将公钥传给客服端</li>
+<li>客服端记录/匹配服务器的公钥,并计算自己密钥文件 ：<br>   客服端会将服务器的公钥记录在<code>～/.ssh/known_hosts</code>中,当下次连线时进行匹配即可,之后计算出自己的密钥文件保存在<code>～/.ssh</code>中</li>
+<li>客服端回传自己的公钥文件：<br>   此时双方都拥有[自己的私钥与对方的公钥]</li>
+<li>开始双向加密解密传输</li>
+</ol>
+<h3 id="启动SSH服务"><a href="#启动SSH服务" class="headerlink" title="启动SSH服务"></a><a name="ch2.2">启动SSH服务</a></h3><p>ssh服务通过<code>service ssh restart</code>启动
+而要开机启动ssh服务可以通过<code>sysv-rc-conf</code>或<code>chkconfig</code></p>
+<p>查看ssh服务监听状态： <code>netstat -ntulp | grep ssh</code>
+ssh预设启动在<code>port 22</code>中</p>
+<h3 id="SSH服务配置文件"><a href="#SSH服务配置文件" class="headerlink" title="SSH服务配置文件"></a><a name="ch2.3">SSH服务配置文件</a></h3><p>ssh服务配置文件可以分为客服端配置以及服务器配置,这里我们说明服务器的配置,其为<code>/etc/ssh/sshd_config</code></p>
+<p>下面列出以下ssh常见的配置项目</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Port 22   # SSH预设启动的端口</div><div class="line">#Port 23  # 我们可以自己设置启动端口</div><div class="line"></div><div class="line">Protocol 2  # SSH协议的版本</div><div class="line"></div><div class="line">ListenAddress 0.0.0.0  # 设置监听的网络接口</div><div class="line"></div><div class="line">PidFile /var/run/sshd.pid # SSHD的pid文件</div><div class="line"></div><div class="line"># 主机的私钥放置文件</div><div class="line">HostKey /etc/ssh/ssh_host_key        # SSH version 1 使用的私钥</div><div class="line">HostKey /etc/ssh/ssh_host_rsa_key    # SSH version 2 使用的 RSA 私钥</div><div class="line">HostKey /etc/ssh/ssh_host_dsa_key    # SSH version 2 使用的 DSA 私钥</div><div class="line"></div><div class="line">PermitRootLogin yes  # 是否允许root登入</div><div class="line"></div><div class="line"># 是否允许用户自行使用成对的密钥进行登入行为,针对version 2</div><div class="line">PubkeyAuthentication yes</div><div class="line">AuthorizedKeysFile      .ssh/authorized_keys   # 用户针对终端自制的公钥放置在自己home目录下 .ssh/authorized_keys 內</div><div class="line"></div><div class="line">PasswordAuthentication yes  # 要密码验证</div><div class="line"></div><div class="line"></div><div class="line">DenyUsers *  # 抵挡所有用户</div><div class="line">DenyUsers test # 抵挡test这个用户的远端登入</div><div class="line"></div><div class="line">DenyGroups test # 抵挡test群组</div><div class="line"></div></pre></td></tr></table></figure>
+<p>设置完配置文件后,重启ssh服务即生效</p>
+<h3 id="ssh客服端连线程序-Linux：ssh-sftp-scp"><a href="#ssh客服端连线程序-Linux：ssh-sftp-scp" class="headerlink" title="ssh客服端连线程序-Linux：ssh/sftp/scp"></a><a name="ch2.3">ssh客服端连线程序-Linux：ssh/sftp/scp</a></h3><h4 id="ssh的用法"><a href="#ssh的用法" class="headerlink" title="ssh的用法"></a><a name="ch2.3.1">ssh的用法</a></h4><p>在客服端,我们可以通过ssh来连接服务器,一般用法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh [-f] [-o 参数] [-p 非正规端口(正规为22)] [账号@]IP [指令]</div></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li><code>f</code>   需要配合后面的指令,执行完指令后立即登出</li>
+<li><code>o</code>  额外参数<ul>
+<li><code>ConnectTimeout=秒数</code>  连线等待的时间</li>
+<li><code>StrictHostKeyChecking=[yes|no|ask]</code>  预设为ask 询问是否主动将服务器的公钥写入<code>known_hosts</code>中,<code>no</code>则直接写入</li>
+</ul>
+</li>
+<li><code>p</code>  指定连接服务器上ssh服务监听的端口</li>
+</ul>
+<h4 id="sftp的用法"><a href="#sftp的用法" class="headerlink" title="sftp的用法"></a><a name="ch2.3.2">sftp的用法</a></h4><p>ssh是登入远端服务器进行工作,如果要从远端服务器下载/上传资源,我们可以直接使用sftp
+通过<code>sftp 账号@ip</code>连接上服务器后,就如同<code>ftp</code>一样操作了,不明白指令时请输入<code>help</code></p>
+<h4 id="scp的用法"><a href="#scp的用法" class="headerlink" title="scp的用法"></a><a name="ch2.3.3">scp的用法</a></h4><p>正如同<code>sftp</code>是ftp的ssh版本一样，<code>scp</code>则是<code>cp</code>的ssh版,
+比如我需要将本机的<code>/etc/hosts</code>文件上传至服务器中student的home目录下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp /etc/hosts student@192.168.14.193:~</div></pre></td></tr></table></figure>
+<p>如需将服务器中/tmp目录下载至本地的/tmp中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">scp  -pr root@192.168.14.193:/tmp  /tmp/</div></pre></td></tr></table></figure>
+<h3 id="ssh客服端连线程序-Windows：pietty-psftp"><a href="#ssh客服端连线程序-Windows：pietty-psftp" class="headerlink" title="ssh客服端连线程序-Windows：pietty/psftp"></a><a name="ch2.3">ssh客服端连线程序-Windows：pietty/psftp</a></h3><h4 id="直接连线putty-pietty"><a href="#直接连线putty-pietty" class="headerlink" title="直接连线putty/pietty"></a><a name="ch2.3.1">直接连线putty/pietty</a></h4><p>windows 要连接SSH服务器可以通过<code>putty</code>或<code>pietty</code>，它们的下载点：</p>
+<ul>
+<li><code>putty</code> ： <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/" target="_blank" rel="external">http://www.chiark.greenend.org.uk/~sgtatham/putty/</a></li>
+<li><code>pietty</code> :  <a href="http://www.csie.ntu.edu.tw/~piaip/pietty/" target="_blank" rel="external">http://www.csie.ntu.edu.tw/~piaip/pietty/</a></li>
+</ul>
+<p>它们使用相当简单,提供服务器IP和SSH服务端口等信息就可以使用</p>
+<h4 id="sftp-server-psftp"><a href="#sftp-server-psftp" class="headerlink" title="sftp-server:psftp"></a><a name="ch2.3.1">sftp-server:psftp</a></h4><p>putty官网也提供类似<code>sftp</code>功能的程序：psftp,用于连接远端SSH服务器,访问其资源。
+同<code>open IP</code>来连接服务器</p>
+<h3 id="ssh客服端连线程序-移动终端：serverauditor"><a href="#ssh客服端连线程序-移动终端：serverauditor" class="headerlink" title="ssh客服端连线程序-移动终端：serverauditor"></a><a name="ch2.4">ssh客服端连线程序-移动终端：serverauditor</a></h3><p>移动终端要连接ssh服务器,可以通过<code>serverauditor</code>这个程序即可,设置上相当简单,以下是serverauditor官网</p>
+<p><a href="https://serverauditor.com/" target="_blank" rel="external">https://serverauditor.com/</a></p>
+<h3 id="不用密码可立即登入的ssh用户"><a href="#不用密码可立即登入的ssh用户" class="headerlink" title="不用密码可立即登入的ssh用户"></a><a name="ch2.5">不用密码可立即登入的ssh用户</a></h3><p>如果我们想让指定客服端通过ssh服务登入某个用户时,不需要输入密码,我们可以将客服端的公钥写入用户的<code>～/.ssh/authorized_keys</code>文件(sshd配置文件中<code>AuthorizedKeysFile</code>属性指定)中,表示对应此客服端,远端服务器认证了,简化传输步骤,下次连接时,客服端以及服务器都拥有了对方的公钥与自己的私钥</p>
+<p>具体步骤如下：</p>
+<ol>
+<li>修改服务端的配置文件<code>/etc/ssh/sshd_config</code>,注意<code>PubkeyAuthentication</code>要为<code>yes</code>,通过注意<code>AuthorizedKeysFile</code>的文件,</li>
+<li>客服端建立密钥文件：<code>authorized_keys -t rsa</code> # 生成rsa的密钥</li>
+<li>客服端放置好密钥文件： 将密钥文件放置在<code>～/.ssh/</code>中</li>
+<li>将客服端的公钥写入服务端的需登入用户的<code>～/.ssh/authorized_keys</code>：注意权限,<code>~/.ssh</code>应该是<code>700</code>  而<code>authorized_keys</code>权限应该是<code>644</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">[jinhu@clientlinux ~]$ ssh-keygen -t rsa   # 客服端生成密钥文件</div><div class="line"></div><div class="line">[jinhu@clientlinux ~]$ scp ~/.ssh/id_rsa.pub  kumho@192.168.14.193:~  # 将客服端的公钥写入客服端的authorized_keys</div><div class="line">[kumho@servicelinux ~]$ cat ~/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</div><div class="line"></div><div class="line">[kumho@servicelinux ~]$ chmod 700  ~/.ssh # 修改服务端权限</div><div class="line">[kumho@servicelinux ~]$ chmod 644  ~/.ssh/authorized_keys</div><div class="line"></div></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag">#linux</a>
+          
+            <a href="/tags/web/" rel="tag">#web</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/09/Linux-服务器篇-申请合法的主机名称/" rel="next" title="Linux 服务器篇 申请合法的主机名称">
+                <i class="fa fa-chevron-left"></i> Linux 服务器篇 申请合法的主机名称
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/09/Linux-服务器篇-远端连接服务器SSH/"
+           data-title="Linux 服务器篇 远端连接服务器SSH" data-url="http://yoursite.com/2016/09/09/Linux-服务器篇-远端连接服务器SSH/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.png"
+               alt="Jinhu" />
+          <p class="site-author-name" itemprop="name">Jinhu</p>
+          <p class="site-description motion-element" itemprop="description">飛べ</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">42</span>
+              <span class="site-state-item-name">文章</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/HiKumho" target="_blank" title="github">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  github
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://my.oschina.net/JhField" target="_blank" title="oschina">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  oschina
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SSH连线服务"><span class="nav-number">2.</span> <span class="nav-text">SSH连线服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#连线加密技术：非对称密钥"><span class="nav-number">2.1.</span> <span class="nav-text">连线加密技术：非对称密钥</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动SSH服务"><span class="nav-number">2.2.</span> <span class="nav-text">启动SSH服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH服务配置文件"><span class="nav-number">2.3.</span> <span class="nav-text">SSH服务配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh客服端连线程序-Linux：ssh-sftp-scp"><span class="nav-number">2.4.</span> <span class="nav-text">ssh客服端连线程序-Linux：ssh/sftp/scp</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ssh的用法"><span class="nav-number">2.4.1.</span> <span class="nav-text">ssh的用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sftp的用法"><span class="nav-number">2.4.2.</span> <span class="nav-text">sftp的用法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#scp的用法"><span class="nav-number">2.4.3.</span> <span class="nav-text">scp的用法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh客服端连线程序-Windows：pietty-psftp"><span class="nav-number">2.5.</span> <span class="nav-text">ssh客服端连线程序-Windows：pietty/psftp</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#直接连线putty-pietty"><span class="nav-number">2.5.1.</span> <span class="nav-text">直接连线putty/pietty</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#sftp-server-psftp"><span class="nav-number">2.5.2.</span> <span class="nav-text">sftp-server:psftp</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ssh客服端连线程序-移动终端：serverauditor"><span class="nav-number">2.6.</span> <span class="nav-text">ssh客服端连线程序-移动终端：serverauditor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不用密码可立即登入的ssh用户"><span class="nav-number">2.7.</span> <span class="nav-text">不用密码可立即登入的ssh用户</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jinhu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"hikumho"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length == 0) {
+       search_path = "search.xml";
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    function proceedsearch() {
+      $("body").append('<div class="popoverlay">').css('overflow', 'hidden');
+      $('.popup').toggle();
+
+    }
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+    'use strict';
+    $.ajax({
+        url: path,
+        dataType: "xml",
+        async: true,
+        success: function( xmlResponse ) {
+            // get the contents from search data
+            isfetched = true;
+            $('.popup').detach().appendTo('.header-inner');
+            var datas = $( "entry", xmlResponse ).map(function() {
+                return {
+                    title: $( "title", this ).text(),
+                    content: $("content",this).text(),
+                    url: $( "url" , this).text()
+                };
+            }).get();
+            var $input = document.getElementById(search_id);
+            var $resultContent = document.getElementById(content_id);
+            $input.addEventListener('input', function(){
+                var matchcounts = 0;
+                var str='<ul class=\"search-result-list\">';
+                var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                $resultContent.innerHTML = "";
+                if (this.value.trim().length > 1) {
+                // perform local searching
+                datas.forEach(function(data) {
+                    var isMatch = true;
+                    var content_index = [];
+                    var data_title = data.title.trim().toLowerCase();
+                    var data_content = data.content.trim().replace(/<[^>]+>/g,"").toLowerCase();
+                    var data_url = data.url;
+                    var index_title = -1;
+                    var index_content = -1;
+                    var first_occur = -1;
+                    // only match artiles with not empty titles and contents
+                    if(data_title != '' && data_content != '') {
+                        keywords.forEach(function(keyword, i) {
+                            index_title = data_title.indexOf(keyword);
+                            index_content = data_content.indexOf(keyword);
+                            if( index_title < 0 && index_content < 0 ){
+                                isMatch = false;
+                            } else {
+                                if (index_content < 0) {
+                                    index_content = 0;
+                                }
+                                if (i == 0) {
+                                    first_occur = index_content;
+                                }
+                            }
+                        });
+                    }
+                    // show search results
+                    if (isMatch) {
+                        matchcounts += 1;
+                        str += "<li><a href='"+ data_url +"' class='search-result-title'>"+ data_title +"</a>";
+                        var content = data.content.trim().replace(/<[^>]+>/g,"");
+                        if (first_occur >= 0) {
+                            // cut out 100 characters
+                            var start = first_occur - 20;
+                            var end = first_occur + 80;
+                            if(start < 0){
+                                start = 0;
+                            }
+                            if(start == 0){
+                                end = 50;
+                            }
+                            if(end > content.length){
+                                end = content.length;
+                            }
+                            var match_content = content.substring(start, end);
+                            // highlight all keywords
+                            keywords.forEach(function(keyword){
+                                var regS = new RegExp(keyword, "gi");
+                                match_content = match_content.replace(regS, "<b class=\"search-keyword\">"+keyword+"</b>");
+                            });
+
+                            str += "<p class=\"search-result\">" + match_content +"...</p>"
+                        }
+                        str += "</li>";
+                    }
+                })};
+                str += "</ul>";
+                if (matchcounts == 0) { str = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>' }
+                if (keywords == "") { str = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>' }
+                $resultContent.innerHTML = str;
+            });
+            proceedsearch();
+        }
+    });}
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched == false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+
+    });
+
+    $('.popup-btn-close').click(function(e){
+      $('.popup').hide();
+      $(".popoverlay").remove();
+      $('body').css('overflow', '');
+    });
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+  </script>
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
