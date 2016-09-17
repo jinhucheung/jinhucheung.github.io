@@ -4,6 +4,162 @@
   
     
     <entry>
+      <title><![CDATA[Ruby/Rails Linux搭建Rails开发环境]]></title>
+      <url>http://yoursite.com/2016/09/17/Ruby-Rails-Linux%E6%90%AD%E5%BB%BARails%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/</url>
+      <content type="html"><![CDATA[<h2 id="Ruby开发环境搭建"><a href="#Ruby开发环境搭建" class="headerlink" title=" Ruby开发环境搭建"></a><a name="ch1"> Ruby开发环境搭建</a></h2><h3 id="Ruby安装"><a href="#Ruby安装" class="headerlink" title=" Ruby安装"></a><a name="ch1.1"> Ruby安装</a></h3><p>Ruby安装方式可以分为两种,一种是源码编译安装,另一种是第三方工具RVM/rbenv来安装管理Ruby环境</p>
+<h4 id="从源码编译安装"><a href="#从源码编译安装" class="headerlink" title=" 从源码编译安装"></a><a name="ch1.1.1"> 从源码编译安装</a></h4><ol>
+<li>通过以下URL下载Ruby源代码<ul>
+<li><a href="https://www.ruby-lang.org/zh_cn/" target="_blank" rel="external">https://www.ruby-lang.org/zh_cn/</a></li>
+</ul>
+</li>
+<li>解压并安装
+请看<a href="https://github.com/HiKumho/blog/issues/31" target="_blank" rel="external">Linux 学习之软件安装:源码与Tarball </a></li>
+</ol>
+<h4 id="使用rbenv安装管理"><a href="#使用rbenv安装管理" class="headerlink" title=" 使用rbenv安装管理"></a><a name="ch1.1.2"> 使用rbenv安装管理</a></h4><p>请查看ruby-china的相关wiki  <a href="https://ruby-china.org/wiki/rbenv-guide" target="_blank" rel="external">https://ruby-china.org/wiki/rbenv-guide</a></p>
+<h3 id="编辑器"><a href="#编辑器" class="headerlink" title=" 编辑器"></a><a name="ch1.2"> 编辑器</a></h3><p>这里我选择使用vim来作为ruby/rails的开发工具</p>
+<p>其配置使用了<a href="https://github.com/tao12345666333/vim" target="_blank" rel="external">tao12345666333/vim</a></p>
+<h2 id="Rails开发环境搭建"><a href="#Rails开发环境搭建" class="headerlink" title=" Rails开发环境搭建"></a><a name="ch2"> Rails开发环境搭建</a></h2><p>我们使用Ruby的包管理器RubyGems可以很方便就下载到第三方套件</p>
+<h3 id="安装Rails"><a href="#安装Rails" class="headerlink" title=" 安装Rails"></a><a name="ch2.1"> 安装Rails</a></h3><p>安装指定版本的rails
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install rails -v 5.0.0.1 </div></pre></td></tr></table></figure></p>
+<h3 id="创建Rails项目"><a href="#创建Rails项目" class="headerlink" title=" 创建Rails项目"></a><a name="ch2.2"> 创建Rails项目</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rails new appname</div></pre></td></tr></table></figure>
+<p>rails在创建项目时,会调用<code>bundle install</code>,<code>bundle</code>是rubygems的批处理,其会根据Gemfile安装所需的gem</p>
+<h3 id="Rails项目目录结构"><a href="#Rails项目目录结构" class="headerlink" title=" Rails项目目录结构"></a><a name="ch2.3"> Rails项目目录结构</a></h3><table>
+<thead>
+<tr>
+<th style="text-align:center">文件/目录</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">app/</td>
+<td style="text-align:center">应用的核心文件,包含模型/视图/控制器等方法</td>
+</tr>
+<tr>
+<td style="text-align:center">app/assets</td>
+<td style="text-align:center">应用的资源文件,如CSS/JS/图像等</td>
+</tr>
+<tr>
+<td style="text-align:center">bin/</td>
+<td style="text-align:center">可执行二进制文件</td>
+</tr>
+<tr>
+<td style="text-align:center">bin/rails</td>
+<td style="text-align:center">生成代码,打开终端会话或者启动本机服务器程序</td>
+</tr>
+<tr>
+<td style="text-align:center">config/</td>
+<td style="text-align:center">应用的配置</td>
+</tr>
+<tr>
+<td style="text-align:center">db/</td>
+<td style="text-align:center">数据库相关的文件</td>
+</tr>
+<tr>
+<td style="text-align:center">doc/</td>
+<td style="text-align:center">应用的文档</td>
+</tr>
+<tr>
+<td style="text-align:center">lib/</td>
+<td style="text-align:center">代码库模块文件</td>
+</tr>
+<tr>
+<td style="text-align:center">lib/assets</td>
+<td style="text-align:center">代码库的资源文件</td>
+</tr>
+<tr>
+<td style="text-align:center">log/</td>
+<td style="text-align:center">应用的日志文件</td>
+</tr>
+<tr>
+<td style="text-align:center">public/</td>
+<td style="text-align:center">公共可访问的文件,例如错误页面</td>
+</tr>
+<tr>
+<td style="text-align:center">test/</td>
+<td style="text-align:center">应用的测试</td>
+</tr>
+<tr>
+<td style="text-align:center">tmp/</td>
+<td style="text-align:center">临时文件</td>
+</tr>
+<tr>
+<td style="text-align:center">vendor/</td>
+<td style="text-align:center">第三方库,如插件和gem</td>
+</tr>
+<tr>
+<td style="text-align:center">vendor/assets</td>
+<td style="text-align:center">第三方库的资源文件</td>
+</tr>
+<tr>
+<td style="text-align:center">README.md</td>
+<td style="text-align:center">应用简介</td>
+</tr>
+<tr>
+<td style="text-align:center">Rakefile</td>
+<td style="text-align:center">使用rake命令执行的任务</td>
+</tr>
+<tr>
+<td style="text-align:center">Gemfile</td>
+<td style="text-align:center">应用所需的gem</td>
+</tr>
+<tr>
+<td style="text-align:center">Gemfile.lock</td>
+<td style="text-align:center">gem列表,确保这个应用的clone使用相同版本的gem</td>
+</tr>
+<tr>
+<td style="text-align:center">config.ru</td>
+<td style="text-align:center">Rack中间件的配置文件</td>
+</tr>
+<tr>
+<td style="text-align:center">.gitignore</td>
+<td style="text-align:center">记录不需要保存在git的文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Ruby-Rails一些工具-RVM-rbenv-RubyGems-Gem等"><a href="#Ruby-Rails一些工具-RVM-rbenv-RubyGems-Gem等" class="headerlink" title=" Ruby/Rails一些工具:RVM/rbenv,RubyGems,Gem等"></a><a name="ch2.4"> Ruby/Rails一些工具:RVM/rbenv,RubyGems,Gem等</a></h3><h4 id="RVM-rbenv"><a href="#RVM-rbenv" class="headerlink" title=" RVM/rbenv"></a><a name="ch2.4.1"> RVM/rbenv</a></h4><p>用于安装Ruby环境，管理多个Ruby环境(管理开发的每个Ruby应用使用机器上哪个Ruby环境),Ruby环境不仅仅是Ruby本身，还包括依赖的第三方Ruby插件。都由RVM/rbenv管理</p>
+<h4 id="RubyGems"><a href="#RubyGems" class="headerlink" title=" RubyGems"></a><a name="ch2.4.2"> RubyGems</a></h4><p>RubyGems是一个方便而强大的Ruby程序包管理器（ package manager），类似RedHat的RPM.它将一个Ruby应用程序打包到一个gem里，作为一个安装单元。无需安装，最新的Ruby版本已经包含RubyGems</p>
+<h4 id="Gems"><a href="#Gems" class="headerlink" title=" Gems"></a><a name="ch2.4.3"> Gems</a></h4><p>Gem是封装起来的Ruby应用程序或代码库。</p>
+<p>在终端使用的gem命令，是指通过RubyGems管理Gem包。</p>
+<h4 id="Gemfile"><a href="#Gemfile" class="headerlink" title=" Gemfile"></a><a name="ch2.4.4"> Gemfile</a></h4><p>定义应用依赖哪些第三方包，bundle根据该配置去寻找这些包</p>
+<h4 id="Bundle"><a href="#Bundle" class="headerlink" title=" Bundle"></a><a name="ch2.4.5"> Bundle</a></h4><p>相当于RubyGems的批处理运行。在配置文件gemfilel里说明你的应用依赖哪些第三方包，他自动帮你下载安装多个包，并且会下载这些包依赖的包。</p>
+<h4 id="Rake"><a href="#Rake" class="headerlink" title=" Rake"></a><a name="ch2.4.6"> Rake</a></h4><p>Rake是一门构建语言，和make类似。Rake是用Ruby写的，它支持自己的DSL用来处理和维护Ruby程序。 Rails用rake扩展来完成多种不容任务，如数据库初始化、更新等。</p>
+<h4 id="Rakefile"><a href="#Rakefile" class="headerlink" title=" Rakefile"></a><a name="ch2.4.7"> Rakefile</a></h4><p>Rakefile是由Ruby编写，Rake的命令执行就是由Rakefile文件定义</p>
+<h2 id="版本控制-git"><a href="#版本控制-git" class="headerlink" title=" 版本控制:git"></a><a name="ch3"> 版本控制:git</a></h2><p>我们这里使用的版本控制工具是git</p>
+<p>以下是git的一些命令：</p>
+<ul>
+<li>用户配置：<code>git config --global user.name &#39;yourname&#39; user.email &#39;youremail&#39;</code></li>
+<li>初始化本地仓库： <code>git init</code></li>
+<li>更新文件至本地仓库：<code>git add -A</code>(未正式提交操作,数据保存在暂存区)</li>
+<li>查看暂存区状态 ： <code>git status</code></li>
+<li>正式提交操作 ： <code>git commit -m ”note“</code></li>
+<li>查看提交日志 ： <code>git log</code></li>
+<li>回退前次提交状态： <code>git checkout -f</code></li>
+<li>创建分支并切换 : <code>git checkout -b &lt;branchname&gt;</code></li>
+<li>切换分支：<code>git checkout &lt;branchname&gt;</code></li>
+<li>删除分支：<code>git branch -d &lt;branchname&gt;</code></li>
+<li>当前分支合并某分支：<code>git merge &lt;branchname&gt;</code></li>
+<li>添加远程仓库 ： <code>git remote add &lt;remotename&gt; git@servername:&lt;username&gt;/repositoriesname.git</code></li>
+<li>删除远程仓库：<code>git remote remove &lt;remotename&gt;</code></li>
+</ul>
+<h2 id="云部署服务：Heroku"><a href="#云部署服务：Heroku" class="headerlink" title=" 云部署服务：Heroku"></a><a name="ch4"> 云部署服务：Heroku</a></h2><p>我们先下载Linux(ubuntu)的Heroku组件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh</div></pre></td></tr></table></figure></p>
+<p>查看是否安装成功
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku version</div></pre></td></tr></table></figure></p>
+<p>登录heroku账号
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku login</div></pre></td></tr></table></figure></p>
+<p>在项目下创建heroku分支
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku create</div></pre></td></tr></table></figure></p>
+<p>部署项目至heroku上
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push heroku master</div></pre></td></tr></table></figure>
+之后其会返回一个heroku的二级域名给我们</p>
+<p>如果不喜欢这个域名,我们可以重命名
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku rename newname</div></pre></td></tr></table></figure>
+注意newname是唯一的,别人注册过就不能使用了</p>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Linux 服务器篇 远端连接服务器SSH]]></title>
       <url>http://yoursite.com/2016/09/09/Linux-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AF%87-%E8%BF%9C%E7%AB%AF%E8%BF%9E%E6%8E%A5%E6%9C%8D%E5%8A%A1%E5%99%A8SSH/</url>
       <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言 "></a><a name="ch1">前言 </a></h2><p>sshd是一个连线服务,我们可以在远端主机通过ssh访问我们主机,获取shell修改主机设置

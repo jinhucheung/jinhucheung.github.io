@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2016-09-09T13:51:14.000Z</updated>
+  <updated>2016-09-17T13:13:26.000Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -14,6 +14,180 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ruby/Rails Linux搭建Rails开发环境</title>
+    <link href="http://yoursite.com/2016/09/17/Ruby-Rails-Linux%E6%90%AD%E5%BB%BARails%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/"/>
+    <id>http://yoursite.com/2016/09/17/Ruby-Rails-Linux搭建Rails开发环境/</id>
+    <published>2016-09-17T11:46:06.000Z</published>
+    <updated>2016-09-17T13:13:26.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Ruby开发环境搭建"><a href="#Ruby开发环境搭建" class="headerlink" title=" Ruby开发环境搭建"></a><a name="ch1"> Ruby开发环境搭建</a></h2><h3 id="Ruby安装"><a href="#Ruby安装" class="headerlink" title=" Ruby安装"></a><a name="ch1.1"> Ruby安装</a></h3><p>Ruby安装方式可以分为两种,一种是源码编译安装,另一种是第三方工具RVM/rbenv来安装管理Ruby环境</p>
+<h4 id="从源码编译安装"><a href="#从源码编译安装" class="headerlink" title=" 从源码编译安装"></a><a name="ch1.1.1"> 从源码编译安装</a></h4><ol>
+<li>通过以下URL下载Ruby源代码<ul>
+<li><a href="https://www.ruby-lang.org/zh_cn/" target="_blank" rel="external">https://www.ruby-lang.org/zh_cn/</a></li>
+</ul>
+</li>
+<li>解压并安装
+请看<a href="https://github.com/HiKumho/blog/issues/31" target="_blank" rel="external">Linux 学习之软件安装:源码与Tarball </a></li>
+</ol>
+<h4 id="使用rbenv安装管理"><a href="#使用rbenv安装管理" class="headerlink" title=" 使用rbenv安装管理"></a><a name="ch1.1.2"> 使用rbenv安装管理</a></h4><p>请查看ruby-china的相关wiki  <a href="https://ruby-china.org/wiki/rbenv-guide" target="_blank" rel="external">https://ruby-china.org/wiki/rbenv-guide</a></p>
+<h3 id="编辑器"><a href="#编辑器" class="headerlink" title=" 编辑器"></a><a name="ch1.2"> 编辑器</a></h3><p>这里我选择使用vim来作为ruby/rails的开发工具</p>
+<p>其配置使用了<a href="https://github.com/tao12345666333/vim" target="_blank" rel="external">tao12345666333/vim</a></p>
+<h2 id="Rails开发环境搭建"><a href="#Rails开发环境搭建" class="headerlink" title=" Rails开发环境搭建"></a><a name="ch2"> Rails开发环境搭建</a></h2><p>我们使用Ruby的包管理器RubyGems可以很方便就下载到第三方套件</p>
+<h3 id="安装Rails"><a href="#安装Rails" class="headerlink" title=" 安装Rails"></a><a name="ch2.1"> 安装Rails</a></h3><p>安装指定版本的rails
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ gem install rails -v 5.0.0.1 </div></pre></td></tr></table></figure></p>
+<h3 id="创建Rails项目"><a href="#创建Rails项目" class="headerlink" title=" 创建Rails项目"></a><a name="ch2.2"> 创建Rails项目</a></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ rails new appname</div></pre></td></tr></table></figure>
+<p>rails在创建项目时,会调用<code>bundle install</code>,<code>bundle</code>是rubygems的批处理,其会根据Gemfile安装所需的gem</p>
+<h3 id="Rails项目目录结构"><a href="#Rails项目目录结构" class="headerlink" title=" Rails项目目录结构"></a><a name="ch2.3"> Rails项目目录结构</a></h3><table>
+<thead>
+<tr>
+<th style="text-align:center">文件/目录</th>
+<th style="text-align:center">作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">app/</td>
+<td style="text-align:center">应用的核心文件,包含模型/视图/控制器等方法</td>
+</tr>
+<tr>
+<td style="text-align:center">app/assets</td>
+<td style="text-align:center">应用的资源文件,如CSS/JS/图像等</td>
+</tr>
+<tr>
+<td style="text-align:center">bin/</td>
+<td style="text-align:center">可执行二进制文件</td>
+</tr>
+<tr>
+<td style="text-align:center">bin/rails</td>
+<td style="text-align:center">生成代码,打开终端会话或者启动本机服务器程序</td>
+</tr>
+<tr>
+<td style="text-align:center">config/</td>
+<td style="text-align:center">应用的配置</td>
+</tr>
+<tr>
+<td style="text-align:center">db/</td>
+<td style="text-align:center">数据库相关的文件</td>
+</tr>
+<tr>
+<td style="text-align:center">doc/</td>
+<td style="text-align:center">应用的文档</td>
+</tr>
+<tr>
+<td style="text-align:center">lib/</td>
+<td style="text-align:center">代码库模块文件</td>
+</tr>
+<tr>
+<td style="text-align:center">lib/assets</td>
+<td style="text-align:center">代码库的资源文件</td>
+</tr>
+<tr>
+<td style="text-align:center">log/</td>
+<td style="text-align:center">应用的日志文件</td>
+</tr>
+<tr>
+<td style="text-align:center">public/</td>
+<td style="text-align:center">公共可访问的文件,例如错误页面</td>
+</tr>
+<tr>
+<td style="text-align:center">test/</td>
+<td style="text-align:center">应用的测试</td>
+</tr>
+<tr>
+<td style="text-align:center">tmp/</td>
+<td style="text-align:center">临时文件</td>
+</tr>
+<tr>
+<td style="text-align:center">vendor/</td>
+<td style="text-align:center">第三方库,如插件和gem</td>
+</tr>
+<tr>
+<td style="text-align:center">vendor/assets</td>
+<td style="text-align:center">第三方库的资源文件</td>
+</tr>
+<tr>
+<td style="text-align:center">README.md</td>
+<td style="text-align:center">应用简介</td>
+</tr>
+<tr>
+<td style="text-align:center">Rakefile</td>
+<td style="text-align:center">使用rake命令执行的任务</td>
+</tr>
+<tr>
+<td style="text-align:center">Gemfile</td>
+<td style="text-align:center">应用所需的gem</td>
+</tr>
+<tr>
+<td style="text-align:center">Gemfile.lock</td>
+<td style="text-align:center">gem列表,确保这个应用的clone使用相同版本的gem</td>
+</tr>
+<tr>
+<td style="text-align:center">config.ru</td>
+<td style="text-align:center">Rack中间件的配置文件</td>
+</tr>
+<tr>
+<td style="text-align:center">.gitignore</td>
+<td style="text-align:center">记录不需要保存在git的文件</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Ruby-Rails一些工具-RVM-rbenv-RubyGems-Gem等"><a href="#Ruby-Rails一些工具-RVM-rbenv-RubyGems-Gem等" class="headerlink" title=" Ruby/Rails一些工具:RVM/rbenv,RubyGems,Gem等"></a><a name="ch2.4"> Ruby/Rails一些工具:RVM/rbenv,RubyGems,Gem等</a></h3><h4 id="RVM-rbenv"><a href="#RVM-rbenv" class="headerlink" title=" RVM/rbenv"></a><a name="ch2.4.1"> RVM/rbenv</a></h4><p>用于安装Ruby环境，管理多个Ruby环境(管理开发的每个Ruby应用使用机器上哪个Ruby环境),Ruby环境不仅仅是Ruby本身，还包括依赖的第三方Ruby插件。都由RVM/rbenv管理</p>
+<h4 id="RubyGems"><a href="#RubyGems" class="headerlink" title=" RubyGems"></a><a name="ch2.4.2"> RubyGems</a></h4><p>RubyGems是一个方便而强大的Ruby程序包管理器（ package manager），类似RedHat的RPM.它将一个Ruby应用程序打包到一个gem里，作为一个安装单元。无需安装，最新的Ruby版本已经包含RubyGems</p>
+<h4 id="Gems"><a href="#Gems" class="headerlink" title=" Gems"></a><a name="ch2.4.3"> Gems</a></h4><p>Gem是封装起来的Ruby应用程序或代码库。</p>
+<p>在终端使用的gem命令，是指通过RubyGems管理Gem包。</p>
+<h4 id="Gemfile"><a href="#Gemfile" class="headerlink" title=" Gemfile"></a><a name="ch2.4.4"> Gemfile</a></h4><p>定义应用依赖哪些第三方包，bundle根据该配置去寻找这些包</p>
+<h4 id="Bundle"><a href="#Bundle" class="headerlink" title=" Bundle"></a><a name="ch2.4.5"> Bundle</a></h4><p>相当于RubyGems的批处理运行。在配置文件gemfilel里说明你的应用依赖哪些第三方包，他自动帮你下载安装多个包，并且会下载这些包依赖的包。</p>
+<h4 id="Rake"><a href="#Rake" class="headerlink" title=" Rake"></a><a name="ch2.4.6"> Rake</a></h4><p>Rake是一门构建语言，和make类似。Rake是用Ruby写的，它支持自己的DSL用来处理和维护Ruby程序。 Rails用rake扩展来完成多种不容任务，如数据库初始化、更新等。</p>
+<h4 id="Rakefile"><a href="#Rakefile" class="headerlink" title=" Rakefile"></a><a name="ch2.4.7"> Rakefile</a></h4><p>Rakefile是由Ruby编写，Rake的命令执行就是由Rakefile文件定义</p>
+<h2 id="版本控制-git"><a href="#版本控制-git" class="headerlink" title=" 版本控制:git"></a><a name="ch3"> 版本控制:git</a></h2><p>我们这里使用的版本控制工具是git</p>
+<p>以下是git的一些命令：</p>
+<ul>
+<li>用户配置：<code>git config --global user.name &#39;yourname&#39; user.email &#39;youremail&#39;</code></li>
+<li>初始化本地仓库： <code>git init</code></li>
+<li>更新文件至本地仓库：<code>git add -A</code>(未正式提交操作,数据保存在暂存区)</li>
+<li>查看暂存区状态 ： <code>git status</code></li>
+<li>正式提交操作 ： <code>git commit -m ”note“</code></li>
+<li>查看提交日志 ： <code>git log</code></li>
+<li>回退前次提交状态： <code>git checkout -f</code></li>
+<li>创建分支并切换 : <code>git checkout -b &lt;branchname&gt;</code></li>
+<li>切换分支：<code>git checkout &lt;branchname&gt;</code></li>
+<li>删除分支：<code>git branch -d &lt;branchname&gt;</code></li>
+<li>当前分支合并某分支：<code>git merge &lt;branchname&gt;</code></li>
+<li>添加远程仓库 ： <code>git remote add &lt;remotename&gt; git@servername:&lt;username&gt;/repositoriesname.git</code></li>
+<li>删除远程仓库：<code>git remote remove &lt;remotename&gt;</code></li>
+</ul>
+<h2 id="云部署服务：Heroku"><a href="#云部署服务：Heroku" class="headerlink" title=" 云部署服务：Heroku"></a><a name="ch4"> 云部署服务：Heroku</a></h2><p>我们先下载Linux(ubuntu)的Heroku组件
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget -O- https://toolbelt.heroku.com/install-ubuntu.sh | sh</div></pre></td></tr></table></figure></p>
+<p>查看是否安装成功
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku version</div></pre></td></tr></table></figure></p>
+<p>登录heroku账号
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku login</div></pre></td></tr></table></figure></p>
+<p>在项目下创建heroku分支
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku create</div></pre></td></tr></table></figure></p>
+<p>部署项目至heroku上
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git push heroku master</div></pre></td></tr></table></figure>
+之后其会返回一个heroku的二级域名给我们</p>
+<p>如果不喜欢这个域名,我们可以重命名
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">heroku rename newname</div></pre></td></tr></table></figure>
+注意newname是唯一的,别人注册过就不能使用了</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Ruby开发环境搭建&quot;&gt;&lt;a href=&quot;#Ruby开发环境搭建&quot; class=&quot;headerlink&quot; title=&quot; Ruby开发环境搭建&quot;&gt;&lt;/a&gt;&lt;a name=&quot;ch1&quot;&gt; Ruby开发环境搭建&lt;/a&gt;&lt;/h2&gt;&lt;h3 id=&quot;Ruby安装&quot;&gt;&lt;a hr
+    
+    </summary>
+    
+      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
+    
+    
+      <category term="Ruby/Rails" scheme="http://yoursite.com/tags/Ruby-Rails/"/>
+    
+      <category term="Linux" scheme="http://yoursite.com/tags/Linux/"/>
+    
+  </entry>
   
   <entry>
     <title>Linux 服务器篇 远端连接服务器SSH</title>
@@ -2578,104 +2752,6 @@ LVM中的最小单位是物理扩展块(PE),有点类似blocks,PE是PV的最小�
     <summary type="html">
     
       &lt;h2 id=&quot;磁盘额度-quota&quot;&gt;&lt;a href=&quot;#磁盘额度-quota&quot; class=&quot;headerlink&quot; title=&quot; 磁盘额度(quota)&quot;&gt;&lt;/a&gt;&lt;a name=&quot;ch1&quot;&gt; 磁盘额度(quota)&lt;/a&gt;&lt;/h2&gt;&lt;h3 id=&quot;什么是quota&quot;&gt;&lt;
-    
-    </summary>
-    
-      <category term="学习" scheme="http://yoursite.com/categories/%E5%AD%A6%E4%B9%A0/"/>
-    
-    
-      <category term="linux" scheme="http://yoursite.com/tags/linux/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Linux 账号管理与ACL权限</title>
-    <link href="http://yoursite.com/2016/09/06/Linux-%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86%E4%B8%8EACL%E6%9D%83%E9%99%90/"/>
-    <id>http://yoursite.com/2016/09/06/Linux-账号管理与ACL权限/</id>
-    <published>2016-09-06T12:52:44.000Z</published>
-    <updated>2016-09-06T12:58:18.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="用户管理"><a href="#用户管理" class="headerlink" title="  用户管理"></a><a name="ch1">  用户管理</a></h2><p>Linux用户信息保存在<code>/etc/passwd</code>,用户密码信息保存在<code>/etc/shadow</code>,用户组信息保存在<code>/etc/group</code>,用户组密码信息保存在<code>/etc/gshadow</code>中.</p>
-<p>下面我们以手工创建一个用户为例,了解上述各文件的结构.</p>
-<h3 id="手工新建用户"><a href="#手工新建用户" class="headerlink" title="  手工新建用户"></a><a name="ch1.1">  手工新建用户</a></h3><p>手工新建用户流程 :</p>
-<ol>
-<li>新建所需要的用户组 (<code>vim /etc/group</code>)</li>
-<li>将<code>/etc/group</code>与<code>/etc/gshadow</code>同步 (<code>grpconv</code>)</li>
-<li>新建用户信息 (<code>vim /etc/passwd</code>)</li>
-<li>将<code>/etc/passwd</code>与<code>/etc/shadow</code>同步 (<code>pwconv</code>)</li>
-<li>新建用户密码 (<code>passwd username</code>)</li>
-<li>新建用户主文件夹 (<code>cp -a /etc/skel /home/username</code>)</li>
-<li>更改用户主文件夹属性 (<code>chown -R username:groupname /home/username</code>)</li>
-<li>检查设置 (<code>pwck</code>)</li>
-</ol>
-<p>具体步骤:
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">1.新建所需的用户组  (vim /etc/group)</div><div class="line">在最后一行加入一条用户组信息(其由4个字段组成, 组名:用户组密码(通常在/etc/gshadow设置,不设置以x表示)</div><div class="line">:GID(通常500以下保留给系统,新建的用户组用现有最大GID+1):用户组成员)</div><div class="line">比如加入一条用户组信息</div><div class="line">normal:x:1001:</div><div class="line"></div><div class="line">2.将/etc/group与/etc/gshadow同步 (grpconv)</div><div class="line">我们使用grpconv将在/etc/group加入的用户组信息同步到/etc/gshadow中.</div><div class="line">/etc/gshadow的结构也由4个字段组成,组名:密码列(开头以!表示不合法密码):用户组管理员:组员</div><div class="line">比如加入一条用户组密码信息(grpconv会同步创建)</div><div class="line">normal:*::</div><div class="line"></div><div class="line">3.新建用户信息 (vim /etc/passwd)</div><div class="line">同样我们在最后一行加入一条用户信息,(由7个字段组成,用户名:用户密码(也由/etc/shadow中代替)</div><div class="line">:UID(通常500以下为系统账号,100以下为系统默认创建,root=0):GID(初始用户组):备注:用户主目录:shell)</div><div class="line">比如加入一条用户信息</div><div class="line">myuser:x:1000:1002::/home/myuser:/bin/bash</div><div class="line"></div><div class="line">4.将/etc/passwd与/etc/shadow同步 (pwconv)</div><div class="line">pwconv将/etc/passwd的用户信息同步到/etc/shadow中,/etc/shadow由9个字段组成,用户名:用户密码(通常由MD5加密后):</div><div class="line">最近密码修改的时间(以天数为单位,后面的字段也是):密码可再次修改的最短时间:</div><div class="line">密码需要重新修改的时间:密码需重新修改的提醒时间(以上个字段为基准):</div><div class="line">密码过期后的宽限时间:账号失效时间(过了这个时间,账号就失效):保留</div><div class="line"></div><div class="line">比如下面这条用户密码信息(pwconv会帮我们创建,其会去参考/etc/default/useradd与/etc/login.defs)</div><div class="line">myuser:$6$4EZkAqYO$ghF87vQWxWAB17Z05OFQrCNfPrkWpceUhSzmxXHQ57hvH/U4PvVPs7r</div><div class="line">tzRAt17VNMYcUD2yhdGgZirNGqX6Il.:17000:0:99999:7::::</div><div class="line"></div><div class="line">5.新建用户密码 (passwd username)</div><div class="line">新建密码我们使用工具passwd来信息</div><div class="line"></div><div class="line">6.新建用户主文件夹 (cp -a /etc/skel /home/username)</div><div class="line">当然我们可以直接新建/home/username,但是我们有些默认的文件想在用户创建时就给予用户,</div><div class="line">通常会将/etc/skel文件给用户,系统创建时也是将/etc/skel的文件给与用户</div><div class="line">(同样,这个操作系统参考/etc/default/useradd的配置),所以我们可以将文件加到/etc/skel中</div><div class="line"></div><div class="line">7.更改用户主文件夹属性及权限 (chown -R username:groupname /home/username 与chmod)</div><div class="line">将用户主文件夹及子文件都改成用户所属</div><div class="line"></div><div class="line"></div><div class="line">8.检查设置 (pwck)</div><div class="line">pwck会报出设置错误信息</div><div class="line"></div></pre></td></tr></table></figure></p>
-<p>通过手工新建用户,我们知道系统在新建用户时会进行的操作,就是修改<code>/etc/passwd</code>  <code>/etc/shadow</code>
-<code>/etc/group</code> <code>/etc/gshadow</code>还有就是创建用户主文件夹</p>
-<h3 id="用户管理工具"><a href="#用户管理工具" class="headerlink" title="  用户管理工具"></a><a name="ch1.2">  用户管理工具</a></h3><h4 id="新建用户-useradd"><a href="#新建用户-useradd" class="headerlink" title="  新建用户 : useradd"></a><a name="ch1.2.1">  新建用户 : useradd</a></h4><p>useradd会参考/etc/default/useradd与/etc/login.defs文件来新建用户,其会去修改上述的/etc/passwd等4个文件</p>
-<p> /etc/default/useradd的默认配置(各系统可能不一样)
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">GROUP=100    # 默认的初始用户组</div><div class="line">HOME=/home  # 用户主文件夹所在目录</div><div class="line">INACTIVE=-1   # 密码过期宽限时间(-1 表示密码过期后永远不失效)</div><div class="line">EXPIRE=          # 账号失效时间</div><div class="line">SKEL=/etc/skel # 用户主文件夹参考目录</div><div class="line">CREATE_MAIL_SPOOL=no # 不创建用户邮件邮箱</div><div class="line">SHELL=/bin/sh   #默认的shell</div></pre></td></tr></table></figure></p>
-<p>/etc/login.defs的默认配置(各系统可能不一样)
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">PASS_MAX_DAYS   99999  #密码需要重新修改的时间</div><div class="line">PASS_MIN_DAYS  0  # 密码可再次修改的最短时间</div><div class="line">PASS_MIN_LEN  5  # 密码最短长度,已失效,被PAM模块代替(PAM是Linux下应用程序需要鉴定功能的调用的API)</div><div class="line">PASS_WARN_AGE 7 #密码需重新修改的提醒时间</div><div class="line"></div><div class="line">UID_MIN   500  # 一般用户最小的UID,小于500被系统保留</div><div class="line">UID_MAX  60000 # 一般用户最大的UID</div><div class="line">GID_MIN 500  # 用户组最小GID,小于500被系统保留</div><div class="line">GID_MAX 60000 # 用户组最大的GID</div><div class="line"></div><div class="line">UMASK 077  # 用户主文件夹的默认权限</div></pre></td></tr></table></figure></p>
-<p>useradd的基本格式是: useradd [参数] 用户名
-常用参数:</p>
-<ul>
-<li><code>m</code>  强制创建用户主目录</li>
-<li><code>M</code>  强制不创建用户主目录</li>
-<li><code>r</code>   创建系统账号</li>
-<li><code>G</code>  次要用户组,如果要添加用户组,也可以在这里指定 - <code>aG</code></li>
-<li><code>s</code>  指定shell</li>
-<li><code>d</code>  指定用户主目录</li>
-</ul>
-<h4 id="修改用户-usermod"><a href="#修改用户-usermod" class="headerlink" title="  修改用户 : usermod"></a><a name="ch1.2.2">  修改用户 : usermod</a></h4><p>usermod与useradd的参数类似, 这里列一些
-参数:</p>
-<ul>
-<li><code>l</code>  修改用户名,后接新的用户名</li>
-<li><code>L</code>  冻结用户密码,使其无法登录(其实就是在/etc/shadow中的密码字段最前面加了!!)</li>
-<li><code>U</code>  解冻用户</li>
-</ul>
-<h4 id="删除用户-userdel"><a href="#删除用户-userdel" class="headerlink" title="  删除用户 : userdel"></a><a name="ch1.2.3">  删除用户 : userdel</a></h4><p>userdel -r 会删除用户相关数据,删除了/etc/passwd,/etc/shadow,/etc/group,/etc/gshadow相关数据与/home/username,/var/spool/mail/username</p>
-<h3 id="用户密码管理工具"><a href="#用户密码管理工具" class="headerlink" title="  用户密码管理工具"></a><a name="ch1.3">  用户密码管理工具</a></h3><h4 id="修改用户密码-passwd-与chpasswd"><a href="#修改用户密码-passwd-与chpasswd" class="headerlink" title="  修改用户密码 : passwd 与chpasswd"></a><a name="ch1.3.1">  修改用户密码 : passwd 与chpasswd</a></h4><p>查看密码状态可以使用 passwd -S</p>
-<p>其中如果想在shell script中输入用户密码可以
-echo “Userpasswd” | passwd –stdin $username 或者 printf “Userpasswd\nUserpasswd\n” | passwd $username</p>
-<p>chpasswd也是用来修改密码的,其格式一定要”username:password”这个形式,如下
-echo “username:password” | chpasswd -m 
--m 以MD5加密</p>
-<h4 id="修改用户密码时间-chage"><a href="#修改用户密码时间-chage" class="headerlink" title="  修改用户密码时间 : chage"></a><a name="ch1.3.2">  修改用户密码时间 : chage</a></h4><p>记住我们/etc/shadow中有关密码时间由很多字段吧,chage -l 可以更直观地列出这些字段的信息.
-除外也可以用相关的参数去修改这些字段,如-d 修改最近一次改动密码的时间(如果我们想用户第一次登录系统后就要求其修改密码 可以 <code>chage -d 0 username</code>)</p>
-<h3 id="用户组管理工具"><a href="#用户组管理工具" class="headerlink" title="  用户组管理工具"></a><a name="ch1.4">  用户组管理工具</a></h3><h4 id="用户初始用户组与有效用户组"><a href="#用户初始用户组与有效用户组" class="headerlink" title="  用户初始用户组与有效用户组"></a><a name="ch1.4.1">  用户初始用户组与有效用户组</a></h4><p>当用户创建会指定用户组(-g),那个用户就是初始用户组,也可以那么说,/etc/passwd中相关用户信息的那个用户组字段就是初始用户组</p>
-<p>有效用户组就是当前用户作用的用户组,比如新建文件时的用户组信息等.</p>
-<p>显示当前用户的用户组信息可以使用<code>groups</code>(第1个用户组为有效用户组)或者<code>id</code></p>
-<p>切换当前有效用户组 可以使用<code>newgrp</code></p>
-<h4 id="新建用户组-groupadd"><a href="#新建用户组-groupadd" class="headerlink" title="  新建用户组 : groupadd"></a><a name="ch1.4.2">  新建用户组 : groupadd</a></h4><p>-r 会修改系统用户组</p>
-<h4 id="修改用户组信息-groupmod"><a href="#修改用户组信息-groupmod" class="headerlink" title="  修改用户组信息: groupmod"></a><a name="ch1.4.3">  修改用户组信息: groupmod</a></h4><p>groupmod会去修改/etc/group相关字段</p>
-<h4 id="删除用户组-groupdel"><a href="#删除用户组-groupdel" class="headerlink" title="  删除用户组:groupdel"></a><a name="ch1.4.4">  删除用户组:groupdel</a></h4><h4 id="用户组管理员-gpasswd"><a href="#用户组管理员-gpasswd" class="headerlink" title="  用户组管理员:gpasswd"></a><a name="ch1.4.5">  用户组管理员:gpasswd</a></h4><ul>
-<li>添加用户组密码:gpasswd groupname</li>
-<li>删除用户组密码:gpasswd -r groupname</li>
-<li>添加用户组管理员(那么其可以执行gpasswd):gpasswd -A user1,user2.. groupname</li>
-<li>添加用户组成员:gpasswd -M user1,user2…groupname</li>
-<li>添加用户至用户组:gpasswd -a user1 groupname</li>
-<li>删除用户:gpasswd -d user1 groupname</li>
-</ul>
-<h2 id="ACL权限"><a href="#ACL权限" class="headerlink" title="  ACL权限"></a><a name="ch2">  ACL权限</a></h2><p>ACL可以针对单一用户,单一用户组,单个文件进行rwx的权限设置.</p>
-<h3 id="启用ACL"><a href="#启用ACL" class="headerlink" title="  启用ACL"></a><a name="ch2.1">  启用ACL</a></h3><p>查看你需要设置的文件对应的文件系统是否启用ACL功能.</p>
-<p>首先查看文件系统的挂载情况:mount
-比如我要设置的文件在/的文件系统下,其挂载至/dev/sda9,我们用dumpe2fs -h /dev/sda9的超级块的Default mount options情况.</p>
-<p>如果没有acl功能,可以在/etc/fstab中options加入acl.这样开机就是启动acl. </p>
-<h3 id="设置ACL-setfacl"><a href="#设置ACL-setfacl" class="headerlink" title="  设置ACL:setfacl"></a><a name="ch2.2">  设置ACL:setfacl</a></h3><p>setfacl最常用的参数就是 <code>-m</code>,设置权限列表, 比如 <code>-m u:user1:rx</code>就是针对某目录设置user1可以rx权限
-删除acl权限可以使用 <code>-b</code></p>
-<p>如果想某目录下所有文件都设置acl权限可以这样设置权限列表 <code>-m d:u:user1:rx</code></p>
-<h3 id="查看ACL-getfacl"><a href="#查看ACL-getfacl" class="headerlink" title="  查看ACL:getfacl"></a><a name="ch23">  查看ACL:getfacl</a></h3><p>当我们文件设置setfacl后,ls查看的文件属性中权限字段会有个<code>+</code>,表示设置了acl权限.
-如果要详细查看acl信息,使用getfacl</p>
-<h2 id="用户身份切换工具"><a href="#用户身份切换工具" class="headerlink" title="  用户身份切换工具"></a><a name="ch3">  用户身份切换工具</a></h2><h3 id="切换用户-su"><a href="#切换用户-su" class="headerlink" title="  切换用户:su"></a><a name="ch3.1">  切换用户:su</a></h3><p>如果单纯使用<code>su username</code>来切换用户,系统会以non-login shell方式去读取用户相关环境变量(只会读取~/.bashrc),如果向使用login shell以完整的流程去读取用户相关的环境变量可以使用 <code>su - username</code></p>
-<h3 id="以root身份去执行命令-sudo"><a href="#以root身份去执行命令-sudo" class="headerlink" title="  以root身份去执行命令:sudo"></a><a name="ch3.2">  以root身份去执行命令:sudo</a></h3><p>一般用户想使用sudo,获取root身份去执行一次命令,需要此用户被选中为sudoer(要root在/etc/sudoers设置).
-/etc/sudoers文件的格式
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"># Host alias specification</div><div class="line"></div><div class="line"> # User alias specification</div><div class="line">User_Alias ADMPW = kumho, jinhu  # 设置用户集合</div><div class="line"></div><div class="line"> # Cmnd alias specification</div><div class="line">Cmnd_Alias ADMPWCOM=!/usr/bin/passwd, !/usr/bin/passwd root, /usr/bin passwd [A-Za-z]*  # 设置命令集  命令一定要以绝对路径写</div><div class="line"></div><div class="line"> # User privilege specification</div><div class="line"> root    ALL=(ALL:ALL) ALL  # 用户   登录者的来源主机名=(可切换的身份:用户组) 命令</div><div class="line"> ADMPW   ALL=(ALL:ALL) ADMPWCOM</div><div class="line"></div><div class="line"> # Members of the admin group may gain root privileges</div><div class="line"> %admin ALL=(ALL) ALL     #admin用户组成员都是sudoer</div><div class="line"></div></pre></td></tr></table></figure></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;用户管理&quot;&gt;&lt;a href=&quot;#用户管理&quot; class=&quot;headerlink&quot; title=&quot;  用户管理&quot;&gt;&lt;/a&gt;&lt;a name=&quot;ch1&quot;&gt;  用户管理&lt;/a&gt;&lt;/h2&gt;&lt;p&gt;Linux用户信息保存在&lt;code&gt;/etc/passwd&lt;/code&gt;,用户密
     
     </summary>
     
