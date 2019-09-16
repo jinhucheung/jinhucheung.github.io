@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="<%= config.language %>">
+<head>
+    <%- partial('_partial/head',{cache: true}) %>
+</head>
+<body>
+    <div class="wrapper">
+        <%- partial('_partial/header',{cache: true}) %>
+        <div class="main">
+            <%- body %>
+        </div>
+        <%- partial('_partial/footer',{cache: true}) %>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>
