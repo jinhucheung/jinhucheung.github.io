@@ -214,6 +214,8 @@ $ cap production puma:config
 $ cap production sidekiq:start
 ```
 
+当前代码可看: [capistrano-demo:v0.1.1](https://github.com/jinhucheung/capistrano-demo/tree/v0.1.1)
+
 ## 添加 NGINX 配置
 
 为我们部署的应用添加 NGINX 配置:
