@@ -99,7 +99,7 @@ $ firewall-cmd --zone=public --add-port=443/tcp --permanent
 $ firewall-cmd --reload
 ```
 
-## FQA
+## Q&A
 
 1. `telnet $server_ip 443` 返回 `No route to host` ?
 
