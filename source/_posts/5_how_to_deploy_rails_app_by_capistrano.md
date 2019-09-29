@@ -138,7 +138,7 @@ $ cap production deploy --dry-run
 $ cap production deploy
 ```
 
-当部署成功后，你可以看到服务器 deploy 用户多了 capistrano-demo 目录，其结果类似下面:
+当部署成功后，你可以看到服务器 deploy 用户多了 capistrano-demo 目录，其结构类似下面:
 
 ```
 ├── current -> /home/deploy/capistrano-demo/releases/20190927081948
