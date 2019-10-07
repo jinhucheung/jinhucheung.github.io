@@ -265,7 +265,7 @@ server {
 
 重启 NGINX，查看是否能正常访问我们的应用～
 
-**Note**: 当我们应用使用 unix 协议时， NGINX 进程所属用户可能没有权限访问我们部署目录，这时候将会获得 403，我们需要在 NGINX 配置文件中调整 NGINX 进程用户或者将应用改成 tcp 协议。
+**Note**: 当我们应用使用 unix 协议时， NGINX 进程所属用户可能没有权限访问我们部署目录，这时候将会获得 403，我们需要在 NGINX 配置文件中调整 NGINX 进程用户或者将应用改成 tcp 协议。 **没有权限这是由于我们部署到 deploy 用户上 home 目录下，须确保 NGINX 用户可读到 deploy 的 home 目录。**
 
 ## Capistrano 部署流
 
@@ -314,8 +314,9 @@ after "deploy:published", "restart_sidekiq"
 
 这是问题多半是我们修改了 config/master.key，导致解密 credentials.yml.enc 错误引起的，此时需要重新生成这两个文件，参考 [How to regenerate the master key for Rails 5.2 credentials](https://gist.github.com/db0sch/19c321cbc727917bc0e12849a7565af9)
 
-2. 为什么 NGINX 默认 nobody 用户开启， tcp 协议应用获取资源没有权限问题， 而 unix 协议应用有权限问题？
+2. 为什么 NGINX 默认 nobody 用户开启， TCP/IP domain sockets 获取资源没有权限问题， 而 UNIX domain socket 有权限问题？
 
+因为 UNIX domain socket 需要读取 sock 文件, 须确保 NGINX 进程用户有权限读取到此文件
 ## 参考
 
 1. [linux命令之远程登录/无密码登录-ssh,ssh-keygen,ssh-copy-id](https://blog.csdn.net/wangjunjun2008/article/details/20037101)
@@ -327,3 +328,5 @@ after "deploy:published", "restart_sidekiq"
 7. [Rails 5.2 + Puma + Capistrano3 + Nginx + Sidekiq 自动化部署](https://ruby-china.org/topics/36924)
 8. [Sidekiq 精通 36 分钟](https://ruby-china.org/topics/19891)
 9. [How can I serve assets in /public that are not part of the asset pipeline with puma/nginx?](https://stackoverflow.com/questions/34963529/how-can-i-serve-assets-in-public-that-are-not-part-of-the-asset-pipeline-with-p)
+10. [What's the difference between Unix socket and TCP/IP socket?](https://serverfault.com/questions/124517/whats-the-difference-between-unix-socket-and-tcp-ip-socket)
+11. [TCP/IP Socket和UNIX Socket区别](https://my.oschina.net/u/1433006/blog/1612446)
