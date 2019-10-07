@@ -99,17 +99,17 @@ $ firewall-cmd --zone=public --add-port=443/tcp --permanent
 $ firewall-cmd --reload
 ```
 
-## Q&A
+## NGINX 开启 WebSocket 代理
 
-1. `telnet $server_ip 443` 返回 `No route to host` ?
+当客户端使用 ws 或者 wss 协议请求服务端进行 WebSocket 通信时，如果服务端返回连接拒绝或失败，返回如下:
 
-须确保服务器开放 443 端口，且 443 端口在安全组入网规则中。
+```
+webSocket connection to failed: Error during WebSocket handshake: Unexpected response code: 404
+```
 
-2. webSocket connection to failed: Error during WebSocket handshake: Unexpected response code: 404?
+这很可能是因为 NGINX 没有配置 WebSocket 代理的原因。
 
-当客户端使用 ws 或者 wss 协议请求服务端进行 WebSocket 通信时，如果服务端返回连接拒绝或失败，很可能是 NGINX 的配置问题。WebSocket 工作在 HTTP 的 80 和 443 端口。
-
-NGINX 作为反向代理服务，在接收到客户端的 WebSocket 连接请求时，须请求后端服务升级协议为 WebSocket，进行如下配置:
+NGINX 作为反向代理服务，在接收到客户端的 WebSocket 连接请求(WebSocket 工作在 HTTP 的 80 和 443 端口)时，须请求后端服务升级协议为 WebSocket，进行如下配置:
 
 ```
 map $http_upgrade $connection_upgrade {
@@ -128,6 +128,12 @@ server {
   }
 }
 ```
+
+## Q&A
+
+1. `telnet $server_ip 443` 返回 `No route to host` ?
+
+须确保服务器开放 443 端口，且 443 端口在安全组入网规则中。
 
 ## 参考
 
