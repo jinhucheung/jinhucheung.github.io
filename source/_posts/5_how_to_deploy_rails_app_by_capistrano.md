@@ -1,7 +1,7 @@
 ---
 title: 使用 Capistrano 部署 Rails 应用
 date: 2019-09-28 16:43:42
-tags: [capistrano, ruby, rails, web, deployment, 运维]
+tags: [Capistrano, Ruby, Rails, Web, Deployment, 运维]
 categories: [Web Backend]
 ---
 
@@ -317,6 +317,7 @@ after "deploy:published", "restart_sidekiq"
 2. 为什么 NGINX 默认 nobody 用户开启， TCP/IP domain sockets 获取资源没有权限问题， 而 UNIX domain socket 有权限问题？
 
 因为 UNIX domain socket 需要读取 sock 文件, 须确保 NGINX 进程用户有权限读取到此文件
+
 ## 参考
 
 1. [linux命令之远程登录/无密码登录-ssh,ssh-keygen,ssh-copy-id](https://blog.csdn.net/wangjunjun2008/article/details/20037101)

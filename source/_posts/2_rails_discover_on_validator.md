@@ -1,7 +1,7 @@
 ---
 title: Rails 发现 - Validator 实例变量的坑
 date: 2018-09-10 22:05:47
-tags: [ruby, rails]
+tags: [Ruby, Rails]
 categories: [Web Backend]
 ---
 

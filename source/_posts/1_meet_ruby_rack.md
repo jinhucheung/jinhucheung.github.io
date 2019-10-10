@@ -1,7 +1,7 @@
 ---
 title: 认识 Ruby Rack
 date: 2018-08-24 23:14:13
-tags: [ruby, rack, web]
+tags: [Ruby, Rack, Web]
 categories: [Web Backend]
 ---
 
