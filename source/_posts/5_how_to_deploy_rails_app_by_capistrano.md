@@ -311,12 +311,10 @@ after "deploy:published", "restart_sidekiq"
 ## Q&A
 
 1. Rails 5.2 使用 Credentials 机制加密 secrets.yml，如果在部署过程中 bundle install 出现 ActiveSupport::MessageEncryptor::InvalidMessage，该怎么办?
-
-这是问题多半是我们修改了 config/master.key，导致解密 credentials.yml.enc 错误引起的，此时需要重新生成这两个文件，参考 [How to regenerate the master key for Rails 5.2 credentials](https://gist.github.com/db0sch/19c321cbc727917bc0e12849a7565af9)
+  这是问题多半是我们修改了 config/master.key，导致解密 credentials.yml.enc 错误引起的，此时需要重新生成这两个文件，参考 [How to regenerate the master key for Rails 5.2 credentials](https://gist.github.com/db0sch/19c321cbc727917bc0e12849a7565af9)
 
 2. 为什么 NGINX 默认 nobody 用户开启， TCP/IP domain sockets 获取资源没有权限问题， 而 UNIX domain socket 有权限问题？
-
-因为 UNIX domain socket 需要读取 sock 文件, 须确保 NGINX 进程用户有权限读取到此文件
+  因为 UNIX domain socket 需要读取 sock 文件, 须确保 NGINX 进程用户有权限读取到此文件。
 
 ## 参考
 
