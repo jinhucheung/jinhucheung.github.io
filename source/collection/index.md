@@ -16,6 +16,7 @@ date: 2019-09-16 11:04:13
 - [Tomato Pie](https://github.com/t9tio/tomato-pie): 番茄工作法的 Chrome 插件～
 - [墨刀](https://modao.cc/): 一个很棒的在线产品原型设计平台 :)
 - [石墨文档](https://shimo.im): 文档实时协同平台，来记录你的学习、工作吧～
+- [在线配色方案自动生成器](http://www.peise.net/tools/color/online.html): 挑选在不同亮度下的颜色
 
 # DevOps
 
