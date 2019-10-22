@@ -12,17 +12,21 @@ branches:
 
 before_install:
   - npm install -g hexo
+  - npm install -g font-spider
 
 install:
   - npm install
   - npm install hexo-deployer-git --save
 
 before_script:
+  - hexo clean
+  - hexo generate -d
+  - sed -i "s~/css/style.css~`pwd`/public/css/style.css~g" ./public/**/*.html
+  - font-spider ./public/**/*.html --debug
+  - sed -i "s~`pwd`/public/css/style.css~/css/style.css~g" ./public/**/*.html
   - git config user.name jimcheung
   - git config user.email hi.jinhu.zhang@gmail.com
   - sed -i "s/gh_token/${ACCESS_TOKEN}/g" ./_config.yml
-  - hexo clean
-  - hexo generate -d
 
 script:
   - hexo deploy
