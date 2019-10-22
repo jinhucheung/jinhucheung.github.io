@@ -28,3 +28,7 @@ date: 2019-09-16 11:04:13
 
 - [下厨房](https://www.xiachufang.com/): 不知做什么菜时就上这儿吧 XD
 - [Keep](https://www.gotokeep.com): 现在起开始记录跑步～
+
+# 收获启示的文章
+
+- [我是如何通过开源项目月入 10 万的？ - GitHub Daily](https://zhuanlan.zhihu.com/p/77361802)
