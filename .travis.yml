@@ -20,7 +20,7 @@ install:
 
 before_script:
   - hexo clean
-  - hexo generate -d
+  - hexo generate
   - sed -i "s~/css/style.css~`pwd`/public/css/style.css~g" ./public/**/*.html
   - font-spider ./public/**/*.html --debug
   - sed -i "s~`pwd`/public/css/style.css~/css/style.css~g" ./public/**/*.html
