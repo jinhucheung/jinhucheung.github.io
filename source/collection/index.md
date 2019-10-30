@@ -8,6 +8,7 @@ date: 2019-09-16 11:04:13
 - [Github Chart API](https://github.com/2016rshah/githubchart-api): 为你的 GitHub 贡献度生成一个图片
 - [GitHub Corners](https://github.com/tholman/github-corners): "Fork me on GitHub" 漂亮标识图
 - [GitHub Buttons](https://buttons.github.io): 生成 GitHub Follow, Star 按钮
+- [Git History](https://github.com/pomber/git-history): 动态显示 Git Commit 历史的平台
 - [IssueHunt](https://issuehunt.io/): 开源打赏平台，为解决 Issue 的人提供一笔奖金～
 - [HelloGitHub](https://hellogithub.com/): 分享、推广 GitHub 上有意思、高质量的项目
 
