@@ -5,7 +5,7 @@ tags: [Web Font, font-spider, Blog, Hexo]
 categories: [Web Frontend]
 ---
 
-前段时间发现本站点的首屏加载很慢，Chrome 上的 favicon 一直在转圈，十分影响体验。于是就有了优化这块的想法~
+前段时间发现本站点的首屏加载很慢，Chrome 上的 favicon 一直在转圈，十分影响体验。于是有了优化这块的想法~
 
 <!--more-->
 
@@ -150,9 +150,7 @@ font.load().then(function () {
 
 ### 提取字符集
 
-我们可以使用一些工具自动分析出页面中使用的 Web Font 并按需进行压缩，如 [font-spider](https://github.com/aui/font-spider)
-
-font-spider 只支持静态网页，现在我们尝试使用 font-spider 为 hexo 静态网页压缩字体:
+我们可以使用一些工具自动分析出页面中使用的 Web Font 并按需进行压缩，如 [font-spider](https://github.com/aui/font-spider)。font-spider 只支持静态网页，现在我们尝试使用 font-spider 为 hexo 静态网页压缩字体:
 
 ```sh
 $ npm install -g font-spider # 安装 font-spider
