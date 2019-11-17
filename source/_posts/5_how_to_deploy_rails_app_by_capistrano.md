@@ -1,8 +1,8 @@
 ---
 title: 使用 Capistrano 部署 Rails 应用
 date: 2019-09-28 16:43:42
-tags: [Capistrano, Ruby, Rails, Web, Deployment, 运维]
-categories: [Web Backend]
+tags: [Capistrano, Ruby, Rails, Web, Deployment]
+categories: [运维]
 ---
 
 [Capistrano](https://capistranorb.com/) 是一个使用 Ruby 构建的自动化部署工具，它除了可以部署 Ruby 应用外，也支持部署 PHP, Python 等其他语言的应用。下面就让我们开始学习如何使用 Capistrano 部署 Rails 应用吧～
