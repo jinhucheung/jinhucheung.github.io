@@ -309,6 +309,8 @@ $ docker run --rm --network docker-demo-network --env-file .env jinhucheung/dock
 
 当你有多个容器需要相互连接时，推荐使用 [Docker Compose](https://docs.docker.com/compose/) 编排、调度它们。后面我们会介绍到它。
 
+本章节的代码可查看 [jinhucheung/docker-demo:v0.2.0](https://github.com/jinhucheung/docker-demo/tree/v0.2.0)
+
 ## 总结
 
 这个教程简单介绍了 Docker 出现的背景以及如何使用。通过使用 Docker, 我们不仅可以节约了部署时间和成本，也可以获得愉悦的开发和部署体验。
