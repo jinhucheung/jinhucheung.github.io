@@ -5,7 +5,7 @@ tags: [Docker, 运维]
 categories: [DevOps]
 ---
 
-Docker 是一件令人惊艳的 DevOps 工具。无论在开发、测试、部署工作上，我们可以通过使用它节省大部分时间，即使对个人项目来说也是如此。在本文里，你可以了解到 Docker 是什么，以及如何将它应用于日常工作中。
+[Docker](https://www.docker.com/) 是一件令人惊艳的 DevOps 工具。无论在开发、测试、部署工作上，我们可以通过使用它节省大部分时间，即使对个人项目来说也是如此。在本文里，你可以了解到 Docker 是什么，以及如何将它应用于日常工作中。
 
 本文使用的代码可在 GitHub 上的 [jinhucheung/docker-demo](https://github.com/jinhucheung/docker-demo) 仓库获取。
 
@@ -200,10 +200,7 @@ if __name__ == '__main__':
 ```
 
 填入你的 PostgreSQL 数据库配置信息，上面脚本连接数据库成功就会输出 `[(1,)]`。没有可连接的 PostgreSQL 数据库？ 没关系，我们就是想使用 Docker 解决这类问题。
-
-### 启用 Postgre 容器
-
-执行以下命令使用 Docker 启动 PostgreSQL 服务：
+bianptgreSQL 服务：
 
 ```
 $ docker run --name postgre-app -p 54321:5432 -e POSTGRES_PASSWORD=1234 -d postgres
@@ -246,7 +243,7 @@ if __name__ == '__main__':
 
 ### 完善应用镜像
 
-接着让我们更新 Dockerfile 文件，加入 psycopg2 安装依赖（使用了阿里云镜像加入构建）：
+接着让我们更新 Dockerfile 文件，执行命令安装 psycopg2 依赖（使用了阿里云镜像加入构建）：
 
 ```Dockerfile
 RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
