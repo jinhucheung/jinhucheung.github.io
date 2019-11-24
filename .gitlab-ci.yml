@@ -1,0 +1,36 @@
+image: node:8
+
+stages:
+  - build
+  - optimize
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - npm install -g hexo
+  - npm install -g font-spider
+  - npm install
+
+.deploy:
+  artifacts:
+    paths:
+      - public
+  only:
+    - source
+
+build:
+  stage: build
+  extends: .deploy
+  script:
+    - hexo clean
+    - hexo generate
+
+compress_font:
+  stage: optimize
+  extends: .deploy
+  script:
+    - sed -i "s~/css/style.css~`pwd`/public/css/style.css~g" ./public/**/*.html
+    - font-spider ./public/**/*.html --debug
+    - sed -i "s~`pwd`/public/css/style.css~/css/style.css~g" ./public/**/*.html
