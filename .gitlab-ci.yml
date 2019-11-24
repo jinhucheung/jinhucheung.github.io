@@ -24,6 +24,7 @@ build:
   stage: build
   extends: .deploy
   script:
+    - sed -i "s~https://jinhucheung.github.io~https://jimcheung.gitlab.io~g" _config.yml
     - hexo clean
     - hexo generate
 

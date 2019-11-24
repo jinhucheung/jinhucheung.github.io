@@ -116,9 +116,56 @@ build_app:
 
 看起来很简单对吧。我们用 `stages` 定义了 Pipeline 的各个阶段，然后定义了 `test_app` 和 `build_app` 两项工作，其中各个工作的 `script` 表示了当真正要执行的命令。只有在 `test_app` 正常结束后，`build_app` 才会开始执行。
 
-下面我们使用 GitLab CI 在 GitLab 上搭建本站点的 Pages。
+下面我们使用 GitLab CI 搭建一个 GitLab Pages，你可以在[此仓库](https://gitlab.com/jimcheung/jimcheung.gitlab.io/)获取相关代码。
 
+```yml
+# .gitlab-ci.yml
+image: node:8
 
+stages:
+  - build
+  - optimize
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - npm install -g hexo
+  - npm install -g font-spider
+  - npm install
+
+.deploy:
+  artifacts:
+    paths:
+      - public
+  only:
+    - source
+
+build:
+  stage: build
+  extends: .deploy
+  script:
+    - sed -i "s~https://jinhucheung.github.io~https://jimcheung.gitlab.io~g" _config.yml
+    - hexo clean
+    - hexo generate
+
+compress_font:
+  stage: optimize
+  extends: .deploy
+  script:
+    - sed -i "s~/css/style.css~`pwd`/public/css/style.css~g" ./public/**/*.html
+    - font-spider ./public/**/*.html --debug
+    - sed -i "s~`pwd`/public/css/style.css~/css/style.css~g" ./public/**/*.html
+```
+
+上面的 `.gitlab-ci.yml` 定义了使用 [Hexo](https://hexo.io/) 构建 Pages 的工作流，其中增加了 [font-spider](http://font-spider.org/) 用于压缩字体。
+
+你可以在[官方文档](https://docs.gitlab.com/ee/ci/yaml/)了解到 `.gitlab-ci.yml` 更多的配置参数。
+
+## 总结
+
+GitLab CI 作为 GitLab 内置的持续集成工具。通过使用它不仅为我们节省大部分时间，也让我们更了解 GitLab 整个生态。GitLab CI 的开发工作仍在持续迭代中，它仍有很多地方待我们发觉，完善。
 
 ## 参考
 
