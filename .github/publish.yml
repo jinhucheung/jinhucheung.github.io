@@ -1,0 +1,44 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - source
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{runner.OS}}-${{hashFiles('**/yarn.lock')}}
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '8.x'
+      - name: Install Font Spider
+        run: npm install -g font-spider
+      - name: Install Package
+        run: |
+          npm install -g hexo
+          npm install hexo-deployer-git --save
+          npm install
+      - name: Hexo Clean & Generate
+        run: |
+          hexo clean
+          hexo generate
+      - name: Compress Web Font
+        run: |
+          sed -i "s~/css/style.css~`pwd`/public/css/style.css~g" ./public/**/*.html
+          font-spider ./public/**/*.html --debug
+          sed -i "s~`pwd`/public/css/style.css~/css/style.css~g" ./public/**/*.html
+      - name: Configure git
+        run: |
+          git config user.name jimcheung
+          git config user.email hi.jinhu.zhang@gmail.com
+          sed -i "s/gh_token/${{ secrets.GITHUB_TOKEN }}/g" ./_config.yml
+      - name: Deploy
+        run: hexo deploy
