@@ -35,10 +35,9 @@ jobs:
           sed -i "s~/css/style.css~`pwd`/public/css/style.css~g" ./public/**/*.html
           font-spider ./public/**/*.html --debug
           sed -i "s~`pwd`/public/css/style.css~/css/style.css~g" ./public/**/*.html
-      - name: Configure git
+      - name: Deploy
         run: |
           git config user.name jimcheung
           git config user.email hi.jinhu.zhang@gmail.com
           sed -i "s/gh_token/${{ secrets.GITHUB_TOKEN }}/g" ./_config.yml
-      - name: Deploy
-        run: hexo deploy
+          hexo deploy
