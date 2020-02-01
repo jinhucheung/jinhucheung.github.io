@@ -19,11 +19,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '8.x'
-      - name: Install Font Spider
-        run: npm install -g font-spider
       - name: Install node modules
         run: |
           npm install -g hexo
+          npm install -g font-spider
           npm install hexo-deployer-git --save
           npm install
       - name: Hexo Clean & Generate
