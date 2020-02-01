@@ -15,13 +15,13 @@ jobs:
         with:
           path: node_modules
           key: ${{runner.OS}}-${{hashFiles('**/yarn.lock')}}
-      - name: Setup Node
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: '8.x'
       - name: Install Font Spider
         run: npm install -g font-spider
-      - name: Install Package
+      - name: Install node modules
         run: |
           npm install -g hexo
           npm install hexo-deployer-git --save
