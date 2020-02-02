@@ -1,6 +1,6 @@
 ---
 title: 个人 Linux 桌面工具清单
-date: 2020-02-01 21:45:00
+date: 2020-02-01 21:47:00
 tags: [Desktop, Linux, ArchLinux, Manjaro]
 categories: [Workstation]
 ---
