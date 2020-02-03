@@ -11,6 +11,7 @@ date: 2019-09-16 11:04:13
 - [Git History](https://github.com/pomber/git-history): 动态显示 Git Commit 历史的平台
 - [IssueHunt](https://issuehunt.io/): 开源打赏平台，为解决 Issue 的人提供一笔奖金～
 - [HelloGitHub](https://hellogithub.com/): 分享、推广 GitHub 上有意思、高质量的项目
+- [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator): 自动根据项目的 Issue, PR 等信息生成 change log
 
 # 效率工具
 
