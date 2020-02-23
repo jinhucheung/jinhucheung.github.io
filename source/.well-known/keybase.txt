@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/jimcheung
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://jinhucheung.github.io
+  * I am jimcheung (https://keybase.io/jimcheung) on keybase.
+  * I have a public key ASDIzFeTb1RCv3e6DqnACC5VHEdUPy5x605V-s4Fn4YW4Qo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120961b994eb32eae61e9507a8e302efb4cb107fd0096bfc1309803f51130cec04e0a",
+      "host": "keybase.io",
+      "kid": "0120c8cc57936f5442bf77ba0ea9c0082e551c47543f2e71eb4e55face059f8616e10a",
+      "uid": "cc8f17013cb0991ea9faa5374a11d719",
+      "username": "jimcheung"
+    },
+    "merkle_root": {
+      "ctime": 1582442055,
+      "hash": "c5d13fa9cb7cbbeabe225af06f5f4ceb4b1b5d3e799325553657634444deb6e57a85b4de94db79411533449e3ba54b76f38b32f3a76c468b18a4ebac9bac8843",
+      "hash_meta": "31d8401669bf47376a0c9b8147cef8c2e85100623719922afbc9fb0bab79fcbc",
+      "seqno": 14705221
+    },
+    "service": {
+      "entropy": "RHVKqVfGoGKdP5MhKRa5k5D+",
+      "hostname": "jinhucheung.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "5.2.0"
+  },
+  "ctime": 1582442084,
+  "expire_in": 504576000,
+  "prev": "9575eb05d74886d5ff59811de97dff0092c56be5fa2db58960932b85bedf67f5",
+  "seqno": 9,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgyMxXk29UQr93ug6pwAguVRxHVD8ucetOVfrOBZ+GFuEKp3BheWxvYWTESpcCCcQglXXrBddIhtX/WYEd6X3/AJLFa+X6LbWJYJMrhb7fZ/XEIBFrqjDpA3Vc3E0HX0mivWaiktyhfYF71on76xJm9O2qAgHCo3NpZ8RAFtORx//3qSZLAU5ER3TP6o4stt75OqSRDubcEPGaaA5sfHiAcFE/3qpNxByl6rdNZSel7BIeDRYir0ZvGlriDqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIFE+jrXruR8QKrHCQz35BEoQLsQeucvLuNxQlerbO9mpo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/jimcheung
+
+==================================================================
