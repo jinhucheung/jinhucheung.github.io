@@ -15,6 +15,12 @@ Contributions in the last year:
 
 # Experience
 
+### Full Stack Engineer @ [Brilliant-Solution](http://www.brilliant-solution.com/)
+
+*2019.09 - Present
+
+As member of the development department, my main job is to maintain internal systems such as Redmine, GitLab. In addition, I also participated in API and E2E Testing for internal product.
+
 ### Ruby Engineer @ [Gitee](https://gitee.com)
 
 *2016.12 - 2019.07* (2 years 7 months)
@@ -23,6 +29,7 @@ As core member of the Gitee Community team, my main jobs are to maintain project
 
 # Projects
 
+- [letscertbot](https://github.com/jinhucheung/letscertbot): Let's Certbot is a tool builds automated scripts base on Certbot for obtaining, renewing, deploying SSL certificates.
 - [intro](https://github.com/jinhucheung/intro): Intro brings your rails application to new feature introduction and step-by-step users guide
 - [2048-react](https://github.com/jinhucheung/2048-react): 2048 Game by React
 - [gitee-subscriber](https://github.com/jinhucheung/gitee-subscriber): A Sinatra application which is subscribed Gitee webhook for generating merged pull request logs
