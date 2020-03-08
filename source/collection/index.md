@@ -21,6 +21,8 @@ date: 2019-09-16 11:04:13
 - [在线配色方案自动生成器](http://www.peise.net/tools/color/online.html): 挑选在不同亮度下的颜色
 - [ProcessOn](https://www.processon.com): 一个 UI 很漂亮的在线作图平台，支持流程图、思维导图等等
 - [docsmall](https://docsmall.com/gif-compress): 一个免费易用的在线图片压缩平台
+- [favicon.io](https://favicon.io/): 一个精致的网站图标生成平台
+- [思知](https://www.ownthink.com/)：对外开放接口的中文知识图谱平台
 
 # DevOps
 
