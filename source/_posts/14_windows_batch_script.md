@@ -1,5 +1,5 @@
 ---
-title: 一次 Windows 批处理脚本编写经历
+title: Windows 批处理脚本初体验
 date: 2020-03-21 18:02:39
 tags: [Windows, Batch, Script]
 categories: [运维]
@@ -142,7 +142,7 @@ if "!valid_file_sha!" == "" (
 )
 ```
 
-最后暂停脚本，已查看结果：
+最后暂停脚本，以查看结果：
 
 ```bat
 pause > nul
