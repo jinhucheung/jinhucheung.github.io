@@ -1,6 +1,6 @@
 ---
 title: Dokku —— 搭建自己的 PaaS 系统
-date: 2020-05-24 08:25:00
+date: 2020-05-24 21:25:00
 tags: [dokku, docker, heroku, paas]
 categories: [运维]
 ---
