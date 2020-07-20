@@ -9,6 +9,7 @@ date: 2019-09-16 11:04:13
 - [GitHub Corners](https://github.com/tholman/github-corners): "Fork me on GitHub" 漂亮标识图
 - [GitHub Buttons](https://buttons.github.io): 生成 GitHub Follow, Star 按钮
 - [Git History](https://github.com/pomber/git-history): 动态显示 Git Commit 历史的平台
+- [GitHub Readme Stats](https://github.com/anuraghazra/github-readme-stats): 在 Redmine 中动态生成 GitHub 统计信息
 - [IssueHunt](https://issuehunt.io/): 开源打赏平台，为解决 Issue 的人提供一笔奖金～
 - [HelloGitHub](https://hellogithub.com/): 分享、推广 GitHub 上有意思、高质量的项目
 - [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator): 自动根据项目的 Issue, PR 等信息生成 change log
