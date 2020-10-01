@@ -17,9 +17,9 @@ Contributions in the last year:
 
 ### Full Stack Engineer @ [Brilliant-Solution](http://www.brilliant-solution.com/)
 
-*2019.09 - Present
+*2019.09 - 2020.09* (1 year)
 
-As member of the development department, my main job is to maintain internal systems such as Redmine, GitLab. In addition, I also participated in API and E2E Testing for internal product.
+As member of the development department, my main job is to develop model operation platform. I upgraded and refactored the distributed job scheduling module, and separated job scheduling module from the core of model management module. It maked the core module easier to maintain and expand. In addition, I am also responsible for development of internal systems such as Redmine, GitLab, Nextcloud. I also participated in API and E2E Testing for internal products, uses GitLab CI, JMeter and other tools to improve the automated testing.
 
 ### Ruby Engineer @ [Gitee](https://gitee.com)
 
@@ -41,13 +41,13 @@ As core member of the Gitee Community team, my main jobs are to maintain project
 
 These are languages, tools to which I have had exposure over the past 3 years or so. Those things which enjoy routine usage in my daily work are denoted with bold font.
 
-- Programming Languages: **[Ruby](https://www.ruby-lang.org)**, **[JavaScript](http://developer.mozilla.org/en/JavaScript)**, [TypeScript](https://www.typescriptlang.org/), [Java](https://www.java.com), [Golang](https://golang.org/)
+- Programming Languages: **[Ruby](https://www.ruby-lang.org)**, **[JavaScript](http://developer.mozilla.org/en/JavaScript)**, **[Python](https://www.python.org/)**, [TypeScript](https://www.typescriptlang.org/), **[Java](https://www.java.com)**, [Golang](https://golang.org/)
 - Markup/Templating Languages & Preprocessors: **[HTML](https://en.wikipedia.org/wiki/HTML)**, **[ERB/eRuby](https://en.wikipedia.org/wiki/ERuby)**, **[Haml](http://haml.info/)**, **[CSS](http://www.w3.org/Style/CSS/Overview.en.html)**, **[Sass](http://sass-lang.com/)**, [CoffeeScript](https://coffeescript.org/)
 - Backend Frameworks: **[Ruby on Rails](http://rubyonrails.org/)**, **[Sinatra](http://sinatrarb.com/)**, **[Grape](http://www.ruby-grape.org/)**
 - Frontend Frameworks: **[jQuery](https://jquery.com/)**, **[Vue.js](https://vuejs.org/)**, [React](https://reactjs.org/), [Stimulus](https://stimulusjs.org/), **[Semantic UI](https://semantic-ui.com/)**, [Bootstrap](https://getbootstrap.com)
 - APIs: **[Github API](https://developer.github.com/v3/)**, [WeChat Official Account API](https://mp.weixin.qq.com/)
 - Databases: **[MySQL](http://mysql.com/)**, **[Redis](https://redis.io/)**, **[Elasticsearch](https://www.elastic.co/)**
-- Services & Tools: **[Sidekiq](https://sidekiq.org/)**, **[RSpec](https://rspec.info/)**, **[Git](http://git-scm.com/)**, [Docker](https://www.docker.com/), [Heroku](https://www.heroku.com/), [NGINX](http://wiki.nginx.org/), **[Arch Linux](https://www.archlinux.org/)**
+- Services & Tools: **[Sidekiq](https://sidekiq.org/)**, **[RSpec](https://rspec.info/)**, **[Git](http://git-scm.com/)**, [Docker](https://www.docker.com/), [Heroku](https://www.heroku.com/), [NGINX](http://wiki.nginx.org/), **[Arch Linux](https://www.archlinux.org/)**, **[JMeter](https://jmeter.apache.org/)**
 
 # Education
 
