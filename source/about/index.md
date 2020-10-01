@@ -39,7 +39,7 @@ As core member of the Gitee Community team, my main jobs are to maintain project
 
 # Skills & Expertise
 
-These are languages, tools to which I have had exposure over the past 3 years or so. Those things which enjoy routine usage in my daily work are denoted with bold font.
+These are languages, tools to which I have had exposure over the past 4 years or so. Those things which enjoy routine usage in my daily work are denoted with bold font.
 
 - Programming Languages: **[Ruby](https://www.ruby-lang.org)**, **[JavaScript](http://developer.mozilla.org/en/JavaScript)**, **[Python](https://www.python.org/)**, [TypeScript](https://www.typescriptlang.org/), **[Java](https://www.java.com)**, [Golang](https://golang.org/)
 - Markup/Templating Languages & Preprocessors: **[HTML](https://en.wikipedia.org/wiki/HTML)**, **[ERB/eRuby](https://en.wikipedia.org/wiki/ERuby)**, **[Haml](http://haml.info/)**, **[CSS](http://www.w3.org/Style/CSS/Overview.en.html)**, **[Sass](http://sass-lang.com/)**, [CoffeeScript](https://coffeescript.org/)
