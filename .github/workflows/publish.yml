@@ -21,7 +21,7 @@ jobs:
           node-version: '8.x'
       - name: Install node modules
         run: |
-          npm install -g hexo
+          npm install -g hexo@4.2.0
           npm install -g font-spider
           npm install hexo-deployer-git --save
           npm install
