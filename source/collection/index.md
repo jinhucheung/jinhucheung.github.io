@@ -14,6 +14,7 @@ date: 2019-09-16 11:04:13
 - [HelloGitHub](https://hellogithub.com/): 分享、推广 GitHub 上有意思、高质量的项目
 - [github-changelog-generator](https://github.com/github-changelog-generator/github-changelog-generator): 自动根据项目的 Issue, PR 等信息生成 change log
 - [GitHub Style Guide](https://styleguide.github.com/): Ruby, Css, JavaScript style guide
+- [GitHub Assets](https://github.githubassets.com/): 获取 GitHub 官方使用的资源，如 [pinned-octocat](https://github.githubassets.com/pinned-octocat.svg)
 
 # 效率工具
 
