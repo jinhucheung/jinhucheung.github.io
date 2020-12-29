@@ -27,6 +27,7 @@ date: 2019-09-16 11:04:13
 - [favicon.io](https://favicon.io/): 一个精致的网站图标生成平台
 - [思知](https://www.ownthink.com/)：对外开放接口的中文知识图谱平台
 - [unDraw](https://undraw.co/): 免费精美的矢量图平台
+- [Avataaars generator](https://getavataaars.com/): 卡通头像生成工具
 
 # DevOps
 
