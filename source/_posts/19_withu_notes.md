@@ -9,7 +9,16 @@ categories: [产品]
 
 稍微调浅了主题色(#6666FF) by 设计师 [你的小表贝]。 后面开始画个人设置页面原型，还需要了解 ActiveStorage 的使用。
 
-## 2020.12.29 - 2021.01.12
+## 2020.01.12
+
+考虑了下 WithU 的帐号方案 —— accounts, users, spaces:
+- 一个 account 下有多个 users: 一个 account 下可以添加多个 user, 这些被添加 user 可以不需要邮箱或手机验证，account 所有者可以管理这些添加的 users。当添加的 user 首次登录后可自己设置个人信息，不再被 account 管理
+- 一个 user 可以创建或加入多个 spaces
+- 注册时会生成 account 和 user
+
+但第一版先不考虑这种，可能有些地方需要预留下。
+
+## 2020.12.29 - 2021.01.11
 
 avataaars 的头像挺讨喜的，发现在 Rails 中集成有些麻烦。有个 Gem 实现了相关功能，但它通过 JavaScript Bridge 去调用 avataaars React component, 个人不太喜欢这种做法。而且 avataaars 生成的头像无法区分性别，这可能会让男性用户的默认头像是女性头像。
 
