@@ -15,6 +15,12 @@ Contributions in the last year:
 
 # Experience
 
+### Ruby Developer @ [AirHost](https://cloud.airhost.co/)
+
+*2020.10 - present*
+
+As member of the ticket support team, my main jobs are to maintain project and handle ticket from users.
+
 ### Full Stack Engineer @ [Brilliant-Solution](http://www.brilliant-solution.com/)
 
 *2019.09 - 2020.09* (1 year)
@@ -29,6 +35,7 @@ As core member of the Gitee Community team, my main jobs are to maintain project
 
 # Projects
 
+- [rpictogrify](https://github.com/jinhucheung/rpictogrify): Ruby version of the pictogrify to generate unique pictograms.
 - [letscertbot](https://github.com/jinhucheung/letscertbot): Let's Certbot is a tool builds automated scripts base on Certbot for obtaining, renewing, deploying SSL certificates.
 - [intro](https://github.com/jinhucheung/intro): Intro brings your rails application to new feature introduction and step-by-step users guide
 - [2048-react](https://github.com/jinhucheung/2048-react): 2048 Game by React

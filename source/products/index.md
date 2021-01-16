@@ -3,6 +3,12 @@ title: Products
 date: 2019-09-16 11:03:29
 ---
 
+# [Rpictogrify](https://github.com/jinhucheung/rpictogrify)
+
+Ruby version of the [pictogrify](https://github.com/luciorubeens/pictogrify) to generate unique pictograms.
+
+![rpictogrify](https://camo.githubusercontent.com/9bb9f306dec702869b08a8410aa3f42d56a1d66d512804eb3b599872dd790422/68747470733a2f2f692e696d6775722e636f6d2f56375763726f582e706e67)
+
 # [Let's Certbot](https://github.com/jinhucheung/letscertbot)
 
 Let's Certbot is a tool builds automated scripts base on Certbot for obtaining, renewing, deploying SSL certificates. Views [Source](https://github.com/jinhucheung/letscertbot).
