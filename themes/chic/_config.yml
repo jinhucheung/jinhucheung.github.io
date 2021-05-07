@@ -18,7 +18,8 @@ nickname: Jim Cheung
 
 ### this variable is MarkDown form.
 description: A Software Development Engineer, Love Ruby.
-avatar: /image/avatar.png
+# avatar: /image/avatar.jpg
+avatar: https://avatars.githubusercontent.com/u/19590194?s=400&u=8733a7da1e23f89903bdc36846d036c91d975ffd&v=4
 
 # main menu navigation
 ## links key words should not be changed.
