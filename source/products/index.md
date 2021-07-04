@@ -40,7 +40,7 @@ Milog Android App via Turbolinks. Views [Source](https://github.com/jinhucheung/
 
 ![milog-android](/images/products/milog-android.png)
 
-# [Go](https://github.com/jinhucheung/milog-android)
+# [Go](https://github.com/jinhucheung/Go)
 
 Go is an Augmented reality navigation app for Android. The Map service provided by [Amap](https://www.amap.com/).
 Views [Video](https://www.youtube.com/watch?v=XZV129LJO4M) / [Source](https://github.com/jinhucheung/Go).
