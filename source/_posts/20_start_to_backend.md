@@ -137,6 +137,4 @@ categories: [Web Backend]
 
 ## 引用
 
-1. [How to Become a Backend Developer? - Backend Development](https://hackr.io/blog/how-to-become-a-backend-developer)
-2. [The Best Way to Learn Backend Web Development](https://www.freecodecamp.org/news/learn-backend-development/)
-3. [Backend Developer](https://roadmap.sh/backend)
+- [Backend Developer](https://roadmap.sh/backend)
