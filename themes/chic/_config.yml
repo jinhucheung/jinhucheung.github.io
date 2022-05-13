@@ -8,7 +8,7 @@ nav:
   # Categories: /category
   Tags: /tag
   Collections: /collection
-  About: /about
+  # About: /about
 
 # favicon
 favicon: /favicon.ico
@@ -29,7 +29,7 @@ links:
   Blog: /archives
 #  Category:
 #  Tags:
-  Resume: /about
+  # Resume: /about
 #  Publish:
 #  Trophy:
 #  Gallary:
