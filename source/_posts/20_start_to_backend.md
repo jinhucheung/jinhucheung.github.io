@@ -77,11 +77,15 @@ categories: [Web Backend]
 
 目前企业应用基本都是运行在 Linux 操作系统上的。作为后端开发，需要掌握 Linux 操作系统使用及 shell 脚本编写。
 
+书籍推荐：[《鸟哥的Linux私房菜》](https://book.douban.com/subject/4889838/)
+
 ### Step2: 学习计算机网络
 
 计算机网络由若干计算机、路由器等节点和连接这些节点的链路组成。它围绕着如何让地理位置上不同的计算机连接起来，并高效可靠的交换数据信息。而网络协议就是为了进行数据交换而建立的标准、协议。HTTP 就是其中一种广泛使用的网络协议。
 
 作为后端开发，我们需要了解计算机网络，特别是 HTTP 协议如何工作。
+
+书籍推荐：[《图解 HTTP》](https://book.douban.com/subject/25863515/)
 
 ### Step3: 学习一门后端语言
 
@@ -89,11 +93,15 @@ categories: [Web Backend]
 
 在语言学习上，我们除了要掌握语法，数据类型，常用函数外，还需要了解其核心特性、包管理及编码的最佳实践，以及常用的开发工具。
 
+书籍推荐：[《Ruby基础教程》](https://book.douban.com/subject/25958845/) [《Ruby元编程》](https://book.douban.com/subject/7056800/)
+
 ### Step4: 选择一个 Web 框架
 
 根据选择的语言，我们可以选择一个 Web 框架进行学习。虽然用编程语言编写整个应用程序代码是允许，但这需要更多的精力和时间，掌握一个框架后会变得更加有效率。
 
 目前无论是 Ruby on Rails 还是 Django 等大多数框架都是遵循 MVC (Model-View-Controller) 模式实践。在前后端分离流行当下，传统的 MVC 框架也在变化发展中。它们仍值得学习。
+
+书籍推荐：[《Ruby on Rails 教程》](https://flapybooks.com/products/railstutorial6th/)
 
 ### Step5: 了解基础的前端知识
 
@@ -101,11 +109,15 @@ categories: [Web Backend]
 
 另外，在学习阶段，如果你想做出一个完整的 demo 应用，不懂前端会变得十分困难。
 
+网站推荐：[W3school](https://www.w3school.com.cn/index.html)
+
 ### Step6: 学习数据库
 
 除非是单纯的转发路由类应用，一般后台应用需要处理复杂的业务逻辑，这涉及到数据处理和存储。所以我们学习数据库相关知识是十分必要的。
 
 目前数据库主要分为关系型数据库(SQL)和非关系型数据库(NoSQL)。我们需要掌握一个关系型数据库比如 PostgreSQL, MySQL 的使用和调优。同时也需要对非关系型数据库有一定程度的理解和使用，比如 Redis。
+
+书籍推荐：[《SQL必知必会》](https://book.douban.com/subject/24250054/) [《Redis设计与实现》](https://book.douban.com/subject/25900156/)
 
 ### Step7: 更多练习和模仿
 
@@ -115,7 +127,7 @@ categories: [Web Backend]
 
 ### Step8: 云服务
 
-现在已经是云服务的时代了。我们可以不需要在线上购买服务器并设置它了，像 AWS，阿里云等云服务商已提供好基础架构给我们。
+现在已经是云服务的时代了。我们可以不需要在线下购买服务器并设置它了，像 AWS，阿里云等云服务商已提供好基础架构给我们。
 
 一开始我们不需要深入掌握它，但你需要了解并使用它，尝试将自己的应用部署上云吧！
 
@@ -137,4 +149,6 @@ categories: [Web Backend]
 
 ## 引用
 
-- [Backend Developer](https://roadmap.sh/backend)
+1. [How to Become a Backend Developer? - Backend Development](https://hackr.io/blog/how-to-become-a-backend-developer)
+2. [The Best Way to Learn Backend Web Development](https://www.freecodecamp.org/news/learn-backend-development/)
+3. [Backend Developer Roadmap](https://roadmap.sh/backend)
