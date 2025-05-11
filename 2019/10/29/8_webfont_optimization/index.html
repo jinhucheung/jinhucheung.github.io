@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>前端优化 - Web Font | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">前端优化 - Web Font</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 29, 2019&nbsp;&nbsp;22:18</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Frontend/">Web Frontend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>前段时间发现本站点的首屏加载很慢，Chrome 上的 favicon 一直在转圈，十分影响体验。于是有了优化这块的想法~</p>
+<a id="more"></a>
+<h2 id="找出慢的原因"><a href="#找出慢的原因" class="headerlink" title="找出慢的原因"></a>找出慢的原因</h2><p>让我们先打开浏览器的开发者模块，切换到 Network Tab 下，关闭缓存 (Disable cache) 和打开历史日志 (Preserve log) 便于之后的调试。然后刷新本站点，观察 Network 日志：</p>
+<p><img src="/images/posts/8_webfont_optimization/slowly_load_assets.png" alt="本站点首屏加载信息"></p>
+<p>我们可以发现 langting.woff2 这个文件加载了近两分钟半钟，粗略计算本次渲染的白屏、首屏时间 (毫秒)：</p>
+<p><img src="/images/posts/8_webfont_optimization/abovethefold.png" alt="白屏、首屏时间信息"></p>
+<p>白屏时间 (浏览器开始显示内容的时间) 本次请求约等于服务器返回的 Document 文件时间，可以忽略不计。</p>
+<p>首屏时间 (用户打开网站开始，到浏览器首屏内容渲染完成的时间) 本次请求以网页整个 load 时间计算，约等于 langting.woff2 的加载时间。当然也可以根据业务需求使用其他指标计算，如最后图片的加载结束时间计算。</p>
+<p>本站点在图片等资源加载完后，还加载 langting.woff2 一段很长的时间，十分影响体验和观感，后面让我们优化它。</p>
+<h2 id="网页字体介绍"><a href="#网页字体介绍" class="headerlink" title="网页字体介绍"></a>网页字体介绍</h2><p>在介绍 WOFF2 文件是什么前，让我们先了解网页字体(Web Font)。网页字体是一个字形集合，每个字形是描述字母或符号的矢量形状。这意味着网页字体大小由集合中的字形数量及每个字形矢量路径的复杂程度决定。所以在选取字体时，重要的是考虑它支持的字符集。</p>
+<h3 id="字体文件格式"><a href="#字体文件格式" class="headerlink" title="字体文件格式"></a>字体文件格式</h3><p>目前网络上使用的字体有 4 种格式文件: EOT、 TTF、 WOFF 和 WOFF2。遗憾的是，现在仍没有一种通用的字体文件格式能被所有浏览器支持： EOT 只有 IE 支持，TTF 获得部分 IE 支持，WOFF 得到广泛支持，但一些较旧的浏览器不支持，而 WOFF2 也尚未被大多浏览器支持。</p>
+<p>没有一种通用的格式文件，意味着我们需要提供多种格式文件给浏览器：</p>
+<ul>
+<li>将 WOFF2 格式文件提供给支持的浏览器</li>
+<li>将 WOFF 格式文件提供给大部分支持的浏览器</li>
+<li>将 TTF 格式文件提供给旧版浏览器 (Android 4.4 以下)</li>
+<li>将 EOT 格式文件提供给旧版 IE 浏览器 (IE 9 以下)</li>
+</ul>
+<h3 id="定义字体"><a href="#定义字体" class="headerlink" title="定义字体"></a>定义字体</h3><p>我们可以使用 <code>@font-face</code> 去定义一种字体，使用如下:</p>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@font-face</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">'lanting'</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: <span class="number">300</span>;</span><br><span class="line">  <span class="attribute">src</span>: <span class="built_in">local</span>(<span class="string">'Lantinghei SC'</span>),</span><br><span class="line">       <span class="built_in">url</span>(<span class="string">'/fonts/lanting/lanting.woff2'</span>) <span class="built_in">format</span>(<span class="string">'woff2'</span>),</span><br><span class="line">       <span class="built_in">url</span>(<span class="string">'/fonts/lanting/lanting.woff'</span>) <span class="built_in">format</span>(<span class="string">'woff'</span>),</span><br><span class="line">       <span class="built_in">url</span>(<span class="string">'/fonts/lanting/lanting.ttf'</span>) <span class="built_in">format</span>(<span class="string">'truetype'</span>), <span class="comment">/* chrome, firefox, opera, Safari, Android, iOS 4.2+ */</span></span><br><span class="line">       <span class="built_in">url</span>(<span class="string">'/fonts/lanting/lanting.eot?#iefix'</span>) <span class="built_in">format</span>(<span class="string">'embedded-opentype'</span>), <span class="comment">/* IE6-IE8 */</span></span><br><span class="line">       <span class="built_in">url</span>(<span class="string">'/fonts/lanting/lanting.eot'</span>); <span class="comment">/* IE9 */</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">body</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">'Microsoft Jhenghei'</span>, <span class="string">'lanting'</span>, PingFang SC, sans-serif;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面一开始我们声明了字体名称为 <code>lanting</code>, 并为它设置 300 的粗细，然后根据浏览器设置它的字体资源文件路径，其中 <code>local</code> 映射到本地系统上的 <code>Lantinghei SC</code> 字体。</p>
+<p>当浏览器确定需要字体时，其就会遍历 <code>body</code> 的 <code>font-family</code>, 检查本地系统是否存在相关字体。如果不存在，浏览器会查看该字体是否有声明的格式，若浏览器支持该字体格式且字体定义了资源路径，此时浏览器将会下载字体资源。</p>
+<h2 id="优化网页字体加载"><a href="#优化网页字体加载" class="headerlink" title="优化网页字体加载"></a>优化网页字体加载</h2><p>前面我们提到浏览器下载字体资源的策略，那浏览器是怎样加载这些资源的呢？</p>
+<h3 id="默认行为"><a href="#默认行为" class="headerlink" title="默认行为"></a>默认行为</h3><p>默认情况下，浏览器在构建渲染树(它依赖 DOM 和 CSSOM 树)之前会延迟字体请求，因为只有构建出渲染树，浏览器才知道使用哪些字体资源来渲染文本。这就可能会导致文本渲染延迟。</p>
+<p><img src="/images/posts/8_webfont_optimization/webfont_crp.png" alt="浏览器渲染字体过程"></p>
+<p>上图展示了浏览器渲染字体经历的过程:</p>
+<ol>
+<li>浏览器请求 HTML 文档。</li>
+<li>浏览器开始解析 HTML 响应和构建 DOM。</li>
+<li>浏览器发现 CSS、JS 以及其他资源并分派请求。</li>
+<li>浏览器在收到所有 CSS 内容后构建 CSSOM, 然后将其与 DOM 树合并以构建渲染树。<ul>
+<li>在渲染树指示需要哪些字体在网页上渲染指定文本后，将分派字体请求。</li>
+</ul>
+</li>
+<li>浏览器执行布局并将绘制内容。<ul>
+<li>如果字体尚不可用，浏览器可能不会渲染任何文本。</li>
+<li>字体可用之后，浏览器将绘制文本像素。</li>
+</ul>
+</li>
+</ol>
+<p>由此，我们可以了解到网页首次绘制与字体资源请求之间的“竞赛”产生了“空白文本的问题”。</p>
+<h3 id="预加载网页字体资源"><a href="#预加载网页字体资源" class="headerlink" title="预加载网页字体资源"></a>预加载网页字体资源</h3><p>如果你事先知道网页要加载的特定字体资源，我们可以提前让浏览器去加载这些资源，而不必等到 DOM 树构建完之后。此时 <code>&lt;link rel=&quot;preload&quot;&gt;</code> 标签就能用上场了，该标签允许你在 <code>&lt;head&gt;</code> 上声明一个资源，提早触发对该资源的请求。</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"preload"</span> <span class="attr">href</span>=<span class="string">"/fonts/awesome-l.woff2"</span> <span class="attr">as</span>=<span class="string">"font"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>并非所有浏览器都支持 <code>&lt;link rel=&quot;preload&quot;&gt;</code>, 不支持的浏览器将忽略此标签。</p>
+<p><strong>Note</strong>: <code>&lt;link rel=&quot;preload&quot;&gt;</code> 将无条件优化发送字体资源请求，而不考虑页面实际是否使用到此字体。如果此时浏览器本地安装了此字体，那么这个请求就是多余的。预加载但不实际使用资源时，某些浏览器会在其开发者工具控制台中显示警告。</p>
+<h3 id="自定义文本渲染延迟"><a href="#自定义文本渲染延迟" class="headerlink" title="自定义文本渲染延迟"></a>自定义文本渲染延迟</h3><p>虽然预加载增加网络字体被及时使用的可能性，但并不保证如此。你仍需要考虑所渲染的文本使用了尚未可用的 <code>font-family</code> 时的行为。</p>
+<p>网页内容首次绘制与字体资源请求之前产生的“竞争”导致“空白文本问题”，出现该问题时，浏览器会在渲染内容时遗漏所有文本。大部分浏览器在等待字体下载时都执行最大超时策略，超时之后将使用回退字体渲染文本。不过，各个浏览器的执行方式并不相同:</p>
+<ul>
+<li>Chrome 和 Firefox 的超时时间是 3 秒，在此之后，将使用回退字体显示文本。等字体下载成功后，将发生交换，以期望字体重新渲染文本。</li>
+<li>IE 超时时间为零秒，这表示文本得以立即渲染。如果字体尚不可用，则使用回退字体，之后可用后再重新渲染文本。</li>
+<li>Safari 没有超时行为</li>
+</ul>
+<p>为确保之后的一致性，我们可以在 CSS 中使用 <code>font-display</code> 描述 <code>@font-face</code>。<code>font-display</code> 支持以下取值:</p>
+<ul>
+<li><code>auto</code> 使用浏览器默认的字体显示策略。现大多浏览器使用类似 <code>block</code> 的策略。</li>
+<li><code>block</code>　为字体指定较短的阻止期 (大部分情况，建议值为 3 秒) 以及无限的交换期，类似 Chrome 的默认行为。</li>
+<li><code>swap</code> 为字体指定零秒的阻止期以及无限的交换期，类似 IE 的默认行为。</li>
+<li><code>fallback</code> 为字体指定极短的阻止期 (大部分情况建议值为 100 毫秒或更短) 以及较短交换期 (大部分情况建议值为 3 秒)。fallback 非常适合于正文等内容，对于这些内容，您希望用户尽快开始阅读，不想让新字体载入时发生的文本移动干扰其体验。</li>
+<li><code>optional</code> 为字体指定极短的阻止期（在大部分情况下，建议值为 100 毫秒或更短）以及零秒的交换期。此值非常适合在下载的字体可以“锦上添花”，但对于用户体验并非至关重要时使用。</li>
+</ul>
+<h3 id="Font-Loading-API"><a href="#Font-Loading-API" class="headerlink" title="Font Loading API"></a>Font Loading API</h3><p>我们配合使用 <code>&lt;link rel=&quot;preload&quot;&gt;</code> 与 <code>font-display</code> 可以较好的控制字体加载与渲染，而不必增加额外的开销。如果需要进一步定义，则需要承担 JavaScript 所引入的开销。 Font Loading API 提供了定义和操纵 CSS 字体，跟踪字体下载进度以及替换默认渲染行为的能力。例如你需要特定字体，并在其加载成功后显示内容：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> font = <span class="keyword">new</span> FontFace(<span class="string">"Awesome Font"</span>, <span class="string">"url(/fonts/awesome.woff2)"</span>, &#123; <span class="attr">style</span>: <span class="string">'normal'</span> &#125;)</span><br><span class="line"></span><br><span class="line">font.load().then(<span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="built_in">document</span>.fonts.add(font);</span><br><span class="line">  <span class="built_in">document</span>.body.style.fontFamily = <span class="string">"Awesome Font, serif"</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> content = <span class="built_in">document</span>.getElementById(<span class="string">"content"</span>);</span><br><span class="line">  content.style.visibility = <span class="string">"visible"</span>;</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<h2 id="压缩网页字体"><a href="#压缩网页字体" class="headerlink" title="压缩网页字体"></a>压缩网页字体</h2><p>字体是字形的集合，其中每个字形都是一组描述字符形状的路径。我们可以通过压缩字形中相似信息或者缩减字形范围，从而达到压缩字体的效果。</p>
+<h3 id="压缩字形"><a href="#压缩字形" class="headerlink" title="压缩字形"></a>压缩字形</h3><p>各个字形虽然不同，但它们包含大量相似的信息。这些信息可通过 GZIP 或兼容的压缩工具进行压缩:</p>
+<ul>
+<li>EOT 和 TTF 格式默认情况下不进行压缩。提供这些格式时，确保你服务器配置为应用 GZIP 压缩。</li>
+<li>WOFF 具有内建压缩。 确保你的 WOFF 压缩工具使用了最佳压缩设置。</li>
+<li>WOFF2 采用自定义预处理和压缩算法，提供的文件大小压缩率比其他格式高大约 30%。</li>
+</ul>
+<h3 id="提取字形"><a href="#提取字形" class="headerlink" title="提取字形"></a>提取字形</h3><p>我们可以使用一些工具自动分析出页面中使用的 Web Font 并按需进行压缩，如 <a href="https://github.com/aui/font-spider" target="_blank" rel="noopener">font-spider</a>。font-spider 只支持静态网页，现在我们尝试使用 font-spider 为 hexo 静态网页压缩字体:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g font-spider <span class="comment"># 安装 font-spider</span></span><br><span class="line">$ hexo generate <span class="comment"># hexo 生成静态网页</span></span><br><span class="line">$ sed -i <span class="string">"s~/css/style.css~`pwd`/public/css/style.css~g"</span> ./public/**/*.html <span class="comment"># 将网页中的 css 资源资源链接替换成文件系统的绝对地址(资源链接根据你的实际情况进行替换)</span></span><br><span class="line">$ font-spider ./public/**/*.html --debug <span class="comment"># 使用 font-spider 压缩字体</span></span><br><span class="line">$ sed -i <span class="string">"s~`pwd`/public/css/style.css~/css/style.css~g"</span> ./public/**/*.html <span class="comment"># 替换回 css 资源链接</span></span><br><span class="line">$ hexo deploy  <span class="comment"># 发布</span></span><br></pre></td></tr></table></figure>
+<p>通过执行以上命令我们就能为使用到的字体进行 “瘦身”。结合 CI，我们还可以做到发布时自动压缩字体～</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当我们决定要在网页中使用一种字体时，需要对该字体的系统普及度做调查。如果是一种不常用字体，此时我们需要下载资源并对其进行优化。在优化字体时，首先考虑先压缩字体或者使用 CDN 加载字体下载，再考虑在客户端上进行处理。一切从用户体验上出发，如果因为字体影响了用户体验，此时我们就要考虑此字体是否有必要引用了。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.kancloud.cn/jonjo/jonjo/1025441" target="_blank" rel="noopener">web前端基础资料 - 性能</a></li>
+<li><a href="https://zhangxiang958.github.io/2017/05/20/%E7%BB%86%E8%AF%B4%20window.performance/" target="_blank" rel="noopener">细说 window.performance</a></li>
+<li><a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/webfont-optimization?hl=zh-CN" target="_blank" rel="noopener">网页字体优化</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/10/29/8_webfont_optimization/">https://jinhucheung.github.io/2019/10/29/8_webfont_optimization/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Web-Font/"># Web Font</a>
+                    
+                        <a href="/tags/font-spider/"># font-spider</a>
+                    
+                        <a href="/tags/Blog/"># Blog</a>
+                    
+                        <a href="/tags/Hexo/"># Hexo</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/11/16/9_devops_docker_started/">DevOps - Docker 入门</a>
+            
+            
+            <a class="next" rel="next" href="/2019/10/11/7_servlet_and_jsp/">Java Web - Servlet and JSP</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

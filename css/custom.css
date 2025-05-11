@@ -1,0 +1,15 @@
+.header-muted {
+  display: inline;
+  position: absolute;
+  right: 0;
+  color: #97aac3;
+  font-size: 0.8em;
+  margin-top: 0.05em;
+}
+/* mobile phone and smart portable devices */
+@media screen and (max-width: 479px) {
+  .header-muted {
+    position: relative;
+    display: block;
+  }
+}

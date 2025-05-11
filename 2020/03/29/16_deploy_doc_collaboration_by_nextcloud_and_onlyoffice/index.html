@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>Nextcloud + OnlyOffice 搭建企业内部网盘及文档协作系统 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Nextcloud + OnlyOffice 搭建企业内部网盘及文档协作系统</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 29, 2020&nbsp;&nbsp;17:17</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>你正需要搭建一个企业内部网盘或者文档协作系统吗？ 相信我，Nextcloud + OnlyOffice 是你一个不错的选择。</p>
+<a id="more"></a>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><a href="https://nextcloud.com/" target="_blank" rel="noopener">Nextcloud</a> 是一款由 PHP 编写的开源网盘软件，在 <a href="https://owncloud.org/" target="_blank" rel="noopener">ownCloud</a> 基础上开发而来。Nextcloud 功能丰富，支持外部扩展，只需要在官方 <a href="https://apps.nextcloud.com/" target="_blank" rel="noopener">应用商店</a> 下载相应插件即可。Nextcloud 客户端支持多个平台。</p>
+<p><a href="https://www.onlyoffice.com/" target="_blank" rel="noopener">OnlyOffice</a> 是一款网上的文档协作系统，包含服务端和客户端套件，其中服务端 <a href="https://github.com/ONLYOFFICE/DocumentServer" target="_blank" rel="noopener">DocumentServer</a> 可独立部署。OnlyOffice 支持对 Office 文档的实时编辑。现已被 Nextcloud, ownCloud, Seafile 等众多软件支持集成。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>目前 OnlyOffice 官方已发布集成好 OnlyOffice 插件的 Nextcloud Docker 应用，我在此基础上加入数据库服务和一些 Nextcloud 插件。</p>
+<p>首先下载仓库:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git clone https:&#x2F;&#x2F;github.com&#x2F;jinhucheung&#x2F;docker-onlyoffice-nextcloud</span><br><span class="line">$ cd docker-onlyoffice-nextcloud</span><br></pre></td></tr></table></figure>
+<p>然后拷贝 docker-compose 配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cp docker-compose.yml.example docker-compose.yml</span><br></pre></td></tr></table></figure>
+<p>最后启动应用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose up -d</span><br></pre></td></tr></table></figure>
+<p>之后打开浏览器访问 <code>http://localhost:4080</code> 对 Nextcloud 进行初始设置。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>我们需要对 Nextcloud 进行一些配置，包含应用默认语言及设置 OnlyOffice 插件等:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ .&#x2F;nextcloud&#x2F;bin&#x2F;config.sh</span><br></pre></td></tr></table></figure>
+<p>执行上面命令对 Nextcloud 设置默认语言及设置 <a href="https://github.com/jinhucheung/docker-onlyoffice-nextcloud/tree/master/nextcloud/plugins" target="_blank" rel="noopener">nextcloud/plugins</a> 目录中的插件。</p>
+<p>如果需要批量注册用户，可以下命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ .&#x2F;nextcloud&#x2F;bin&#x2F;add_users.sh $users_csv_file_path $user_default_password</span><br></pre></td></tr></table></figure>
+<p>其中 <code>$users_csv_file_path</code> 为用户 CSV 文件路径。文件格式参考 <a href="https://github.com/jinhucheung/docker-onlyoffice-nextcloud/blob/master/nextcloud/public/data/users.csv.example" target="_blank" rel="noopener">users.csv.example</a>。</p>
+<p>而 <code>$user_default_password</code> 为用户默认密码。如果要设置简单密码，需要先在 Nextcloud 后台设置密码校验。</p>
+<h2 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h2><h3 id="宿主机访问不了-Docker-容器桥接网络？"><a href="#宿主机访问不了-Docker-容器桥接网络？" class="headerlink" title="宿主机访问不了 Docker 容器桥接网络？"></a>宿主机访问不了 Docker 容器桥接网络？</h3><p>此问题有很多原因，可以从 IPv4, IPv6(容器网络绑定到 IPv6 上), 防火墙，SELinux 方面上进行分析。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2020/03/29/16_deploy_doc_collaboration_by_nextcloud_and_onlyoffice/">https://jinhucheung.github.io/2020/03/29/16_deploy_doc_collaboration_by_nextcloud_and_onlyoffice/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Docker/"># Docker</a>
+                    
+                        <a href="/tags/Nextcloud/"># Nextcloud</a>
+                    
+                        <a href="/tags/OnlyOffice/"># OnlyOffice</a>
+                    
+                        <a href="/tags/Wiki/"># Wiki</a>
+                    
+                        <a href="/tags/DocCollaboration/"># DocCollaboration</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/05/24/17_dokku__build_your_own_paas/">Dokku —— 搭建自己的 PaaS 系统</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/21/15_jmeter_use_custom_encrypt_jar/">JMeter 使用自定义的加密库</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

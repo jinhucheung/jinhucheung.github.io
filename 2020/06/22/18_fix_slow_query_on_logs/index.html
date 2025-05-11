@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>记录一次解决日志表的慢查询 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">记录一次解决日志表的慢查询</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 22, 2020&nbsp;&nbsp;21:17</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Backend/">Web Backend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>今天在工作中修复了两个慢查询请求。可能之后也会遇到，记录下问题，让自己更好理解。</p>
+<a id="more"></a>
+<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在描述那两个慢查询场景前，需要先理下相关的表结构：</p>
+<p>logs (日志表)</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>日志主键</td>
+</tr>
+<tr>
+<td>job_id</td>
+<td>作业 ID</td>
+</tr>
+<tr>
+<td>job_group</td>
+<td>作业群组标识</td>
+</tr>
+<tr>
+<td>handle_code</td>
+<td>执行结果编码</td>
+</tr>
+<tr>
+<td>handle_msg</td>
+<td>执行结果信息</td>
+</tr>
+</tbody>
+</table>
+<p>jobs (作业表)</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>作业主键</td>
+</tr>
+<tr>
+<td>type</td>
+<td>作业类型</td>
+</tr>
+<tr>
+<td>name</td>
+<td>作业名称</td>
+</tr>
+<tr>
+<td>executor_id</td>
+<td>作业执行器 ID</td>
+</tr>
+</tbody>
+</table>
+<p>models (模型表)</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>模型主键</td>
+</tr>
+<tr>
+<td>version</td>
+<td>模型版本</td>
+</tr>
+<tr>
+<td>job_id</td>
+<td>作业 ID</td>
+</tr>
+</tbody>
+</table>
+<p>executors (作业执行器表)</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>id</td>
+<td>作业执行器主键</td>
+</tr>
+<tr>
+<td>address</td>
+<td>作业执行器地址</td>
+</tr>
+<tr>
+<td>job_group</td>
+<td>作业群组标识</td>
+</tr>
+</tbody>
+</table>
+<p>用一句话总结上面的关系是：模型会有关联一个作业，但作业有不同类型（可能不是模型），每个作业会在一个执行器中执行，然后产生执行日志信息。</p>
+<p>好了，知道这些后，我们来看看前面提到的慢查询吧～</p>
+<h2 id="TOP1-Logs"><a href="#TOP1-Logs" class="headerlink" title="TOP1 Logs"></a>TOP1 Logs</h2><p>现在我们需要在模型或作业中显示其最新的执行信息，而执行信息只能在日志表中获取。这意味着我们需要从日志表中拿到作业最后的日志信息，看看下面的查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.*</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">logs</span> t1</span><br><span class="line"><span class="keyword">WHERE</span> t1.id = (</span><br><span class="line">	<span class="keyword">SELECT</span> <span class="keyword">MAX</span>(<span class="keyword">id</span>)</span><br><span class="line">	<span class="keyword">FROM</span> <span class="keyword">logs</span> t2</span><br><span class="line">	<span class="keyword">WHERE</span> t1.job_id = t2.job_id</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>日志表自关联，获取每个作业的最后日志 ID, 之后通过日志 ID 获取相关记录。</p>
+<p>看起来没什么问题，开发环境数据量少，查询起来也不会慢，so easy。</p>
+<p>但随着日志越来越多，慢慢地就会发现，这个查询怎么 5、6 分钟都没出结果。</p>
+<p>让我们一步步来看看上面的查询，首先根据日志中的作业 ID 获取关联作业的所有日志信息（耗时为 T1),然后从关联作业的所有日志中获取最后的 ID(耗时为 T2), 最后根据日志 ID 获取相关记录（耗时为 T3，相当于扫描一次日志表的时间)。</p>
+<p>那上面查询的总耗时大概为： <code>(T1 + T2) * T3 + T3</code></p>
+<p>当日志越来越多时，T1, T2, T3 都会越来越大，此时上面查询时间复杂度为 <code>O(N^2)</code></p>
+<p>知道问题后，我们来优化这个查询，通过作业 ID 获取最后的日志信息，我们可以联想到使用 <code>GROUP BY</code>:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.*</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">logs</span> t1</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> t1.job_id</span><br><span class="line"><span class="keyword">HAVING</span> t1.id = <span class="keyword">MAX</span>(t1.id)</span><br></pre></td></tr></table></figure>
+<p>但有些数据库在默认设置下执行前面的 SQL 会出现以下错误：</p>
+<blockquote>
+<p>Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column ‘your_database.t1.id’ which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by</p>
+</blockquote>
+<p>为了解决上面的错误，我们可以修改数据库的配置信息，参考：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">GLOBAL</span> sql_mode=(<span class="keyword">SELECT</span> <span class="keyword">REPLACE</span>(@@sql_mode,<span class="string">'ONLY_FULL_GROUP_BY'</span>,<span class="string">''</span>));</span><br></pre></td></tr></table></figure>
+<p>如果在不修改数据库的前提下，我们可以在上面 GROUP 查询外增加一个查询，如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.*</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">logs</span> t1</span><br><span class="line"><span class="keyword">JOIN</span> (</span><br><span class="line">	<span class="keyword">SELECT</span> <span class="keyword">MAX</span>(<span class="keyword">id</span>) <span class="keyword">as</span> max_id</span><br><span class="line">	<span class="keyword">FROM</span> <span class="keyword">logs</span> t3</span><br><span class="line">	<span class="keyword">GROUP</span> <span class="keyword">BY</span> t3.job_id</span><br><span class="line">) t2 <span class="keyword">ON</span> t2.max_id = t1.id</span><br></pre></td></tr></table></figure>
+<p>我们也按之前的方法分析下上面的查询耗时，首先 <code>GROUP BY</code> 将遍历一次全表并将 job id 进行分组（耗时为 T1），然后获取每个分组中最大 ID(耗时为 T2)，最后进行联表（耗时为 T3，没索引情况下，相当于两次全表扫描）。</p>
+<p>那么上面查询总耗时为 <code>T1 + T2 + T3</code>，时间复杂度约为 <code>O(N)</code>。</p>
+<h2 id="Join-Logs"><a href="#Join-Logs" class="headerlink" title="Join Logs"></a>Join Logs</h2><p>当我们需要在日志中显示其作业、执行器信息时，那么需要将日志表和其他表进行关联，如下面的查询：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.*, t2.address, t3.version, t4.name</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">logs</span> t1</span><br><span class="line"><span class="keyword">JOIN</span> executors t2 <span class="keyword">ON</span> t2.job_group = t1.job_group</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> models t3 <span class="keyword">ON</span> t3.job_id = t1.job_id</span><br><span class="line"><span class="keyword">JOIN</span> jobs t4 <span class="keyword">ON</span> t4.id = t1.job_id</span><br></pre></td></tr></table></figure>
+<p>看起来上面的查询没有可以优化的空间，但随着日志表越来越大，执行将变得越来越慢。</p>
+<p>考虑到日志表很大，尝试联表时尽可能不关联日志表，优化后查询如下：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> t1.*, t2.name, t3.address, t4.version</span><br><span class="line"><span class="keyword">FROM</span> <span class="keyword">logs</span> t1</span><br><span class="line"><span class="keyword">JOIN</span> jobs t2 <span class="keyword">ON</span> t2.id = t1.job_id</span><br><span class="line"><span class="keyword">JOIN</span> executors t3 <span class="keyword">ON</span> t3.id = t2.executor_id</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> models t4 <span class="keyword">ON</span> t4.job_id = t2.id</span><br></pre></td></tr></table></figure>
+<p>由于使用作业表代替日志表的引用，这样联表时减少对日志表的扫描，从而提升执行速度。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>当我们对大数据量的表进行查询时，需要分外注意查询效率。联表使用其他表代替大表的关联，使用适合的聚合函数，这样就可以减小对大表的扫描，从而加快查询。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://stackoverflow.com/questions/41887460/select-list-is-not-in-group-by-clause-and-contains-nonaggregated-column-inc" target="_blank" rel="noopener">SELECT list is not in GROUP BY clause and contains nonaggregated column … incompatible with sql_mode=only_full_group_by</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/86613661" target="_blank" rel="noopener">SQL数据分析之 group by 的实现原理</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2020/06/22/18_fix_slow_query_on_logs/">https://jinhucheung.github.io/2020/06/22/18_fix_slow_query_on_logs/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/SQL/"># SQL</a>
+                    
+                        <a href="/tags/Web/"># Web</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2022/05/01/20_start_to_backend/">怎么学习一门后端语言</a>
+            
+            
+            <a class="next" rel="next" href="/2020/05/24/17_dokku__build_your_own_paas/">Dokku —— 搭建自己的 PaaS 系统</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

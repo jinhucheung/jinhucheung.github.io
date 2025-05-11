@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>怎么学习一门后端语言 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">怎么学习一门后端语言</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 1, 2022&nbsp;&nbsp;21:55</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Backend/">Web Backend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="什么是后端？"><a href="#什么是后端？" class="headerlink" title="什么是后端？"></a>什么是后端？</h2><p>我们都知道，软件系统可以根据关注点不同划分为前端和后端两部分。前端指系统中直接和用户交互的部分，负责呈现内容给用户，并将用户输入给后端。而后端不被用户看见，负责处理用户输入，最后输出给前端。</p>
+<p>随着软件开发日益复杂，工程师也随着职责划分为前端和后端。由我向大家介绍后端开发入门的一些知识，也希望能让大家了解到我们后端这一群人的工作。</p>
+<p><img src="https://user-images.githubusercontent.com/19590194/168108022-6f9d0b15-f998-4eb1-ace1-7be7ac760fe9.png" alt="backend"></p>
+<a id="more"></a>
+<h2 id="后端在做什么"><a href="#后端在做什么" class="headerlink" title="后端在做什么?"></a>后端在做什么?</h2><p>前面我们提到后端是处理用户输入，并将结果输出给前端，而这个工作场所就是服务器。这比较笼统，让我们看下用人单位的招聘描述:</p>
+<details><br>  <summary><a href="https://eleduck.com/posts/L5fgzg" target="_blank" rel="noopener">Airhost</a></summary><br>  <blockquote style="margin-top: -35px; margin-bottom: -10px; padding-top: 0; font-size: 14px;"><br>  基础要求<br>  ● 3 年以上工作经验，至少 2 年以上 Ruby on Rails 实际项目经验；<br>  ● 优秀的学习能力和沟通能力;<br>  ● 熟悉测试驱动开发；<br>  ● 有开发 API 的经验；<br>  ● 熟练掌握 RESTful API 规范，并有丰富开发经验；<br>  ● 了解或熟悉swagger 3.0（openapi 3.0）规范;<br>  ● 有参与前后分离型开发的经验；<br>  ● 熟悉 PostgreSQL 数据库的配置、维护及优化；<br>  ● 了解或熟悉 postgresql 数据库的表格设计与性能优化；<br>  ● 了解或熟悉 Elasticsearch 的全文搜索功能；<br><br>  加分项<br>  ● 有酒店预订和管理相关产品的开发经验；<br>  ● 有 Stripe 等支付系统的开发经验；<br>  ● 有AWS常用产品的使用经验（S3, Lambda, Api Gateway）;<br>  </blockquote><br></details>
+
+<details><br>  <summary><a href="https://www.zhipin.com/job_detail/820d35405ad6a3d01nxz3NW0F1pX.html?ka=search_list_jname_1_blank&amp;lid=tnuFfO3V9R.search.1&amp;securityId=4NyabkX9sxXKd-H15R3_YmP_cWtFyJRgMdFgkPDDfTlO5lTxXM1b1G49D9m6uhodnbtvZ6BLIxo8h39rnacGm1t2b6617t2mzWU3iGVKAvM6DNfTkCM%7E" target="_blank" rel="noopener">腾讯</a></summary><br>  <blockquote style="margin-top: -35px; margin-bottom: -10px; padding-top: 0; font-size: 14px;"><br>  岗位职责<br>  ● 熟悉c++/java/golang等语言,至少一种。有一年以上golang研发经验优;<br>  ● 熟悉golang语言框架代码,了解一个golang开源项目优先;<br>  ● 负责产品服务端开发，不断进行产品演进，提高产品质量和用户体验；<br>  ● 负责项目的设计、编码、调优、测试及Bug处理；<br>  ● 良好的编码和文档习惯，对代码美感的追求孜孜不倦；<br>  ● 深入理解计算机原理，有扎实的数据结构和算法基础；<br>  ● 具有分布式系统设计和开发经验者优先;<br>  ● 深入理解linux系统及其原理，熟悉常用数据结构的使用,熟悉TCP/IP、HTTP协议以及网络编程；<br>  ● 熟悉常用的sql、nosql数据库原理，阅读和理解优秀的开源系统代码；<br>  </blockquote><br></details>
+
+<p>从中我们可以知道后端需要做：</p>
+<ul>
+<li>使用后端语言：掌握一门可以运行在服务器的计算机语言;</li>
+<li>实现维护业务功能：理解功能需求，研究可行性，最后实现或者维护功能;</li>
+<li>设计开发 API：与前端协作，确定 API 输入、输出;</li>
+<li>关注服务器：应用程序调优，数据库维护优化等，可能会涉及到运维工作;</li>
+</ul>
+<p>可知，后端开发需要围绕服务器及应用程序进行，所以我们学习后端也从这两点展开。</p>
+<h2 id="怎么学习后端？"><a href="#怎么学习后端？" class="headerlink" title="怎么学习后端？"></a>怎么学习后端？</h2><h3 id="Step1-熟悉操作系统"><a href="#Step1-熟悉操作系统" class="headerlink" title="Step1: 熟悉操作系统"></a>Step1: 熟悉操作系统</h3><p>操作系统也是一种软件，它向下和计算机硬件打交道，向上提供通用交互接口给其他应用程序。它主要帮我们做了下面这些事情：</p>
+<ul>
+<li>进程管理：一个运行起来的应用程序都是进程。进程是资源分配的最小单位，有自己独立的一块内存空间；</li>
+<li>内存管理：内存资源的分配和回收；</li>
+<li>文件管理：文件读写、权限等；</li>
+<li>输入输出管理：外部设备读写，如存储设备；</li>
+</ul>
+<p>目前企业应用基本都是运行在 Linux 操作系统上的。作为后端开发，需要掌握 Linux 操作系统使用及 shell 脚本编写。</p>
+<p>书籍推荐：<a href="https://book.douban.com/subject/4889838/" target="_blank" rel="noopener">《鸟哥的Linux私房菜》</a></p>
+<h3 id="Step2-学习计算机网络"><a href="#Step2-学习计算机网络" class="headerlink" title="Step2: 学习计算机网络"></a>Step2: 学习计算机网络</h3><p>计算机网络由若干计算机、路由器等节点和连接这些节点的链路组成。它围绕着如何让地理位置上不同的计算机连接起来，并高效可靠的交换数据信息。而网络协议就是为了进行数据交换而建立的标准、协议。HTTP 就是其中一种广泛使用的网络协议。</p>
+<p>作为后端开发，我们需要了解计算机网络，特别是 HTTP 协议如何工作。</p>
+<p>书籍推荐：<a href="https://book.douban.com/subject/25863515/" target="_blank" rel="noopener">《图解 HTTP》</a></p>
+<h3 id="Step3-学习一门后端语言"><a href="#Step3-学习一门后端语言" class="headerlink" title="Step3: 学习一门后端语言"></a>Step3: 学习一门后端语言</h3><p>后端语言有很多：Ruby, Python, JavaScript, PHP, Java, Go, Rust 等，我们可以根据语言特性，发展程度及受众程度等先选择一门语言开始学习，我们开始不需要在语言选择上过多纠结。实在拿不定没有主意，我们可以在招聘网站或者技术论坛选择当下热门的后端语言。</p>
+<p>在语言学习上，我们除了要掌握语法，数据类型，常用函数外，还需要了解其核心特性、包管理及编码的最佳实践，以及常用的开发工具。</p>
+<p>书籍推荐：<a href="https://book.douban.com/subject/25958845/" target="_blank" rel="noopener">《Ruby基础教程》</a> <a href="https://book.douban.com/subject/7056800/" target="_blank" rel="noopener">《Ruby元编程》</a></p>
+<h3 id="Step4-选择一个-Web-框架"><a href="#Step4-选择一个-Web-框架" class="headerlink" title="Step4: 选择一个 Web 框架"></a>Step4: 选择一个 Web 框架</h3><p>根据选择的语言，我们可以选择一个 Web 框架进行学习。虽然用编程语言编写整个应用程序代码是允许，但这需要更多的精力和时间，掌握一个框架后会变得更加有效率。</p>
+<p>目前无论是 Ruby on Rails 还是 Django 等大多数框架都是遵循 MVC (Model-View-Controller) 模式实践。在前后端分离流行当下，传统的 MVC 框架也在变化发展中。它们仍值得学习。</p>
+<p>书籍推荐：<a href="https://flapybooks.com/products/railstutorial6th/" target="_blank" rel="noopener">《Ruby on Rails 教程》</a></p>
+<h3 id="Step5-了解基础的前端知识"><a href="#Step5-了解基础的前端知识" class="headerlink" title="Step5: 了解基础的前端知识"></a>Step5: 了解基础的前端知识</h3><p>虽然我们不一定能像前端开发一样实现精美交互复杂的页面，但我们也需要有了解基础的前端知识，比如 HTML, JavaScript, CSS。当我们与前端协作时，懂一些前端知识可以帮助我们更快定位到问题，减少沟通成本。</p>
+<p>另外，在学习阶段，如果你想做出一个完整的 demo 应用，不懂前端会变得十分困难。</p>
+<p>网站推荐：<a href="https://www.w3school.com.cn/index.html" target="_blank" rel="noopener">W3school</a></p>
+<h3 id="Step6-学习数据库"><a href="#Step6-学习数据库" class="headerlink" title="Step6: 学习数据库"></a>Step6: 学习数据库</h3><p>除非是单纯的转发路由类应用，一般后台应用需要处理复杂的业务逻辑，这涉及到数据处理和存储。所以我们学习数据库相关知识是十分必要的。</p>
+<p>目前数据库主要分为关系型数据库(SQL)和非关系型数据库(NoSQL)。我们需要掌握一个关系型数据库比如 PostgreSQL, MySQL 的使用和调优。同时也需要对非关系型数据库有一定程度的理解和使用，比如 Redis。</p>
+<p>书籍推荐：<a href="https://book.douban.com/subject/24250054/" target="_blank" rel="noopener">《SQL必知必会》</a> <a href="https://book.douban.com/subject/25900156/" target="_blank" rel="noopener">《Redis设计与实现》</a></p>
+<h3 id="Step7-更多练习和模仿"><a href="#Step7-更多练习和模仿" class="headerlink" title="Step7: 更多练习和模仿"></a>Step7: 更多练习和模仿</h3><p>前面的学习铺垫，是时候让我们开始实践了！运用我们学习到的知识，尝试创造一些”小物件”比如 To-do list 或者模仿一些优秀的应用。</p>
+<p>我们只有在实践中才能发现一些问题，解决并积累这些问题，这样我们可以更好地理解吸收迄今为止所学的知识。</p>
+<h3 id="Step8-云服务"><a href="#Step8-云服务" class="headerlink" title="Step8: 云服务"></a>Step8: 云服务</h3><p>现在已经是云服务的时代了。我们可以不需要在线下购买服务器并设置它了，像 AWS，阿里云等云服务商已提供好基础架构给我们。</p>
+<p>一开始我们不需要深入掌握它，但你需要了解并使用它，尝试将自己的应用部署上云吧！</p>
+<h3 id="Step9-保持学习和尝试！"><a href="#Step9-保持学习和尝试！" class="headerlink" title="Step9: 保持学习和尝试！"></a>Step9: 保持学习和尝试！</h3><p>后端开发还有很多知识点需要我们持续学习精进，比如</p>
+<ul>
+<li>API 设计</li>
+<li>测试驱动</li>
+<li>缓存</li>
+<li>搜索引擎</li>
+<li>消息队列</li>
+<li>常见业务场景中的最佳实践，比如消息通知、事件日志</li>
+<li>安全 &amp; 监控</li>
+<li>虚拟化</li>
+<li>云服务</li>
+<li>…</li>
+</ul>
+<p>虽然需要学习的有很多，但我们一生不都在学习吗？</p>
+<h2 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h2><ol>
+<li><a href="https://hackr.io/blog/how-to-become-a-backend-developer" target="_blank" rel="noopener">How to Become a Backend Developer? - Backend Development</a></li>
+<li><a href="https://www.freecodecamp.org/news/learn-backend-development/" target="_blank" rel="noopener">The Best Way to Learn Backend Web Development</a></li>
+<li><a href="https://roadmap.sh/backend" target="_blank" rel="noopener">Backend Developer Roadmap</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2022/05/01/20_start_to_backend/">https://jinhucheung.github.io/2022/05/01/20_start_to_backend/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Web/"># Web</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2022/11/18/21_aws_intro/">AWS 介绍</a>
+            
+            
+            <a class="next" rel="next" href="/2020/06/22/18_fix_slow_query_on_logs/">记录一次解决日志表的慢查询</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

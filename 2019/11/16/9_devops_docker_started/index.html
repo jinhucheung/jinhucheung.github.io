@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>DevOps - Docker 入门 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">DevOps - Docker 入门</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 16, 2019&nbsp;&nbsp;23:13</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/DevOps/">DevOps</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><a href="https://www.docker.com/" target="_blank" rel="noopener">Docker</a> 是一件令人惊艳的 DevOps 工具。无论在开发、测试、部署工作上，我们可以通过使用它节省大部分时间，即使对个人项目来说也是如此。在本文里，你可以了解到 Docker 是什么，以及如何将它应用于日常工作中。</p>
+<p>本文使用的代码可在 GitHub 上的 <a href="https://github.com/jinhucheung/docker-demo" target="_blank" rel="noopener">jinhucheung/docker-demo</a> 仓库获取。</p>
+<p>如果你已经很熟悉 Docker，甚至多次尝试应用它，请直接跳过本文。</p>
+<a id="more"></a>
+<h2 id="Docker-解决的问题"><a href="#Docker-解决的问题" class="headerlink" title="Docker 解决的问题"></a>Docker 解决的问题</h2><p>在 Docker 出现之前，软件开发、部署工作都要在特定的环境上进行安装、配置和运行。如果我们没注意将运行环境的功能模块或数据改动，这可能会造成我们软件不能再工作。当我们需要在其他环境上部署软件时，也可能由于环境不同而出现各种依赖不一致的问题，导致软件安装失败。</p>
+<p>由于上述软件开发、部署环境不同造成的各种问题，我们渴望能有一种将软件代码及其运行环境“打包”发布的方案以去解决它们。</p>
+<p>如果你对虚拟机有所了解，你可能会有一个疑问 – “我们不是有虚拟机技术吗？” 对的，我们可以通过虚拟机还原软件的运行环境。但虚拟机往往占用系统资源较多，安装、启动软件步骤较多。</p>
+<p>由于虚拟机存在的这些缺点， Linux 发展出另一种虚拟化技术： Linux 容器 (Linux Containers, LXC)。Linux 容器不是模拟一个完整的操作系统，而是对进程进行隔离。或者说，在正常进程外面套了一个保护层。对于容器里面的进程来说，它接触到的各种资源都是虚拟的，从而实现与底层系统的隔离。</p>
+<p>正是在此背景下， Docker 出现了。它基于 Linux 容器技术为我们提供了一种轻量、易用地将软件及环境一起打包的方案。</p>
+<h2 id="Docker-是什么？"><a href="#Docker-是什么？" class="headerlink" title="Docker 是什么？"></a>Docker 是什么？</h2><p>Docker 属于 Linux 容器的一种封装，提供简单易用的容器使用接口。</p>
+<p>Docker 将软件及其依赖环境打包成一个文件，运行此文件生成一个容器。软件在容器里运行，就如同在真实的物理机上运行一样。有了 Docker, 就不用担心环境问题。</p>
+<h2 id="安装-Docker"><a href="#安装-Docker" class="headerlink" title="安装 Docker"></a>安装 Docker</h2><p>Docker 分为社区版 (Docker Engine - Community) 和企业版 (Docker Engine - Enterprise / Docker Enterprise)。企业版包含了一些收费功能，个人开发者一般用不到，不同版本间的区别你可以在<a href="https://docs.docker.com/install/overview/" target="_blank" rel="noopener">官方文档</a>中了解到。下面介绍以社区版进行开展。</p>
+<p>Docker 社区版参考以下官方文档进行安装：</p>
+<ul>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/centos/" target="_blank" rel="noopener">CentOS</a></li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/debian/" target="_blank" rel="noopener">Debian</a></li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/fedora/" target="_blank" rel="noopener">Fedora</a></li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/" target="_blank" rel="noopener">Ubuntu</a></li>
+<li><a href="https://docs.docker.com/install/linux/docker-ce/binaries/" target="_blank" rel="noopener">Linux 二进制文件</a></li>
+<li><a href="https://docs.docker.com/docker-for-mac/" target="_blank" rel="noopener">Mac</a></li>
+<li><a href="https://docs.docker.com/docker-for-windows/" target="_blank" rel="noopener">Windows</a></li>
+</ul>
+<p>安装成功后，执行下面命令进行验证:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker -v</span><br></pre></td></tr></table></figure>
+<p>Docker 守护进程默认以 Unix socket 形式运行，而不是 TCP 端口。此 Unix socket 文件属于 root 用户。这意味我们用非 root 用户执行 docker 命令时须加上 <code>sudo</code>。如果不想以 <code>sudo</code> 开头执行 docker 命令，我们需要创建一个 <code>docker</code> 用户组并将用户加入其中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo groupadd docker</span><br><span class="line">$ sudo usermod -aG docker $USER</span><br></pre></td></tr></table></figure>
+<p>然后登出用户会话，以确保用户成功加入到 <code>docker</code> 用户组中。</p>
+<p>当我们执行 docker 命令，需要确保 Docker 守护进程已启动。下面将 docker 守护进程加入开机启动中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># systemd</span><br><span class="line">$ sudo systemctl enable docker</span><br><span class="line"></span><br><span class="line"># upstart</span><br><span class="line">$ echo manual | sudo tee &#x2F;etc&#x2F;init&#x2F;docker.override</span><br><span class="line"></span><br><span class="line"># chkconfig</span><br><span class="line">$ sudo chkconfig docker on</span><br></pre></td></tr></table></figure>
+<h2 id="开始使用-Docker"><a href="#开始使用-Docker" class="headerlink" title="开始使用 Docker"></a>开始使用 Docker</h2><p>下面，我们通过一个简单的例子来感受下 Docker。</p>
+<p>需要说明的是，国内访问 Docker 官方仓库 <a href="https://hub.docker.com/" target="_blank" rel="noopener">Docker Hub</a> 较慢，你可以参考此篇文章<sup><a href="#boost_docker_hub">[3]</a></sup>设置镜像库加速访问。</p>
+<p>首先执行下面命令将官方仓库的 image 文件(下一节会详细介绍)拉取到本地：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker image pull library&#x2F;hello-world</span><br></pre></td></tr></table></figure>
+<p>拉取成功后执行命令查看：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker images</span><br></pre></td></tr></table></figure>
+<p>然后使用此文件构建容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker container run library&#x2F;hello-world</span><br></pre></td></tr></table></figure>
+<p>如果运行成功，你应该会看到 <code>Hello from Docker!</code> 的输出。</p>
+<p>其实 <code>docker container run</code> 可以缩写为 <code>docker run</code>, 它有自动拉取 image 文件的功能，所以上述命令可简化为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run library&#x2F;hello-world</span><br></pre></td></tr></table></figure>
+<p>最后将以下停用的容器、挂起的 image 文件清理掉：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker system prune</span><br></pre></td></tr></table></figure>
+<h2 id="构建镜像"><a href="#构建镜像" class="headerlink" title="构建镜像"></a>构建镜像</h2><p>前面我们提到了 image 文件是一个二进制文件。Docker 将应用程序及其依赖环境打包到此文件中。只用通过这个文件才能生成容器。image 可以看做容器的模板，Docker 根据 image 生成容器的实例。同一个 image 可以生成多个同时运行的容器。</p>
+<p>在实际运用中，一个 image 文件往往通过继承其他 image 文件，在此基础上，加入特定的设置生成而来。我们可以在 Docker Hub 中获取到满足我们需求的 image 文件，当然我们制作好 image 后，也可以推送到 Docker Hub 上。</p>
+<p>下面尝试为一个 python 脚本生成 image 文件，构建第一个镜像。</p>
+<p>首先让我们编写 python 脚本 run.py:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># run.py</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    print(<span class="string">'Hello Python'</span>)</span><br></pre></td></tr></table></figure>
+<p>然后编写 Dockerfile 用于描述 image 如何构建：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FROM</span> python:<span class="number">3.7</span>-alpine</span><br><span class="line"></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> . /app</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /app</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> python run.py</span></span><br></pre></td></tr></table></figure>
+<p>上面的 Dockerfile 描述了将要生成的 image 继承至 python:3.7-alpine 这个 image。然后需要拷贝当前目录下文件至 image 的 /app 目录下，并设置该目录为工作空间。最后设置 <code>python run.py</code> 为此 image 构建出容器的默认执行命令。</p>
+<p>之后执行下面命令构建 image：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t jinhucheung&#x2F;docker-demo .</span><br></pre></td></tr></table></figure>
+<p>最后让我们尝试用此 image 运行一个容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --rm jinhucheung&#x2F;docker-demo</span><br></pre></td></tr></table></figure>
+<p>如果运行正常，你应该会看到 <code>Hello Python</code> 的输出。另外上面命令的 <code>--rm</code> 参数意味着此容器运行完即销毁。</p>
+<p>本章节的代码可查看 <a href="https://github.com/jinhucheung/docker-demo/tree/v0.1.0" target="_blank" rel="noopener">jinhucheung/docker-demo:v0.1.0</a></p>
+<h2 id="连接容器"><a href="#连接容器" class="headerlink" title="连接容器"></a>连接容器</h2><p>为了更好说明容器间如何通信，假定我们遇到了一个需求 - 为前面的 python 脚本连接 PostgreSQL 数据库。</p>
+<h3 id="完善应用脚本"><a href="#完善应用脚本" class="headerlink" title="完善应用脚本"></a>完善应用脚本</h3><p>首先需要在 python 脚本中引入 PostgreSQL 驱动依赖：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ echo psycopg2 &gt;&gt; requirements.txt</span><br><span class="line">$ pip install -r requirements.txt --user</span><br></pre></td></tr></table></figure>
+<p>如果本地没有安装 PostgreSQL 依赖库， pip install 将会报错。这个时候请不要着急安装，后面我们会使用 Docker 去安装。</p>
+<p>在脚本中使用 psycopg2 连接数据库：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># run.py</span></span><br><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> psycopg2</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    database_name = <span class="string">'your_postgres_db'</span></span><br><span class="line">    database_user = <span class="string">'your_postgres_user'</span></span><br><span class="line">    database_password = <span class="string">'your_postgres_password'</span></span><br><span class="line">    database_host = <span class="string">'your_postgres_host'</span></span><br><span class="line">    database_port = <span class="string">'your_postgres_port'</span></span><br><span class="line"></span><br><span class="line">    conn = psycopg2.connect(dbname=database_name, user=database_user,</span><br><span class="line">        password=database_password, host=database_host, port=database_port)</span><br><span class="line"></span><br><span class="line">    cursor = conn.cursor()</span><br><span class="line">    cursor.execute(<span class="string">'SELECT 1'</span>)</span><br><span class="line">    print(cursor.fetchall())</span><br><span class="line"></span><br><span class="line">    conn.close()</span><br></pre></td></tr></table></figure>
+<p>填入你的 PostgreSQL 数据库配置信息，上面脚本连接数据库成功就会输出 <code>[(1,)]</code>。没有可连接的 PostgreSQL 数据库？ 没关系，我们就是想使用 Docker 解决这类问题。<br>bianptgreSQL 服务：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --name postgre-app -p 54321:5432 -e POSTGRES_PASSWORD&#x3D;1234 -d postgres</span><br></pre></td></tr></table></figure>
+<p>上面的命令将拉取 Postgres 镜像，并在后台启动一个 Postgre 服务容器。容器将内部 5432 端口暴露在宿主机 54321 端口上，并创建了一个数据库。数据库名称为 postgres, 用户名为 postgres 且密码为 1234。</p>
+<p>让我们更新 run.py 脚本的数据库配置信息为 Postgres 容器：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    database_name = <span class="string">'postgres'</span></span><br><span class="line">    database_user = <span class="string">'postgres'</span></span><br><span class="line">    database_password = <span class="string">'1234'</span></span><br><span class="line">    database_host = <span class="string">'127.0.0.1'</span></span><br><span class="line">    database_port = <span class="string">'54321'</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如果配置正常，执行 run.py 脚本应该能看到正确输出。</p>
+<p>细心的你可能会发现一个问题：如果之后的 Postgres 容器信息变更，脚本里的数据库配置信息也要随之改变。如果我们就这样将脚本打包成镜像，那每次运行此镜像时，都要先进入镜像里修改代码，十分不便。</p>
+<p>修改脚本代码引入环境变量，让 PostgreSQL 数据库的配置信息优先读取环境变量：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    database_name = os.environ.get(<span class="string">'POSTGRES_DB'</span>, <span class="string">'your_postgres_db'</span>)</span><br><span class="line">    database_user = os.environ.get(<span class="string">'POSTGRES_USER'</span>, <span class="string">'your_postgres_user'</span>)</span><br><span class="line">    database_password = os.environ.get(<span class="string">'POSTGRES_PASSWORD'</span>, <span class="string">'your_postgres_password'</span>)</span><br><span class="line">    database_host = os.environ.get(<span class="string">'POSTGRES_HOST'</span>, <span class="string">'your_postgres_host'</span>)</span><br><span class="line">    database_port = os.environ.get(<span class="string">'POSTGRES_PORT'</span>, <span class="string">'your_postgres_port'</span>)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h3 id="完善应用镜像"><a href="#完善应用镜像" class="headerlink" title="完善应用镜像"></a>完善应用镜像</h3><p>接着让我们更新 Dockerfile 文件，执行命令安装 psycopg2 依赖（使用了阿里云镜像加入构建）：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> sed -i <span class="string">'s/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g'</span> /etc/apk/repositories</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> apk update &amp;&amp; apk add build-base postgresql-dev</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple</span></span><br></pre></td></tr></table></figure>
+<p>然后重新构建应用镜像：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker build -t jinhucheung&#x2F;docker-demo .</span><br></pre></td></tr></table></figure>
+<p>创建 .env 文件并写入 Postgres 配置信息：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># .env</span><br><span class="line">POSTGRES_DB&#x3D;postgres</span><br><span class="line">POSTGRES_USER&#x3D;postgres</span><br><span class="line">POSTGRES_PASSWORD&#x3D;1234</span><br><span class="line">POSTGRES_HOST&#x3D;127.0.0.1</span><br><span class="line">POSTGRES_PORT&#x3D;54321</span><br></pre></td></tr></table></figure>
+<p>加入环境变量并启动应用容器：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --rm --env-file .env jinhucheung&#x2F;docker-demo</span><br></pre></td></tr></table></figure>
+<p>emm…连接不上？观察我们 Postgres 配置信息是否有错误 – 注意 POSTGRES_HOST。对的，127.0.0.1 指向的是 docker-demo 容器内，并不是宿主机。尝试将 POSTGRES_HOST 改完宿主机的内网地址，如 <code>192.168.1.103</code>。Bingo! 连通了。</p>
+<h3 id="创建网络"><a href="#创建网络" class="headerlink" title="创建网络"></a>创建网络</h3><p>虽然通过上述的办法，可以连通两个容器。但如果此时宿主机 IP 变更，这意味着我们将重新设置。有没一个方法可以一劳永逸呢？ 有 – 创建 Docker 网络。</p>
+<p>执行以下命令创建 docker-demo-network：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker network create docker-demo-network</span><br></pre></td></tr></table></figure>
+<p>销毁之前 Postgres 容器以释放 postgre-app 名称，之后重新构建容器并将其加入网络中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ docker stop postgre-app</span><br><span class="line">$ docker rm postgre-app</span><br><span class="line">$ docker run --rm --name postgre-app --network docker-demo-network -e POSTGRES_PASSWORD&#x3D;1234 -d postgres</span><br></pre></td></tr></table></figure>
+<p>更新 docker-demo 的 <code>.env</code> 文件，将 <code>POSTGRES_HOST</code> 修改为 <code>postgre-app</code>, <code>POSTGRES_PORT</code> 改为 <code>5432</code>。然后将 docker-demo 容器加入上面的网络中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker run --rm --network docker-demo-network --env-file .env jinhucheung&#x2F;docker-demo</span><br></pre></td></tr></table></figure>
+<p>如果两个容器连通，应该能得到正常的信息输出。</p>
+<p>当你有多个容器需要相互连接时，推荐使用 <a href="https://docs.docker.com/compose/" target="_blank" rel="noopener">Docker Compose</a> 编排、调度它们。后面我们会介绍到它。</p>
+<p>本章节的代码可查看 <a href="https://github.com/jinhucheung/docker-demo/tree/v0.2.0" target="_blank" rel="noopener">jinhucheung/docker-demo:v0.2.0</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>这个教程简单介绍了 Docker 出现的背景以及如何使用。通过使用 Docker, 我们不仅可以节约了部署时间和成本，也可以获得愉悦的开发和部署体验。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html" target="_blank" rel="noopener">Docker 入门教程</a></li>
+<li><a href="https://www.oschina.net/news/57838/docker-dotcloud" target="_blank" rel="noopener">Docker 传奇之 dotCloud</a></li>
+<li><a name='boost_docker_hub'></a><a href="https://juejin.im/post/5cd2cf01f265da0374189441" target="_blank" rel="noopener">Docker Hub 镜像加速器</a></li>
+<li><a href="https://www.runoob.com/docker/docker-container-connection.html" target="_blank" rel="noopener">Docker 容器连接</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/11/16/9_devops_docker_started/">https://jinhucheung.github.io/2019/11/16/9_devops_docker_started/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E8%BF%90%E7%BB%B4/"># 运维</a>
+                    
+                        <a href="/tags/Docker/"># Docker</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/11/16/10_devops_docker_compose/">DevOps - Docker Compose</a>
+            
+            
+            <a class="next" rel="next" href="/2019/10/29/8_webfont_optimization/">前端优化 - Web Font</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

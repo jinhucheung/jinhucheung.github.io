@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>Phoenix LiveView 介绍 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Phoenix LiveView 介绍</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 11, 2025&nbsp;&nbsp;11:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Backend/">Web Backend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="什么是-LiveView？"><a href="#什么是-LiveView？" class="headerlink" title="什么是 LiveView？"></a>什么是 LiveView？</h1><p><a href="https://hexdocs.pm/phoenix_live_view/welcome.html" target="_blank" rel="noopener">Phoenix LiveView</a> 是 Elixir/Phoenix 框架下的一种模式，用来构建无需 JavaScript 的高交互网页。其主要特点包括：</p>
+<ul>
+<li>运行在 <strong>服务器端的组件化 UI</strong></li>
+<li>通过 <strong>WebSocket</strong> 实现 <strong>页面局部更新</strong></li>
+<li>类似于 React 的状态驱动渲染，但渲染逻辑在服务器端完成</li>
+<li><strong>零 JS 也能做出动态交互</strong>：表单验证、实时列表等</li>
+</ul>
+<p>LiveView 把我们过去需要写 JS 和前后端通信才能做的事，变成纯后端代码就能完成的工作</p>
+<h1 id="LiveView-应用演示"><a href="#LiveView-应用演示" class="headerlink" title="LiveView 应用演示"></a>LiveView 应用演示</h1><h2 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h2><iframe width="100%" height="624" src="https://www.youtube.com/embed/Onb55RSUolI" title="Phoenix LiveView Todo Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">defmodule</span> <span class="title">LiveViewDemoWeb.TodoLive</span></span> <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">use</span> LiveViewDemoWeb, <span class="symbol">:live_view</span></span><br><span class="line">  <span class="keyword">import</span> Ecto.Query</span><br><span class="line"></span><br><span class="line">  <span class="keyword">alias</span> LiveViewDemo.Task</span><br><span class="line">  <span class="keyword">alias</span> LiveViewDemo.Repo</span><br><span class="line"></span><br><span class="line">  <span class="variable">@topic</span> <span class="string">"todo"</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">render</span></span>(assigns) <span class="keyword">do</span></span><br><span class="line">    <span class="string">~H"""</span></span><br><span class="line"><span class="string">      &lt;div class="</span>max-w-md mx-auto mt<span class="number">-10</span> p<span class="number">-4</span> border rounded<span class="string">"&gt;</span></span><br><span class="line"><span class="string">        &lt;h2 class="</span>text<span class="number">-2</span>xl font-bold mb<span class="number">-4</span><span class="string">"&gt;Todo List&lt;/h2&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &lt;form phx-submit="</span>add<span class="string">"&gt;</span></span><br><span class="line"><span class="string">          &lt;input type="</span>text<span class="string">" name="</span>title<span class="string">" value=&#123;@title&#125;</span></span><br><span class="line"><span class="string">                class="</span>border p<span class="number">-2</span> w-full mb<span class="number">-2</span><span class="string">" placeholder="</span>New task...<span class="string">" /&gt;</span></span><br><span class="line"><span class="string">          &lt;button class="</span>bg-blue<span class="number">-500</span> text-white px<span class="number">-4</span> py<span class="number">-1</span> rounded<span class="string">"&gt;Add&lt;/button&gt;</span></span><br><span class="line"><span class="string">        &lt;/form&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &lt;ul class="</span>mt<span class="number">-4</span> space-y<span class="number">-2</span><span class="string">"&gt;</span></span><br><span class="line"><span class="string">          &lt;%= for task &lt;- @tasks do %&gt;</span></span><br><span class="line"><span class="string">            &lt;li class="</span>flex justify-between items-center border p<span class="number">-2</span> rounded<span class="string">"&gt;</span></span><br><span class="line"><span class="string">              &lt;div class="</span>flex items-center space-x<span class="number">-2</span><span class="string">"&gt;</span></span><br><span class="line"><span class="string">                &lt;input type="</span>checkbox<span class="string">"</span></span><br><span class="line"><span class="string">                      phx-click="</span>toggle<span class="string">"</span></span><br><span class="line"><span class="string">                      phx-value-id=&#123;task.id&#125;</span></span><br><span class="line"><span class="string">                      checked=&#123;task.completed&#125; /&gt;</span></span><br><span class="line"><span class="string">                &lt;span class=&#123;if task.completed, do: "</span>line-through text-gray<span class="number">-500</span><span class="string">", else: "</span><span class="string">"&#125;&gt;</span></span><br><span class="line"><span class="string">                  &lt;%= task.title %&gt;</span></span><br><span class="line"><span class="string">                &lt;/span&gt;</span></span><br><span class="line"><span class="string">              &lt;/div&gt;</span></span><br><span class="line"><span class="string">              &lt;button phx-click="</span>delete<span class="string">" phx-value-id=&#123;task.id&#125;</span></span><br><span class="line"><span class="string">                      class="</span>text-red<span class="number">-500</span> <span class="symbol">hover:</span>underline<span class="string">"&gt;Delete&lt;/button&gt;</span></span><br><span class="line"><span class="string">            &lt;/li&gt;</span></span><br><span class="line"><span class="string">          &lt;% end %&gt;</span></span><br><span class="line"><span class="string">        &lt;/ul&gt;</span></span><br><span class="line"><span class="string">      &lt;/div&gt;</span></span><br><span class="line"><span class="string">    "</span><span class="string">""</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">mount</span></span>(_params, _session, socket) <span class="keyword">do</span></span><br><span class="line">    Phoenix.PubSub.subscribe(LiveViewDemo.PubSub, <span class="variable">@topic</span>)</span><br><span class="line"></span><br><span class="line">    &#123;<span class="symbol">:ok</span>, assign(socket, <span class="symbol">tasks:</span> list_tasks(), <span class="symbol">title:</span> <span class="string">""</span>)&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle_event</span></span>(<span class="string">"add"</span>, %&#123;<span class="string">"title"</span> =&gt; title&#125;, socket) <span class="keyword">do</span></span><br><span class="line">    if String.trim(title) != <span class="string">""</span> <span class="keyword">do</span></span><br><span class="line">      %Task&#123;<span class="symbol">title:</span> title, <span class="symbol">completed:</span> <span class="keyword">false</span>&#125;</span><br><span class="line">      |&gt; Repo.insert()</span><br><span class="line">      Phoenix.PubSub.broadcast(LiveViewDemo.PubSub, <span class="variable">@topic</span>, <span class="symbol">:tasks_updated</span>)</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    &#123;<span class="symbol">:noreply</span>, assign(socket, <span class="symbol">tasks:</span> list_tasks(), <span class="symbol">title:</span> <span class="string">""</span>)&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle_event</span></span>(<span class="string">"delete"</span>, %&#123;<span class="string">"id"</span> =&gt; id&#125;, socket) <span class="keyword">do</span></span><br><span class="line">    task = Repo.get!(Task, id)</span><br><span class="line">    Repo.delete!(task)</span><br><span class="line">    Phoenix.PubSub.broadcast(LiveViewDemo.PubSub, <span class="variable">@topic</span>, <span class="symbol">:tasks_updated</span>)</span><br><span class="line">    &#123;<span class="symbol">:noreply</span>, assign(socket, <span class="symbol">tasks:</span> list_tasks())&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle_event</span></span>(<span class="string">"toggle"</span>, %&#123;<span class="string">"id"</span> =&gt; id&#125;, socket) <span class="keyword">do</span></span><br><span class="line">    task = Repo.get!(Task, id)</span><br><span class="line">    &#123;<span class="symbol">:ok</span>, _&#125; =</span><br><span class="line">      task</span><br><span class="line">      |&gt; Ecto.Changeset.change(<span class="symbol">completed:</span> !task.completed)</span><br><span class="line">      |&gt; Repo.update()</span><br><span class="line"></span><br><span class="line">    Phoenix.PubSub.broadcast(LiveViewDemo.PubSub, <span class="variable">@topic</span>, <span class="symbol">:tasks_updated</span>)</span><br><span class="line">    &#123;<span class="symbol">:noreply</span>, assign(socket, <span class="symbol">tasks:</span> list_tasks())&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle_info</span></span>(<span class="symbol">:tasks_updated</span>, socket) <span class="keyword">do</span></span><br><span class="line">    &#123;<span class="symbol">:noreply</span>, assign(socket, <span class="symbol">tasks:</span> list_tasks())&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">defp</span> <span class="title">list_tasks</span></span> <span class="keyword">do</span></span><br><span class="line">    Repo.all(from t <span class="keyword">in</span> Task, <span class="symbol">order_by:</span> [<span class="symbol">desc:</span> t.inserted_at])</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="用户注册表单"><a href="#用户注册表单" class="headerlink" title="用户注册表单"></a>用户注册表单</h2><iframe width="100%" height="624" src="https://www.youtube.com/embed/uxG8sW_IG_4" title="Phoenix LiveView Registration Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">defmodule</span> <span class="title">LiveViewDemoWeb.RegistrationLive</span></span> <span class="keyword">do</span></span><br><span class="line">  <span class="keyword">use</span> LiveViewDemoWeb, <span class="symbol">:live_view</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">alias</span> LiveViewDemo.Accounts.User</span><br><span class="line">  <span class="keyword">alias</span> LiveViewDemo.Repo</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">render</span></span>(assigns) <span class="keyword">do</span></span><br><span class="line">    <span class="string">~H"""</span></span><br><span class="line"><span class="string">      &lt;.simple_form</span></span><br><span class="line"><span class="string">        for=&#123;@changeset&#125;</span></span><br><span class="line"><span class="string">        as=&#123;:user&#125;</span></span><br><span class="line"><span class="string">        id="</span>registration_form<span class="string">"</span></span><br><span class="line"><span class="string">        phx-change="</span>validate<span class="string">"</span></span><br><span class="line"><span class="string">        phx-submit="</span>save<span class="string">"</span></span><br><span class="line"><span class="string">        class="</span>space-y<span class="number">-6</span><span class="string">"</span></span><br><span class="line"><span class="string">        :let=&#123;f&#125;</span></span><br><span class="line"><span class="string">      &gt;</span></span><br><span class="line"><span class="string">        &lt;.input field=&#123;f[:username]&#125; label="</span>Username<span class="string">" /&gt;</span></span><br><span class="line"><span class="string">        &lt;.input field=&#123;f[:password]&#125; type="</span>password<span class="string">" label="</span>Password<span class="string">" /&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        &lt;:actions&gt;</span></span><br><span class="line"><span class="string">          &lt;.button phx-disable-with="</span>Registering...<span class="string">" class="</span>w-full<span class="string">"&gt;</span></span><br><span class="line"><span class="string">            Register</span></span><br><span class="line"><span class="string">          &lt;/.button&gt;</span></span><br><span class="line"><span class="string">        &lt;/:actions&gt;</span></span><br><span class="line"><span class="string">      &lt;/.simple_form&gt;</span></span><br><span class="line"><span class="string">    "</span><span class="string">""</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">mount</span></span>(_params, _session, socket) <span class="keyword">do</span></span><br><span class="line">    &#123;<span class="symbol">:ok</span>, assign(socket, <span class="symbol">changeset:</span> User.changeset(%User&#123;&#125;, %&#123;&#125;))&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle_event</span></span>(<span class="string">"validate"</span>, %&#123;<span class="string">"user"</span> =&gt; user_params&#125;, socket) <span class="keyword">do</span></span><br><span class="line">    changeset =</span><br><span class="line">      %User&#123;&#125;</span><br><span class="line">      |&gt; User.changeset(user_params)</span><br><span class="line">      |&gt; Map.put(<span class="symbol">:action</span>, <span class="symbol">:validate</span>)</span><br><span class="line"></span><br><span class="line">    &#123;<span class="symbol">:noreply</span>, assign(socket, <span class="symbol">changeset:</span> changeset)&#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">handle_event</span></span>(<span class="string">"save"</span>, %&#123;<span class="string">"user"</span> =&gt; user_params&#125;, socket) <span class="keyword">do</span></span><br><span class="line">    <span class="keyword">case</span> Repo.insert(User.changeset(%User&#123;&#125;, user_params)) <span class="keyword">do</span></span><br><span class="line">      &#123;<span class="symbol">:ok</span>, _user&#125; -&gt;</span><br><span class="line">        socket = put_flash(socket, <span class="symbol">:info</span>, <span class="string">"Registration successful!"</span>)</span><br><span class="line">        &#123;<span class="symbol">:noreply</span>, push_navigate(socket, <span class="symbol">to:</span> <span class="string">"/"</span>)&#125;</span><br><span class="line">      &#123;<span class="symbol">:error</span>, changeset&#125; -&gt;</span><br><span class="line">        &#123;<span class="symbol">:noreply</span>, assign(socket, <span class="symbol">changeset:</span> changeset)&#125;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><p><a href="https://github.com/jinhucheung/live_view_demo/tree/main/lib/live_view_demo_web/live" target="_blank" rel="noopener">https://github.com/jinhucheung/live_view_demo/tree/main/lib/live_view_demo_web/live</a></p>
+<iframe width="100%" height="831" src="https://www.youtube.com/embed/l7oWwYKkXP8" title="Phoenix LiveView Chat Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<iframe width="100%" height="624" src="https://www.youtube.com/embed/MH_Pvo33ArE" title="Phoenix LiveView Counter Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<iframe width="100%" height="624" src="https://www.youtube.com/embed/__02rnWvYuM" title="Phoenix LiveView Weather Demo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+<h1 id="LiveView-要解决哪些痛点？"><a href="#LiveView-要解决哪些痛点？" class="headerlink" title="LiveView 要解决哪些痛点？"></a>LiveView 要解决哪些痛点？</h1><p>对于大部分传统 MVC 后端框架，如果要实现：</p>
+<ul>
+<li>实时表单验证</li>
+<li>动态页面交互</li>
+</ul>
+<p>必须写 JavaScript：</p>
+<ul>
+<li>用 JS 监听事件</li>
+<li>用 AJAX 发送请求</li>
+<li>写后端接口返回 JSON</li>
+<li>JS 再根据数据更新 DOM</li>
+</ul>
+<p>在这个过程中会有下面问题：</p>
+<ul>
+<li><strong>前后端割裂</strong></li>
+<li><strong>状态同步困难</strong></li>
+<li><strong>维护成本高</strong></li>
+<li><strong>动态交互门槛高</strong></li>
+</ul>
+<p>LiveView 旨在解决传统后端框架中遇到的上述问题，提升实时交互应用开发的体验，减少开发和维护成本</p>
+<p><img src="/images/posts/26_phoenix_liveview_intro/liveview_1.png" alt=""></p>
+<h1 id="LiveView-是否解决了这些问题？"><a href="#LiveView-是否解决了这些问题？" class="headerlink" title="LiveView 是否解决了这些问题？"></a>LiveView 是否解决了这些问题？</h1><p>LiveView 优势：</p>
+<ul>
+<li>满足大部分实时交互需求：实时性强，WebSocket 提供流畅体验</li>
+<li>高效的开发体验：只需要开发维护一套后端代码，状态完全由后端控制</li>
+<li>SEO 友好：首屏加载返回 HTML</li>
+<li>出色的性能：仅传输最小化 diff patches 减少了带宽和延迟；基于 Erlang/Elixir 每个用户连接都是独立轻量的进程，天生适合处理高并发；不需要引入前端框架，降低了前端渲染的开销</li>
+</ul>
+<p>LiveView 劣势：</p>
+<ul>
+<li>无法离线使用，不适合复杂的客户端应用(如 Figma)</li>
+<li>高频交互（如拖拽、动画） 场景下，由于所有事件都需往返服务器，可能不如纯前端流畅</li>
+</ul>
+<h1 id="LiveView-核心的技术机制"><a href="#LiveView-核心的技术机制" class="headerlink" title="LiveView 核心的技术机制"></a>LiveView 核心的技术机制</h1><ol>
+<li>页面初始加载是 HTML 渲染(传统方式)</li>
+<li>后续交互走 WebSocket，每个事件都是消息 (phx-* 事件) 传回后端服务器处理</li>
+<li>LiveView 内部维护 socket 状态，每次更新后只发送最小化 diff patches</li>
+<li>客户端接收到数据后，通过 LiveView 内置的 JS 框架对 DOM 结构进行更新，调用相应的 JS hooks (phx-hook)</li>
+</ol>
+<p><img src="/images/posts/26_phoenix_liveview_intro/liveview_2.png" alt=""></p>
+<h1 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h1><ul>
+<li><a href="https://hexdocs.pm/phoenix_live_view/welcome.html" target="_blank" rel="noopener">LiveView HexDoc</a></li>
+<li><a href="https://www.phoenixframework.org/blog/phoenix-liveview-1.0-released" target="_blank" rel="noopener">Phoenix LiveView 1.0.0 is here!</a></li>
+<li><a href="https://yiming.dev/blog/2020/05/17/an-introduction-to-phoenix-live-view/" target="_blank" rel="noopener">Phoenix LiveView 简介</a></li>
+<li><a href="https://github.com/chrismccord/phoenix_live_view_example" target="_blank" rel="noopener">phoenix_live_view_example</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2025/05/11/26_phoenix_liveview_intro/">https://jinhucheung.github.io/2025/05/11/26_phoenix_liveview_intro/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Elixir/"># Elixir</a>
+                    
+                        <a href="/tags/Phoenix/"># Phoenix</a>
+                    
+                        <a href="/tags/LiveView/"># LiveView</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2024/11/30/25_home_assistant_intro/">Home Assistant 介绍</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

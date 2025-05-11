@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>Windows 批处理脚本初体验 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Windows 批处理脚本初体验</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 21, 2020&nbsp;&nbsp;18:02</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>前段时间遇到一个需求，需要在 Windows 平台上做文件的 MD5 校验。由于之前已有 Linux 的 MD5 校验脚本，故需在 Windows 上也实现同样的功能，然后就有了这次 Windows 批处理脚本编写的经历。</p>
+<a id="more"></a>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>Windows 批处理 (Batch) 通常被认为是一种脚本语言，它应用于 DOS 和 Windows 系统中，由系统内置的解析器 (COMMAND.COM 或 CMD.EXE) 解析运行。它类似 Unix 中的 Shell 脚本，具有 .bat 或 .cmd 的扩展名。</p>
+<h2 id="描述需求"><a href="#描述需求" class="headerlink" title="描述需求"></a>描述需求</h2><p>上面提到需要在 Windows 平台实现文件 MD5 校验工具。考虑需要运行在不同的 Windows 环境上，所以决定用 Windows 内置解析的批处理脚本实现。而文件 MD5 校验基本流程如下：</p>
+<ol>
+<li>获取用户输入的文件</li>
+<li>检查是否输入文件的 MD5 值文件</li>
+<li>获取输入文件的 MD5 值</li>
+<li>从 MD5 值文件获取相应文件的值</li>
+<li>对比上两步的 MD5 值</li>
+</ol>
+<h2 id="实现需求"><a href="#实现需求" class="headerlink" title="实现需求"></a>实现需求</h2><h3 id="了解批处理脚本"><a href="#了解批处理脚本" class="headerlink" title="了解批处理脚本"></a>了解批处理脚本</h3><p>在编写批处理脚本前，需要先了解批处理的基本命令、语法及一些内置变量等。</p>
+<p>下面是批处理的基本命令：</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>echo</td>
+<td>打印</td>
+<td>echo Press Enter</td>
+</tr>
+<tr>
+<td>rem</td>
+<td>注释</td>
+<td>REM 获取文件值</td>
+</tr>
+<tr>
+<td>pause</td>
+<td>暂停</td>
+<td>pause &gt; null</td>
+</tr>
+<tr>
+<td>set</td>
+<td>设置变量</td>
+<td>set “sha=”</td>
+</tr>
+<tr>
+<td>call</td>
+<td>调用另一个批处理程序，并不终止父批处理程序</td>
+<td>call callchild.bat</td>
+</tr>
+<tr>
+<td>start</td>
+<td>调用外部批处理程序，非同一直进程</td>
+<td>start startchild.bat</td>
+</tr>
+<tr>
+<td>for</td>
+<td>循环命令</td>
+<td>FOR %%parameter IN (set) DO command</td>
+</tr>
+<tr>
+<td>if</td>
+<td>判断命令</td>
+<td>IF condtion (command) ELSE (command)</td>
+</tr>
+</tbody>
+</table>
+<p>而批处理变量使用 <code>%$name%</code> 或者 <code>!$name!</code> 引用变量，如 <code>%file%</code> 引用定义好的 file 变量。其中 <code>%$name%</code> 与 <code>!$name!</code> 的区别在于，<code>!$name!</code> 会延迟处理这个变量，而 <code>%$name%</code> 则在命令解释时将用具体值替换该变量。</p>
+<p>下面是一些预设的变量：</p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%CD%</td>
+<td>当前目录字符串</td>
+</tr>
+<tr>
+<td>%DATE%</td>
+<td>当前日期</td>
+</tr>
+<tr>
+<td>%TIME%</td>
+<td>当前时间</td>
+</tr>
+<tr>
+<td>%RANDOM%</td>
+<td>0 和 32767 之间的任意十进制数字</td>
+</tr>
+<tr>
+<td>%0</td>
+<td>批处理脚本所在的文件路径</td>
+</tr>
+<tr>
+<td>%1</td>
+<td>批处理脚本所传入的参数1..n</td>
+</tr>
+<tr>
+<td>%path%</td>
+<td>当前环境变量</td>
+</tr>
+</tbody>
+</table>
+<p>下面是一些扩展变量，假设当前批处理脚本为 <code>C:\Documents\script\check.bat</code></p>
+<table>
+<thead>
+<tr>
+<th>变量</th>
+<th>描述</th>
+<th>取值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>%0</td>
+<td>批处理脚本所在的文件路径</td>
+<td>C:\Documents\script\check.bat</td>
+</tr>
+<tr>
+<td>%~dp0</td>
+<td>批处理脚本所在的目录</td>
+<td>C:\Documents\script\</td>
+</tr>
+<tr>
+<td>%~nx0</td>
+<td>批处理脚本文件名(含扩展)</td>
+<td>check.bat</td>
+</tr>
+<tr>
+<td>%~n0</td>
+<td>批处理脚本文件名(不含扩展)</td>
+<td>check</td>
+</tr>
+<tr>
+<td>%~x0</td>
+<td>批处理脚本文件扩展名</td>
+<td>.bat</td>
+</tr>
+</tbody>
+</table>
+<h3 id="编写批处理脚本"><a href="#编写批处理脚本" class="headerlink" title="编写批处理脚本"></a>编写批处理脚本</h3><p>在了解完批处理的基本命令后，可以编写批处理脚本实现上面的需求了。</p>
+<p>文中实现的代码可在 <a href="https://github.com/jinhucheung/shell-script-sample/blob/master/md5_check_bat/check_change.bat" target="_blank" rel="noopener">jinhucheung/shell-script-sample</a> 中获取。</p>
+<p>首先需要一个工具编写脚本文本，Linux 上需要注意换行符、编码等与 Windows 平台不同。而 Windows 上可以用文本工具另存为 bat 即可。</p>
+<p>然后先关闭命令回显，并设置变量延迟处理：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">setlocal</span> enableDelayedExpansion</span><br></pre></td></tr></table></figure>
+<p>之后进入批处理脚本目录，等待用户输入校验的文件名：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> %~dp0</span><br><span class="line"><span class="built_in">set</span> /p file="Please enter checking file name, e.g. attachment.zip: "</span><br></pre></td></tr></table></figure>
+<p>需要注意文件名可能存在空格，而批处理接收到这类文件名是带引号的，需要将引号过滤：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> file=<span class="variable">%file:"=%</span></span><br></pre></td></tr></table></figure>
+<p>获取输入文件对应的 MD5 值文件：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> "md5_file_name=md5_<span class="variable">!file!</span>.txt"</span><br><span class="line"><span class="keyword">for</span> /r "%~dp0" <span class="variable">%%a</span> <span class="keyword">in</span> (*) <span class="keyword">do</span> <span class="keyword">if</span> "<span class="variable">%%~</span>nxa"=="<span class="variable">!md5_file_name!</span>" <span class="built_in">set</span> md5_file_path="<span class="variable">%%~</span>dpnxa"</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">defined</span> md5_file_path (</span><br><span class="line">  <span class="built_in">echo</span> <span class="variable">!md5_file_path!</span> is found.</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">  <span class="built_in">echo</span> It can <span class="keyword">not</span> check because <span class="variable">!md5_file_name!</span> is <span class="keyword">not</span> found.</span><br><span class="line">  <span class="built_in">echo</span> Press Enter <span class="keyword">for</span> exiting</span><br><span class="line">  <span class="built_in">pause</span> &gt; <span class="built_in">nul</span></span><br><span class="line">  <span class="keyword">exit</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>使用 certutil 工具获取输入文件的 MD5 值：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> "check_file_sha="</span><br><span class="line"><span class="keyword">for</span> /f "skip=<span class="number">1</span> tokens=* delims=" <span class="variable">%%#</span> <span class="keyword">in</span> ('certutil -hashfile "<span class="variable">!file!</span>" MD5') <span class="keyword">do</span> (</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">not</span> <span class="keyword">defined</span> check_file_sha (</span><br><span class="line">		<span class="keyword">for</span> <span class="variable">%%Z</span> <span class="keyword">in</span> (<span class="variable">%%#</span>) <span class="keyword">do</span> <span class="built_in">set</span> "check_file_sha=<span class="variable">!check_file_sha!</span><span class="variable">%%Z</span>"</span><br><span class="line">	)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>获取 MD5 值文件中的 MD5 值：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">set</span> "valid_file_sha="</span><br><span class="line"><span class="keyword">for</span> /f "tokens=<span class="number">1</span> delims= " <span class="variable">%%i</span> <span class="keyword">in</span> ('<span class="built_in">findstr</span> "<span class="variable">!file!</span>" <span class="variable">!md5_file_path!</span>') <span class="keyword">do</span> <span class="built_in">set</span> "valid_file_sha=<span class="variable">!valid_file_sha!</span><span class="variable">%%i</span>"</span><br></pre></td></tr></table></figure>
+<p>校验输入文件与 MD5 值文件的 MD5 值是否一致：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> "<span class="variable">!valid_file_sha!</span>" == "" (</span><br><span class="line">  <span class="built_in">echo</span> It's Invalid. the <span class="variable">!md5_file_name!</span> is <span class="keyword">not</span> found or sha of <span class="variable">!file!</span> is no existed!!</span><br><span class="line">) <span class="keyword">else</span> (</span><br><span class="line">  <span class="keyword">if</span> "<span class="variable">!valid_file_sha!</span>" == "<span class="variable">!check_file_sha!</span>" (</span><br><span class="line">    <span class="built_in">echo</span> It's Ok.</span><br><span class="line">  ) <span class="keyword">else</span> (</span><br><span class="line">    <span class="built_in">echo</span> It's Invalid. current file sha is <span class="keyword">not</span> matched <span class="keyword">for</span> valid file sha!!</span><br><span class="line">  )</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>最后暂停脚本，以查看结果：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">pause</span> &gt; <span class="built_in">nul</span></span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://ss64.com/nt" target="_blank" rel="noopener">Windows CMD commands</a></li>
+<li><a href="https://www.jianshu.com/p/97cfbb5f2baf" target="_blank" rel="noopener">Windows批处理命令</a></li>
+<li><a href="https://www.jb51.net/article/29323.htm" target="_blank" rel="noopener">批处理中setlocal enabledelayedexpansion的作用详细整理</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2020/03/21/14_windows_batch_script/">https://jinhucheung.github.io/2020/03/21/14_windows_batch_script/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Windows/"># Windows</a>
+                    
+                        <a href="/tags/Batch/"># Batch</a>
+                    
+                        <a href="/tags/Script/"># Script</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/21/15_jmeter_use_custom_encrypt_jar/">JMeter 使用自定义的加密库</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/29/13_how_to_use_jmeter/">Apache JMeter 接口测试</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

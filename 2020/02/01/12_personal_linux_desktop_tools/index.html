@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>个人 Linux 桌面工具清单 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">个人 Linux 桌面工具清单</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 1, 2020&nbsp;&nbsp;21:47</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Workstation/">Workstation</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>本文记录了自己平时使用的工作环境，便于新环境重新部署。</p>
+<a id="more"></a>
+<h2 id="安装-Arch-Linux"><a href="#安装-Arch-Linux" class="headerlink" title="安装 Arch Linux"></a>安装 Arch Linux</h2><ol>
+<li>下载镜像</li>
+<li>做启动盘 (dd)</li>
+<li>分区安装系统</li>
+<li>安装 gnome 桌面 (Manjaro 跳过)</li>
+<li>安装一堆驱动 (Archlinux)</li>
+</ol>
+<h2 id="基本设置"><a href="#基本设置" class="headerlink" title="基本设置"></a>基本设置</h2><ol>
+<li>为工作用户设置 sudoer: 注意工作用户 sudo 配置是否被覆盖 (sudo -l -U username 查看)</li>
+<li>启用 sshd: 根据情况是否开启 ssh 登录 root</li>
+<li>为工作用户生成 ssh 密钥</li>
+<li>连接网络并设置自动时间</li>
+<li>为 pacman 增加中国源</li>
+<li>安装 yaourt</li>
+<li>安装 dash to dock 并配置</li>
+<li>安装搜狗输入法</li>
+</ol>
+<h2 id="科学上网"><a href="#科学上网" class="headerlink" title="科学上网"></a>科学上网</h2><ol>
+<li>下载 v2ray 并配置</li>
+<li>开启 v2ray 服务并设置开机启动</li>
+<li>下载 proxychains-ng 并配置 socket5</li>
+<li>下载 chromium</li>
+<li>下载 SwitchyOmega 并配置: 导入<a href="/attachs/OmegaOptions.bak">配置文件</a>, 下载<a href="https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt" target="_blank" rel="noopener">规则清单文件</a></li>
+<li>同步 Google 帐号</li>
+<li>登录 lastpass</li>
+</ol>
+<h2 id="效率工具"><a href="#效率工具" class="headerlink" title="效率工具"></a>效率工具</h2><ol>
+<li>安装 deepin-wine</li>
+<li>安装微信 deepin-wine-wechat</li>
+<li>安装企业微信 deepin-wxwork</li>
+<li>安装 xmind</li>
+<li>安装 wps</li>
+<li>安装 peek: 录 gif</li>
+<li>安装网易云</li>
+</ol>
+<h2 id="开发环境"><a href="#开发环境" class="headerlink" title="开发环境"></a>开发环境</h2><h3 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h3><ol>
+<li>安装 base-devel 依赖</li>
+<li>安装 terminator 并配置: 参考<a href="https://github.com/jinhucheung/m-terminal" target="_blank" rel="noopener">文档</a></li>
+<li>安装 Oh My Zsh 并配置</li>
+<li>为 terminator 添加全局快捷键</li>
+</ol>
+<h3 id="Ruby"><a href="#Ruby" class="headerlink" title="Ruby"></a>Ruby</h3><ol>
+<li>安装 rvm 并添加 ruby-china 源</li>
+<li>安装 ruby 并设置默认版本</li>
+<li>gem 添加 ruby-china 源</li>
+<li>安装 bundler 并设置镜像源</li>
+</ol>
+<p><strong>Note</strong>: add script to zsh</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[ -s <span class="string">"<span class="variable">$HOME</span>/.rvm/scripts/rvm"</span> ]] &amp;&amp; . <span class="string">"<span class="variable">$HOME</span>/.rvm/scripts/rvm"</span></span><br></pre></td></tr></table></figure>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><ol>
+<li>安装 nvm 并设置淘宝源</li>
+<li>安装 node</li>
+<li>npm 安装 yarn</li>
+</ol>
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><ol>
+<li>pacman 安装 OpenJDK</li>
+<li>通过 archlinux-java 切换 java 版本</li>
+</ol>
+<h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><ol>
+<li>pacman 安装 python, python2</li>
+</ol>
+<h3 id="VSCode"><a href="#VSCode" class="headerlink" title="VSCode"></a>VSCode</h3><ol>
+<li>安装 vscode</li>
+<li>安装插件：vscode-icons, Visual Studio IntelliCode, GitLens, Git History, Git Blame, ruby 等</li>
+<li>配置 vscode，如下：</li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"window.zoomLevel"</span>: <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"editor.fontSize"</span>: <span class="number">14</span>,</span><br><span class="line">    <span class="attr">"terminal.external.linuxExec"</span>: <span class="string">"terminator"</span>,</span><br><span class="line">    <span class="attr">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">"window.zoomLevel"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"files.trimTrailingWhitespace"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="attr">"explorer.confirmDelete"</span>: <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"editor.suggestSelection"</span>: <span class="string">"first"</span>,</span><br><span class="line">    <span class="attr">"vsintellicode.modify.editor.suggestSelection"</span>: <span class="string">"automaticallyOverrodeDefaultValue"</span>,</span><br><span class="line">    <span class="attr">"ruby.intellisense"</span>: <span class="string">"rubyLocate"</span>,</span><br><span class="line">    <span class="attr">"gitlens.advanced.messages"</span>: &#123;</span><br><span class="line">        <span class="attr">"suppressLineUncommittedWarning"</span>: <span class="literal">true</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"emmetdeng.includeLanguages"</span>: &#123;</span><br><span class="line">        <span class="attr">"erb"</span>: <span class="string">"html"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"typescript.updateImportsOnFileMove.enabled"</span>: <span class="string">"always"</span>,</span><br><span class="line">    <span class="attr">"python.linting.enabled"</span>: <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ol>
+<li>安装 git</li>
+<li>安装 nginx： 带 ssl, gzip 模块最好，并设置开机启动</li>
+<li>安装 redis 并设置开机启动</li>
+<li>安装 mariadb 并设置开机启动</li>
+<li>安装 dbeaver</li>
+<li>安装 docker / docker-compose</li>
+</ol>
+<h2 id="远程环境"><a href="#远程环境" class="headerlink" title="远程环境"></a>远程环境</h2><p>如当前部署的机器为远程环境机，进行如下配置：</p>
+<ol>
+<li>远程环境机安装 nomachine 并启动 nxserver.service</li>
+<li>客户端同样安装 nomachine</li>
+<li>关闭自动熄屏</li>
+<li>关闭合盖熄屏，如下：</li>
+</ol>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sed -i <span class="string">"s~#HandleLidSwitch=suspend~HandleLidSwitch=ignore~g"</span> /etc/systemd/logind.conf</span><br><span class="line">$ reboot</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2020/02/01/12_personal_linux_desktop_tools/">https://jinhucheung.github.io/2020/02/01/12_personal_linux_desktop_tools/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Desktop/"># Desktop</a>
+                    
+                        <a href="/tags/Linux/"># Linux</a>
+                    
+                        <a href="/tags/ArchLinux/"># ArchLinux</a>
+                    
+                        <a href="/tags/Manjaro/"># Manjaro</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/29/13_how_to_use_jmeter/">Apache JMeter 接口测试</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/24/11_devops_gitlab_ci/">DevOps - GitLab CI</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

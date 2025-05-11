@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>Java Web - Servlet and JSP | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java Web - Servlet and JSP</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 11, 2019&nbsp;&nbsp;22:54</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Backend/">Web Backend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>之前我们搭建好了自己的 Java Web 开发环境，现在当然要进行实际应用啦。下面就开始我们 Java Web 之旅第二站 - Servlet and JSP。</p>
+<a id="more"></a>
+<h2 id="Servlet"><a href="#Servlet" class="headerlink" title="Servlet"></a>Servlet</h2><p>Servlet 是基于 Java 的 Web 组件，作为 Web 容器的功能模块，它运行在服务端，处理来自客户端的网络请求，并返回相应数据包。任何 Servlet 组件都实现了 <code>javax.servlet.Servlet</code> 接口， Web 容器可以统一管理这些 Servlet 组件。</p>
+<h3 id="Servlet-生命周期"><a href="#Servlet-生命周期" class="headerlink" title="Servlet 生命周期"></a>Servlet 生命周期</h3><p>Servlet 整个生命周期由 Web 容器管理，它会经历以下 4 个阶段:</p>
+<ol>
+<li>载入阶段 load<br>Web 容器部署后，将加载所有 Servlet。</li>
+<li>初始化阶段 init<br>Web 容器在首次接收到来自客户端请求或者 Web 容器启动时指定(web.xml 中设置), 将调用对应 Servlet 类的 init 方法，实例化 Servlet 对象并初始化数据。</li>
+<li>处理请求 service<br>Web 容器启用一个线程来处理客户端请求，根据 Request URI 调用对于 Servlet 实例的 service 方法，并传入 HttpServletRequest 和 HttpServletResponse 参数， 默认的 service 方法将请求分发到对应的 doGet 或 doPost 方法中。</li>
+<li>销毁阶段 destroy<br>当 Web 容器终止 或者 Servlet 重新装载时，Web 容器将调用前面 Servlet 实例的 destroy 方法，销毁实例。最后 servlet 实例将被 JVM 垃圾回收。</li>
+</ol>
+<p><img src="/images/posts/7_servlet_and_jsp/servlet_life_cycle.png" alt="Servlet 生命周期"></p>
+<h3 id="IDEA-搭建-Servlet-项目"><a href="#IDEA-搭建-Servlet-项目" class="headerlink" title="IDEA 搭建 Servlet 项目"></a>IDEA 搭建 Servlet 项目</h3><p>使用 IDEA 可以很方便地搭建出 Servlet 项目骨架。让我们开始吧～</p>
+<p>首先新建一个项目，选择 JavaEE Web Application 骨架，然后在此基础上集成 Maven 环境，最后会得到如下的项目结构:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">├── pom.xml</span><br><span class="line">├── servlet_demo.iml</span><br><span class="line">├── src</span><br><span class="line">│   ├── main</span><br><span class="line">│   │   ├── java</span><br><span class="line">│   │   └── resources</span><br><span class="line">│   └── test</span><br><span class="line">│       └── java</span><br><span class="line">└── web</span><br><span class="line">    ├── index.jsp</span><br><span class="line">    └── WEB-INF</span><br><span class="line">        └── web.xml</span><br></pre></td></tr></table></figure>
+<p>下面描述下各文件的作用:</p>
+<ol>
+<li>pom.xml: Maven 的配置文件，用于管理项目依赖等</li>
+<li>servlet_demo.iml: IDEA 的项目设置文件，保存模块路径，依赖关系和其他设置等</li>
+<li>src: 保存功能或测试代码的目录</li>
+<li>web: 保存前端页面或资源的目录</li>
+<li>web.xml: Java Web 项目的配置文件，用于配置 Servlet, 路由映射等</li>
+</ol>
+<p>在开始编写代码前，我们需要先引入 servlet-api.jar 到项目中。打开 pom.xml 并按下 <code>ALT</code> + <code>Insert</code>, 在弹窗中选择 <code>Dependency</code>, 搜索 <code>servlet</code> 并选中相应的依赖包，最后在 Maven 面板中选择同步依赖即可<sup><a href="#work_with_maven_dependencies">[2]</a></sup>。</p>
+<h3 id="First-Servlet"><a href="#First-Servlet" class="headerlink" title="First Servlet"></a>First Servlet</h3><p>准备工作已经做好了，现在让我们着手编写第一个 Servlet 吧。</p>
+<p>首先在 web 目录下添加一个 HTML 页面，它有个登录表单提交用户输入的用户名和密码:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.html --&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"en"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>Login<span class="tag">&lt;/<span class="name">title</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"login"</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">        Username: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span>&gt;</span></span><br><span class="line">        Password: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"password"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"Login"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>然后在 src/main/java 目录下创建一个 Servlet Java 文件:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LoginServlet.java</span></span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletException;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServlet;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletRequest;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.http.HttpServletResponse;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LoginServlet</span> <span class="keyword">extends</span> <span class="title">HttpServlet</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">doPost</span><span class="params">(HttpServletRequest req, HttpServletResponse resp)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        String username = req.getParameter(<span class="string">"username"</span>);</span><br><span class="line">        String password = req.getParameter(<span class="string">"password"</span>);</span><br><span class="line"></span><br><span class="line">        PrintWriter writer = resp.getWriter();</span><br><span class="line"></span><br><span class="line">        writer.println(<span class="string">"loging in..."</span>);</span><br><span class="line">        <span class="keyword">if</span> (username.equals(<span class="string">"admin"</span>) &amp;&amp; password.equals(<span class="string">"123"</span>)) &#123;</span><br><span class="line">            writer.println(<span class="string">"authorized"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            writer.println(<span class="string">"failed"</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        resp.setContentType(<span class="string">"text/html"</span>);</span><br><span class="line">        writer.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>前面提到一个 Servlet 类需要实现 <code>javax.servlet.Servlet</code> 接口，上面定义的 <code>LoginServlet</code> 继承的 <code>HttpServlet</code> 类就实现了 <code>javax.servlet.Servlet</code>, 此外实现了此接口的还有 <code>GenericServlet</code> 类。而 <code>GenericServlet</code> 比起 <code>HttpServlet</code>，它没有派发 service 方法，需要自己实现。</p>
+<p>这里的 <code>LoginServlet</code> 获取到请求中的 <code>username</code> 和 <code>password</code> 参数，并对其验证，输出验证结果。</p>
+<p>别忘了还需要映射 servlet 到路由上哦，更新 web.xml 如下:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"</span></span></span><br><span class="line"><span class="tag">         <span class="attr">version</span>=<span class="string">"4.0"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>LoginServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>LoginServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>LoginServlet<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/login<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">welcome-file-list</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">welcome-file</span>&gt;</span>index.html<span class="tag">&lt;/<span class="name">welcome-file</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">welcome-file-list</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">web-app</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>其中 welcome-file 就是网站首页。</p>
+<p>最后点击启动 Tomcat 运行我们的站点吧～(别忘了，运行前配置下 Tomcat)</p>
+<h2 id="JSP"><a href="#JSP" class="headerlink" title="JSP"></a>JSP</h2><p>JSP - Java Server Pages 是一种特殊的 Servlet, 主要用于处理 Web 视图部分。它允许在 HTML, XML 中嵌入 Java 代码，调用 Java API。</p>
+<h3 id="JSP-生命周期"><a href="#JSP-生命周期" class="headerlink" title="JSP 生命周期"></a>JSP 生命周期</h3><p>JSP 有着类似 Servlet 一样的生命周期，区别在于 JSP 比起 Servlet 多了编译阶段。 JSP 会经历以下 4 个阶段:</p>
+<ol>
+<li>编译阶段<br>当客户端请求 JSP 页面时， Web 容器会检查此 JSP，若 JSP 未被编译或编译后修改， Web 容器将解析此 JSP，并将其转换 Servlet 再编译。</li>
+<li>初始化阶段<br>Web 容器编译完 JSP 后，将会调用 jspInit 方法初始化 JSP。</li>
+<li>处理请求<br>Web 容器调用 _jspService 方法来处理每个请求， _jspService 接收了 HttpServletRequest 和 HttpServletResponse 两个参数。</li>
+<li>销毁阶段<br>Web 容器终止或 JSP 被重新编译时，Web 容器将调用 jspDestroy 方法来销毁之前的 JSP。</li>
+</ol>
+<h3 id="JSP-语法"><a href="#JSP-语法" class="headerlink" title="JSP 语法"></a>JSP 语法</h3><p>JSP 在 XML 中嵌入 Java 代码，它也有着自己特殊的语法，下面我们简单介绍下:</p>
+<ol>
+<li>基本格式: <code>&lt;% 代码片段 %&gt;</code></li>
+<li>声明语法: <code>&lt;%! int c = 1; %&gt;</code></li>
+<li>插值语法: <code>&lt;%= (new java.util.Date()).toLocaleString() %&gt;</code></li>
+<li>指令语法: <code>&lt;%@ page attribute=&quot;value&quot; %&gt;</code>, 用于描述页面属性等</li>
+<li>行为语法: <code>&lt;% jsp:include page=&quot;value&quot; %&gt;</code></li>
+</ol>
+<h3 id="JSP-隐含对象"><a href="#JSP-隐含对象" class="headerlink" title="JSP 隐含对象"></a>JSP 隐含对象</h3><p>JSP 上下文中存在一些隐含对象，我们用它们控制 JSP 行为。</p>
+<ol>
+<li>request: HttpServletRequest 实例</li>
+<li>response: HttpServletResponse 实例</li>
+<li>out:    PrintWriter 实例，用于把结果输出至网页上</li>
+<li>session:    HttpSession 实例</li>
+<li>application: ServletContext 实例，与应用上下文有关</li>
+<li>config: ServletConfig 实例</li>
+<li>pageContext: PageContext 实例，提供对 JSP 页面所有对象以及命名空间的访问</li>
+<li>page: 类似于 Java 类中的 this 关键字</li>
+<li>Exception: Exception 对象，代表发生错误的 JSP 页面中对应的异常对象</li>
+</ol>
+<h3 id="JSP-编码问题"><a href="#JSP-编码问题" class="headerlink" title="JSP 编码问题"></a>JSP 编码问题</h3><p>如果我们要在页面正常显示中文，我们需要在 JSP 文件头部添加以下代码:</p>
+<figure class="highlight jsp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ page language=<span class="string">"java"</span> contentType=<span class="string">"text/html; charset=UTF-8"</span> pageEncoding=<span class="string">"UTF-8"</span>%&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="First-JSP"><a href="#First-JSP" class="headerlink" title="First JSP"></a>First JSP</h3><p>我们已经了解 JSP 的基本概念了，现在就编写第一个 JSP 吧。</p>
+<p>首先在前面的 index.html 中增加下面的表单，接收输入的用户名提交后跳转到 JSP 页面:</p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- index.html --&gt;</span></span><br><span class="line">...</span><br><span class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"welcome.jsp"</span>&gt;</span></span><br><span class="line">        Username: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"username"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> <span class="attr">value</span>=<span class="string">"Welcome"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在 JSP 页面中，我们将接收到的用户名输出页面中:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;%-- welcome.jsp --%&gt;</span><br><span class="line">&lt;%@ page contentType=<span class="string">"text/html;charset=UTF-8"</span> language=<span class="string">"java"</span> %&gt;</span><br><span class="line">&lt;html&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;title&gt;Welcome&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    Hi &lt;%= request.getParameter(<span class="string">"username"</span>) %&gt;, Welcome to JSP</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.edureka.co/blog/servlet-and-jsp-tutorial/" target="_blank" rel="noopener">Servlet and JSP Tutorial- How to Build Web Applications in Java?</a></li>
+<li><a name='work_with_maven_dependencies'></a><a href="https://www.jetbrains.com/help/idea/work-with-maven-dependencies.html" target="_blank" rel="noopener">Work with Maven dependencies</a></li>
+<li><a href="https://www.runoob.com/jsp/jsp-life-cycle.html" target="_blank" rel="noopener">JSP 生命周期</a></li>
+<li><a href="https://www.runoob.com/jsp/jsp-syntax.html" target="_blank" rel="noopener">JSP 语法</a></li>
+<li><a href="https://www.cnblogs.com/lazycoding/archive/2011/04/04/two_include.html" target="_blank" rel="noopener">JSP中两种include的区别</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/10/11/7_servlet_and_jsp/">https://jinhucheung.github.io/2019/10/11/7_servlet_and_jsp/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"># Java</a>
+                    
+                        <a href="/tags/Web/"># Web</a>
+                    
+                        <a href="/tags/Servlet/"># Servlet</a>
+                    
+                        <a href="/tags/JSP/"># JSP</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/10/29/8_webfont_optimization/">前端优化 - Web Font</a>
+            
+            
+            <a class="next" rel="next" href="/2019/10/09/6_java_web_getting_started/">Java Web - 搭建开发环境</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

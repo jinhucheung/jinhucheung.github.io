@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>DevOps - Docker Compose | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">DevOps - Docker Compose</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 16, 2019&nbsp;&nbsp;23:33</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/DevOps/">DevOps</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在 “<a href="/2019/11/16/9_devops_docker_started/">DevOps - Docker 入门</a>” 一文中，我们尝试连通多个容器。在这一过程中，我们需要执行很多的命令，这些命令有先后之分。而且随着我们需要连接的容器增多，此工作会更加复杂繁琐。为此 Docker 官方提供了一个编排调度 Docker 容器的工具以解放我们双手。</p>
+<p>本文使用的代码可在 GitHub 上的 <a href="https://github.com/jinhucheung/docker-demo/tree/v0.3.0" target="_blank" rel="noopener">jinhucheung/docker-demo:v0.3.0</a> 仓库获取。</p>
+<p>如果你已经在使用 Docker Compose，请直接跳过本文。</p>
+<a id="more"></a>
+<h2 id="Docker-Compose-介绍"><a href="#Docker-Compose-介绍" class="headerlink" title="Docker Compose 介绍"></a>Docker Compose 介绍</h2><p><a href="https://github.com/docker/compose" target="_blank" rel="noopener">Docker Compose</a> 是 Docker 的一种编排工具，用于在 Docker 上定义并运行复杂的应用。通过 Docker Compose, 我们可以很容易地用一个配置文件定义一个多容器应用，然后使用一条命令安装这个应用的所有依赖，完成构建。</p>
+<p>Docker Compose 有两个重要的概念：</p>
+<ul>
+<li>服务 (service): 一个应用的容器。实际上可以包括若干运行相同镜像的容器实例。</li>
+<li>项目 (project): 由一组关联的应用容器组合而成的一个完整业务单元，在 docker-compose.yml 中定义。</li>
+</ul>
+<p>一个项目可以由多个服务(容器)组合而成， Compose 面向项目进行管理，通过调用 Compose 的命令对项目中的一组容器进行便捷地生命周期管理。</p>
+<p>Docker Compose 实际上调用了 Docker 服务提供的 API 来对容器进行管理。因此，只要所操作的平台支持 Docker API，就可以在其上利用 Compose 来进行编排管理。</p>
+<h2 id="Docker-Compose-安装"><a href="#Docker-Compose-安装" class="headerlink" title="Docker Compose 安装"></a>Docker Compose 安装</h2><p>Docker Compose 独立于 Docker， 其由 Python 编写。Compose 的安装可参考<a href="https://docs.docker.com/compose/install/" target="_blank" rel="noopener">官方文档</a>进行安装。</p>
+<p>安装完成后，执行下面命令进行验证：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose --version</span><br></pre></td></tr></table></figure>
+<h2 id="Docker-Compose-应用"><a href="#Docker-Compose-应用" class="headerlink" title="Docker Compose 应用"></a>Docker Compose 应用</h2><p>下面我们使用 Docker Compose 为 <a href="https://github.com/jinhucheung/docker-demo/tree/v0.2.0" target="_blank" rel="noopener">jinhucheung/docker-demo:v0.2.0</a> 项目编排 Postgres 以及 Docker Demo App 容器。</p>
+<h3 id="编排容器"><a href="#编排容器" class="headerlink" title="编排容器"></a>编排容器</h3><p>首先创建 docker-compose.yml 文件：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">'3.4'</span></span><br><span class="line"></span><br><span class="line"><span class="attr">x-postgres-variables:</span> <span class="string">&amp;postgres-variables</span></span><br><span class="line">  <span class="attr">POSTGRES_DB:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">POSTGRES_USER:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">POSTGRES_PASSWORD:</span> <span class="string">pass</span></span><br><span class="line">  <span class="attr">POSTGRES_HOST:</span> <span class="string">postgres</span></span><br><span class="line">  <span class="attr">POSTGRES_PORT:</span> <span class="number">5432</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:12</span></span><br><span class="line">    <span class="attr">environment:</span> <span class="string">*postgres-variables</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">docker_demo:</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">      <span class="attr">context:</span> <span class="string">.</span></span><br><span class="line">      <span class="attr">dockerfile:</span> <span class="string">./Dockerfile</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker_demo_app</span></span><br><span class="line">    <span class="attr">environment:</span> <span class="string">*postgres-variables</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres</span></span><br></pre></td></tr></table></figure>
+<p>更多的配置参数你可以在<a href="https://docs.docker.com/compose/compose-file/" target="_blank" rel="noopener">官方文档</a> 中了解到。</p>
+<p>然后执行以下命令部署项目：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose up</span><br></pre></td></tr></table></figure>
+<p>Docker Compose 会自动拉取镜像、生成、执行容器并将服务加入到同一个网络中。之后等待 Compose 最后执行结束。</p>
+<p>观察 Compose 输出，你很快会察觉到一个问题，为什么 Docker Demo 连接不上 Postgres？ Postgres 还在启动中。</p>
+<p>对的，postgres 服务调度完后马上就启动 docker_demo 服务了。此时 Postgres 守护进程还没有完全启动，从而导致此问题。</p>
+<p>为了解决上述的问题，你可以将 <code>docker-compose up</code> 分为两步执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose up -d postgres</span><br><span class="line">$ docker-compose up docker_demo</span><br></pre></td></tr></table></figure>
+<p>上述命令参数 <code>-d</code> 为后台启动。</p>
+<p>你也可以参考<a href="https://docs.docker.com/compose/startup-order/" target="_blank" rel="noopener">官方文档</a> 使用一个脚本阻塞服务，等待其依赖服务完全启动后再执行相关脚本。添加 wait-for-postgres.sh 脚本并将其设置为可执行：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/sh</span></span><br><span class="line"><span class="comment"># wait-for-postgres.sh</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line"></span><br><span class="line">cmd=<span class="string">"<span class="variable">$@</span>"</span></span><br><span class="line"></span><br><span class="line">until PGPASSWORD=<span class="variable">$POSTGRES_PASSWORD</span> psql -h <span class="string">"<span class="variable">$POSTGRES_HOST</span>"</span> -p <span class="variable">$POSTGRES_PORT</span> -U <span class="variable">$POSTGRES_USER</span> -c <span class="string">'\q'</span>; <span class="keyword">do</span></span><br><span class="line">  &gt;&amp;2 <span class="built_in">echo</span> <span class="string">"Postgres is unavailable - sleeping"</span></span><br><span class="line">  sleep 1</span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">&gt;&amp;2 <span class="built_in">echo</span> <span class="string">"Postgres is up - executing command"</span></span><br><span class="line"><span class="built_in">exec</span> <span class="variable">$cmd</span></span><br></pre></td></tr></table></figure>
+<p>由于 wait-for-postgres.sh 依赖于 psql 工具，我们需要更新 Dockerfile 文件：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">RUN</span><span class="bash"> apk update &amp;&amp; apk add build-base postgresql-dev postgresql</span></span><br></pre></td></tr></table></figure>
+<p>更新 docker-compose.yml 配置文件：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">...</span></span><br><span class="line">  <span class="attr">docker_demo:</span></span><br><span class="line">    <span class="attr">build:</span></span><br><span class="line">      <span class="attr">context:</span> <span class="string">.</span></span><br><span class="line">      <span class="attr">dockerfile:</span> <span class="string">./Dockerfile</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">docker_demo_app</span></span><br><span class="line">    <span class="attr">environment:</span> <span class="string">*postgres-variables</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">['./wait-for-postgres.sh',</span> <span class="string">'python'</span><span class="string">,</span> <span class="string">'run.py'</span><span class="string">]</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres</span></span><br></pre></td></tr></table></figure>
+<p>然后执行下面命令重新构建 docker_demo 镜像：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose build docker_demo</span><br></pre></td></tr></table></figure>
+<p>执行 <code>$ docker-compose up</code> 应该正常了。</p>
+<h3 id="恢复数据"><a href="#恢复数据" class="headerlink" title="恢复数据"></a>恢复数据</h3><p>当需要为项目添加初始数据时，我们可以使用 Postgres 镜像预留的 <code>docker-entrypoint-initdb.d</code> 目录。只需要将数据放入到上面的目录中，Postgres 镜像生成容器时就会初始化这批数据。</p>
+<p>首先，我们使用 <code>pg_dump</code> 从本地导出一份数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ PGPASSWORD&#x3D;$database_password pg_dump $database_name -U $database_user -h $database_host -p $database_port -t  public.$tablename -Ox &gt; table.sql</span><br></pre></td></tr></table></figure>
+<p>填入相关数据库信息后，将导一份数据表 <code>table.sql</code>。如果数据量很大，我们往往会将其进行压缩：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ gzip table.sql</span><br></pre></td></tr></table></figure>
+<p>上面的命令将压缩 <code>table.sql</code> 为 <code>table.sql.gz</code>。这份数据表你可以在 <a href="https://github.com/jinhucheung/docker-demo/blob/v0.3.0/table.sql.gz" target="_blank" rel="noopener">GitHub</a> 上获得。</p>
+<p>然后我们修改 <code>docker-compose.yml</code>, 将 <code>table.sql.gz</code> 挂载到 <code>docker-entrypoint-initdb.d</code> 目录中。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">postgres:</span></span><br><span class="line">    <span class="string">...</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./table.sql.gz:/docker-entrypoint-initdb.d/table.sql.gz</span></span><br></pre></td></tr></table></figure>
+<p>之后重新构建容器，Postgres 服务将会自动导入数据：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ docker-compose down</span><br><span class="line">$ docker-compose up</span><br></pre></td></tr></table></figure>
+<p>如果你不想要重新构建容器，想在容器重新启动时就恢复初始数据。此时你可以添加一个 service 容器，并连接到前面 Postgres 容器上，对它进行操作。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">restore_postgres:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">postgres:12</span></span><br><span class="line">    <span class="attr">environment:</span> <span class="string">*postgres-variables</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./table.sql.gz:/docker-entrypoint-initdb.d/table.sql.gz</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./wait-for-postgres.sh:/usr/bin/wait-for-postgres.sh</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">./restore_postgres.sh:/usr/bin/restore_postgres.sh</span></span><br><span class="line">    <span class="attr">command:</span> <span class="string">['./wait-for-postgres.sh',</span> <span class="string">'/usr/bin/restore_postgres.sh'</span><span class="string">]</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">postgres</span></span><br></pre></td></tr></table></figure>
+<p>添加 <code>restore_postgres.sh</code> 脚本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">export</span> PGPASSWORD=<span class="string">"<span class="variable">$&#123;PGPASSWORD:-$POSTGRES_PASSWORD&#125;</span>"</span></span><br><span class="line"></span><br><span class="line">psql=( psql -h <span class="variable">$POSTGRES_HOST</span> -p <span class="variable">$POSTGRES_PORT</span> -U <span class="variable">$POSTGRES_USER</span> -d <span class="variable">$POSTGRES_DB</span> )</span><br><span class="line"></span><br><span class="line"><span class="variable">$&#123;psql[@]&#125;</span> -c <span class="string">'DROP TABLE IF EXISTS public.users CASCADE;'</span></span><br><span class="line"></span><br><span class="line">gunzip -c /docker-entrypoint-initdb.d/table.sql.gz | <span class="string">"<span class="variable">$&#123;psql[@]&#125;</span>"</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">unset</span> PGPASSWORD</span><br></pre></td></tr></table></figure>
+<p>执行 <code>$ docker-compose up</code> 启动项目。你会发现 <code>restore_postgres</code> 容器正在处理 <code>postgres</code> 的数据。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://www.ityouknow.com/docker/2018/03/22/docker-compose.html" target="_blank" rel="noopener">Docker(四)：Docker 三剑客之 Docker Compose</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/11/16/10_devops_docker_compose/">https://jinhucheung.github.io/2019/11/16/10_devops_docker_compose/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E8%BF%90%E7%BB%B4/"># 运维</a>
+                    
+                        <a href="/tags/Docker/"># Docker</a>
+                    
+                        <a href="/tags/Docker-Compose/"># Docker Compose</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/11/24/11_devops_gitlab_ci/">DevOps - GitLab CI</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/16/9_devops_docker_started/">DevOps - Docker 入门</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

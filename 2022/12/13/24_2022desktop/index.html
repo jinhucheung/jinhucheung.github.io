@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>2022&#39;s Desktop | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">2022&#39;s Desktop</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 13, 2022&nbsp;&nbsp;20:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%B7%A5%E4%BD%9C/">工作</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="主机配置"><a href="#主机配置" class="headerlink" title="主机配置"></a>主机配置</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>准系统</td>
+<td>ASRock DeskMeet B660 Series</td>
+<td>1399.52</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>Intel i5-12400</td>
+<td>1064</td>
+</tr>
+<tr>
+<td>内存</td>
+<td>KingBank DRR4 3200 * 2</td>
+<td>888</td>
+</tr>
+<tr>
+<td>硬盘</td>
+<td>M.2 SSD SN770 1T</td>
+<td>504.9</td>
+</tr>
+<tr>
+<td>硬盘</td>
+<td>M.2 SSD SN850 500G</td>
+<td>418</td>
+</tr>
+<tr>
+<td>散热</td>
+<td>AXP90-X47 BLACK 47mm</td>
+<td>132</td>
+</tr>
+<tr>
+<td>网卡</td>
+<td>Intel WiFi 6E AX210 003</td>
+<td>89.1</td>
+</tr>
+<tr>
+<td>显示器</td>
+<td>DELL U2417H 23.8</td>
+<td>1399</td>
+</tr>
+<tr>
+<td>键盘</td>
+<td>USB K1</td>
+<td>10.98</td>
+</tr>
+<tr>
+<td>键鼠</td>
+<td>Logitech K380 + Pebble</td>
+<td>169</td>
+</tr>
+<tr>
+<td>音箱</td>
+<td>春夏秋冬 USB + 蓝牙</td>
+<td>29.32</td>
+</tr>
+<tr>
+<td>摄像头</td>
+<td>Promotion Your Power 1080P + Microphone</td>
+<td>37</td>
+</tr>
+</tbody>
+</table>
+<h2 id="其他设备"><a href="#其他设备" class="headerlink" title="其他设备"></a>其他设备</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>路由器</td>
+<td>红米 AX6S</td>
+<td>224</td>
+</tr>
+<tr>
+<td>路由器</td>
+<td>红米 AX6000</td>
+<td>397.51</td>
+</tr>
+</tbody>
+</table>
+<h2 id="教程"><a href="#教程" class="headerlink" title="教程"></a>教程</h2><h3 id="OS"><a href="#OS" class="headerlink" title="OS"></a>OS</h3><ol>
+<li><a href="https://www.bilibili.com/video/BV16L4y1B7F3/?from=seopage&amp;vd_source=7e09dbd8c54e71adbd5dd330d5a1b033" target="_blank" rel="noopener">在PVE上安装Windows11</a></li>
+<li><a href="https://www.reddit.com/r/Proxmox/comments/ckfthg/vm_no_longer_boots_after_creating_windows_10_vm/" target="_blank" rel="noopener">VM no longer boots after creating Windows 10 VM</a></li>
+<li><a href="https://www.xh86.me/?p=724" target="_blank" rel="noopener">PVE开启硬件直通功能</a></li>
+<li><a href="https://www.youtube.com/watch?v=00GxKDGUhxA&amp;ab_channel=VedioTalk" target="_blank" rel="noopener">PVE直通核显</a></li>
+<li><a href="https://www.simaek.com/archives/69/" target="_blank" rel="noopener">PVE下安装Windows10并直通核显、键盘鼠标、声卡等设备详细步骤</a></li>
+<li><a href="https://www.raobee.com/archives/343/" target="_blank" rel="noopener">在ProxmoxVE(PVE)7.0中安装ArchLinux</a></li>
+<li><a href="https://archlinuxstudio.github.io/ArchLinuxTutorial/#/" target="_blank" rel="noopener">Arch Linux 安装使用教程 - ArchTutorial - Arch Linux Studio</a></li>
+<li><a href="https://bbs.archlinux.org/viewtopic.php?id=238981" target="_blank" rel="noopener">[SOLVED] I have no internet! connect: Network is unreachable</a></li>
+<li><a href="https://forum.proxmox.com/threads/pci-passthrough-device-name-is-not-displayed.85581/" target="_blank" rel="noopener">PCI passthrough, device name is not displayed</a></li>
+<li><a href="https://www.asrock.com/support/faq.cn.asp?id=46" target="_blank" rel="noopener">华擎主板均支持网络唤醒（Wake on LAN）</a></li>
+<li><a href="https://github.com/Bpazy/blog/issues/124" target="_blank" rel="noopener">总结几点Wake On Lan(WOL)失败的原因</a></li>
+<li><a href="https://wiki.archlinux.org/title/Wake-on-LAN" target="_blank" rel="noopener">Archliunx Wake on LAN</a></li>
+<li><a href="https://wiki.archlinux.org/title/dhcpcd" target="_blank" rel="noopener">Archlinux dhcpcd</a></li>
+<li><a href="https://zmcdbp.com/archlinux-static-ip/" target="_blank" rel="noopener">archlinux 设置静态IP</a></li>
+<li><a href="https://www.bilibili.com/video/BV1FY4y1Y7Ro/?vd_source=7e09dbd8c54e71adbd5dd330d5a1b033" target="_blank" rel="noopener">【胡瓜】超强黑群晖引导编译神器，轻松搞定PVE+最新DSM7.1</a></li>
+<li><a href="https://never666.uk/1590/" target="_blank" rel="noopener">在 Proxmox (PVE) 7 中安装黑群晖</a></li>
+<li><a href="https://vt.wooomooo.com/?p=45932" target="_blank" rel="noopener">VLOG | PVE全新奶妈保姆级+爱快+openwrt+黑群晖7.0.1 +直通+IPV6+MAC地址重复修复</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/540846901" target="_blank" rel="noopener">玩转PVE:给黑群晖进行硬盘直通</a></li>
+<li><a href="https://www.openos.org/threads/20220220dsm7-0-1-_esata____ddns.3773/" target="_blank" rel="noopener">【20220220更新】DSM7.0.1 引导三分钟编译不求人、eSATA挂载、关机等驱动、人脸识别、缩略图、DDNS等讨论 | 你的群晖之路从这里开始~</a></li>
+<li><a href="https://blog.csdn.net/pariese/article/details/121493594" target="_blank" rel="noopener">opkg 安装软件到别的分区或者U盘</a></li>
+<li><a href="https://andytimes.xyz/blog/2020/07/02/mirouter-r3-opkg/" target="_blank" rel="noopener">为小米路由器3 配置 opkg</a></li>
+<li><a href="https://qust.me/post/ax6000-openwrt/" target="_blank" rel="noopener">红米 ax6000 刷 openwrt 教程，终于有完善好用的 openwrt 了</a></li>
+<li><a href="https://www.youtube.com/watch?v=X6kaDbZOm9Q&amp;list=RDCMUCUWUYyNh8KFS7E6-Q0ajBzQ&amp;index=2" target="_blank" rel="noopener">【司波图】PVE虚拟环境macOS系统基本应用以及优化</a></li>
+<li><a href="https://www.notion.so/IP-DDNS-2e4012f7fedc48f1b60f1bb0a46880c7?pvs=21" target="_blank" rel="noopener">公网 IP 配置桥接模式 + 路由拨号 + DDNS</a></li>
+<li><a href="https://www.notion.so/SSL-13c59b5727124a8abf014d12472b8081?pvs=21" target="_blank" rel="noopener">红米路由器开启 SSL</a></li>
+</ol>
+<h3 id="Tool"><a href="#Tool" class="headerlink" title="Tool"></a>Tool</h3><ol>
+<li><a href="https://asdf-vm.com/" target="_blank" rel="noopener">asdf</a></li>
+<li><a href="https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/dotenv" target="_blank" rel="noopener">ohmyzsh + dotenv</a></li>
+<li><a href="https://github.com/521xueweihan/GitHub520/issues/93" target="_blank" rel="noopener">GitHub520 Linux 服务器自动更新工具 + openwrt/padavan 路由器配置详细教程</a></li>
+<li><a href="https://stackoverflow.com/questions/67215729/asdf-wont-switch-local-version-based-on-tool-versions-or-using-the-local-command" target="_blank" rel="noopener">Asdf wont switch local version based on tool-versions or using the local command</a></li>
+</ol>
+<h3 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h3><ol>
+<li>systemctl restart systemd-networkd</li>
+<li>PVE : /etc/cron.d/poweroff</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2022/12/13/24_2022desktop/">https://jinhucheung.github.io/2022/12/13/24_2022desktop/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/desktop-deskmeet/"># desktop deskmeet</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2023/10/13/22_rubyconf_china_2023/">RubyConf China 2023</a>
+            
+            
+            <a class="next" rel="next" href="/2022/11/18/21_aws_intro/">AWS 介绍</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

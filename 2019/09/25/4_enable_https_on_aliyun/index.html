@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>记录一次在阿里云 ECS 上开启 HTTPS 的经历 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">记录一次在阿里云 ECS 上开启 HTTPS 的经历</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">September 25, 2019&nbsp;&nbsp;21:29</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>今天工作中遇到了为阿里云 ECS 配置子域名站点 HTTPS 证书的需求，期间遇到一些坑，将配置过程记录下来。</p>
+<a id="more"></a>
+<h2 id="申请-SSL-证书"><a href="#申请-SSL-证书" class="headerlink" title="申请 SSL 证书"></a>申请 SSL 证书</h2><p>在阿里云 [SSL 证书（应用安全）] 中为域名购买免费的 DV SSL 证书，注意每个帐号最多持有 20 个免费证书。</p>
+<p>然后选择 NGINX SSL 证书下载至本地，并上传至相应服务器。</p>
+<h2 id="配置-NGINX"><a href="#配置-NGINX" class="headerlink" title="配置 NGINX"></a>配置 NGINX</h2><p>首先查看 NGINX 是否配置了 SSL 模块，执行以下命令:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nginx -V</span><br></pre></td></tr></table></figure>
+<p>查看是否含有 <code>http_ssl_module</code>，如果没有，服务器需要安装 <code>openssl</code> 依赖库，且为 NGINX 重新编译 <code>http_ssl_module</code> 模块。</p>
+<p>将前面的证书文件添加到 NGINX 配置路径（如 <code>/etc/nginx/conf/</code>）的 ssl 目录下。在 NGINX 配置目录增加 <code>conf.d</code> 文件并新建目标域名的配置文件，如 <code>example.com.conf</code>。</p>
+<p>写入 <code>example.com</code> 的配置，与下面类似:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">  listen 443 ssl;</span><br><span class="line">  server_name example.com; # 你要部署的域名</span><br><span class="line"></span><br><span class="line">  ssl_certificate &#x2F;etc&#x2F;nginx&#x2F;conf&#x2F;ssl&#x2F;example.com.pem; # 公钥</span><br><span class="line">  ssl_certificate_key &#x2F;etc&#x2F;nginx&#x2F;conf&#x2F;ssl&#x2F;example.com.key; # 秘钥</span><br><span class="line"></span><br><span class="line">  ssl_session_timeout  5m;</span><br><span class="line">  ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;</span><br><span class="line"></span><br><span class="line">  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;</span><br><span class="line"></span><br><span class="line">  ssl_prefer_server_ciphers  on;</span><br><span class="line"></span><br><span class="line">  location &#x2F; &#123;</span><br><span class="line">    proxy_pass http:&#x2F;&#x2F;localhost:3000; # 应用</span><br><span class="line">    proxy_set_header X-Forwarded-Proto https;</span><br><span class="line">    proxy_set_header Host $http_host;</span><br><span class="line">    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  listen      80;</span><br><span class="line">  server_name example.com;</span><br><span class="line">  return 301 https:&#x2F;&#x2F;$server_name$request_uri;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>执行下面命令查看 NGINX 配置是否含有错误:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nginx -t</span><br></pre></td></tr></table></figure>
+<p>NGINX 重新加载配置文件:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nginx -s reload</span><br></pre></td></tr></table></figure>
+<h2 id="设置阿里云-ECS-安全组"><a href="#设置阿里云-ECS-安全组" class="headerlink" title="设置阿里云 ECS 安全组"></a>设置阿里云 ECS 安全组</h2><p>在阿里云 [云服务器 ECS] 上查看部署实例机器的 [安全组配置]，查看其 [入网方向规则] 中是否含有 <code>443</code> 端口。如果没有，则新建含有 <code>443</code> 入网规则的安全组，并将实例机器加入该安全组中。</p>
+<h2 id="服务器开放-443-端口"><a href="#服务器开放-443-端口" class="headerlink" title="服务器开放 443 端口"></a>服务器开放 443 端口</h2><p>首先查看服务器是否监听 443 端口:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ netstat -ntlp</span><br></pre></td></tr></table></figure>
+<p>如果没有 443 端口，请确保 NGINX 正常启动。</p>
+<p>查看防火墙是否开放 443 端口:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ firewall-cmd --list-ports</span><br></pre></td></tr></table></figure>
+<p>如果不含 443 端口，须要将防火墙 443 端口开放:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ firewall-cmd --zone&#x3D;public --add-port&#x3D;443&#x2F;tcp --permanent</span><br><span class="line">$ firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<h2 id="NGINX-开启-WebSocket-代理"><a href="#NGINX-开启-WebSocket-代理" class="headerlink" title="NGINX 开启 WebSocket 代理"></a>NGINX 开启 WebSocket 代理</h2><p>当客户端使用 ws 或者 wss 协议请求服务端进行 WebSocket 通信时，如果服务端返回连接拒绝或失败，返回如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">webSocket connection to failed: Error during WebSocket handshake: Unexpected response code: 404</span><br></pre></td></tr></table></figure>
+<p>这很可能是因为 NGINX 没有配置 WebSocket 代理的原因。</p>
+<p>NGINX 作为反向代理服务，在接收到客户端的 WebSocket 连接请求(WebSocket 工作在 HTTP 的 80 和 443 端口)时，须请求后端服务升级协议为 WebSocket，进行如下配置:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">map $http_upgrade $connection_upgrade &#123;</span><br><span class="line">  default upgrade;</span><br><span class="line">  &#39;&#39;      close;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">server &#123;</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">  location &#x2F; &#123;</span><br><span class="line">    proxy_pass http:&#x2F;&#x2F;backend;</span><br><span class="line">    proxy_http_version 1.1;</span><br><span class="line">    proxy_set_header Upgrade $http_upgrade;</span><br><span class="line">    proxy_set_header Connection $connection_upgrade;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Q-amp-A"><a href="#Q-amp-A" class="headerlink" title="Q&amp;A"></a>Q&amp;A</h2><ol>
+<li><code>telnet $server_ip 443</code> 返回 <code>No route to host</code> ?<br>须确保服务器开放 443 端口，且 443 端口在安全组入网规则中。</li>
+</ol>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://ruby-china.org/topics/35009" target="_blank" rel="noopener">快速实现 HTTPS 和 HTTP 同时都可以访问 Ruby on Rails 应用</a></li>
+<li><a href="https://hunfan.top/2018/11/16/Nginx%E9%87%8D%E6%96%B0%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E6%B7%BB%E5%8A%A0http-ssl-module%E6%A8%A1%E5%9D%97/" target="_blank" rel="noopener">Nginx编译安装添加http_ssl_module模块</a></li>
+<li><a href="https://my.oschina.net/macleo/blog/1816346" target="_blank" rel="noopener">Centos7 下防火墙开启 80 443 端口</a></li>
+<li><a href="https://www.hi-linux.com/posts/42176.html" target="_blank" rel="noopener">配置 Nginx 反向代理 WebSocket</a></li>
+<li><a href="https://blog.51cto.com/tchuairen/2175525" target="_blank" rel="noopener">Nginx map 使用详解</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/09/25/4_enable_https_on_aliyun/">https://jinhucheung.github.io/2019/09/25/4_enable_https_on_aliyun/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E8%BF%90%E7%BB%B4/"># 运维</a>
+                    
+                        <a href="/tags/%E5%B7%A5%E4%BD%9C/"># 工作</a>
+                    
+                        <a href="/tags/SSL/"># SSL</a>
+                    
+                        <a href="/tags/HTTPS/"># HTTPS</a>
+                    
+                        <a href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/"># 阿里云</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/09/28/5_how_to_deploy_rails_app_by_capistrano/">使用 Capistrano 部署 Rails 应用</a>
+            
+            
+            <a class="next" rel="next" href="/2018/09/10/2_rails_discover_on_validator/">Rails 发现 - Validator 实例变量的坑</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

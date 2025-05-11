@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>认识 Ruby Rack | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">认识 Ruby Rack</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">August 24, 2018&nbsp;&nbsp;23:14</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Backend/">Web Backend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>你可能听说过 <a href="https://rubyonrails.org/" target="_blank" rel="noopener">Rails</a>、<a href="http://sinatrarb.com/" target="_blank" rel="noopener">Sinatra</a> 这些 Web 框架，也使用过其中一二。但如果你不知道 <a href="https://rack.github.io/" target="_blank" rel="noopener">Rack</a>，那只能说你 Web 开发停留在表面上。Rack 是这些 Web 框架的基础，它们正是构建在 Rack 之上。了解 Rack 可以让更好你理解 Rails、Sinatra 这些 Web 框架背后运作机制，处理问题时得心应手。下面就开始我们的 Rack 之旅吧～</p>
+<a id="more"></a>
+<h2 id="什么是-Rack"><a href="#什么是-Rack" class="headerlink" title="什么是 Rack"></a>什么是 Rack</h2><p>Rack 提供一组轻量接口，实现了 Web 服务器与 Rack 应用间的交互。其交互过程下图所示：</p>
+<p><img src="/images/posts/1_meet_ruby_rack/web_service_and_rack_app_connection.png" alt="Web Server 与 Rack App 交互"></p>
+<p>当用户在 User Agent 发起 HTTP 请求后，Rack Web Server 接收请求并调起 Rack App (如 Rails、Sinatra　等)响应， 最后 Web Server 将响应返回给 User Agent。</p>
+<p>那么一个 Rack 应用如何实现呢？下面是一个最简单的 Rack 应用：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.rb -v1</span></span><br><span class="line"></span><br><span class="line">app = proc <span class="keyword">do</span> <span class="params">|env|</span></span><br><span class="line">  [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'hello rack'</span>]]</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>一个 Rack 应用是一个能响应 call 方法的对象，其中 call 方法接收一个 env 参数，并返回含有三个元素数组：</p>
+<ol>
+<li><p>第一个元素是 HTTP 状态码</p>
+</li>
+<li><p>第二个元素是 HTTP Headers，使用 hash 定义</p>
+</li>
+<li><p>第三个元素是 HTTP Body，使用一个响应 each 方法的对象定义</p>
+</li>
+</ol>
+<p>为了让上面的 Rack 应用能成功运行，还需加上两行代码，引入 Rack Server，代码如下:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.rb -v1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'rack'</span></span><br><span class="line"></span><br><span class="line">app = proc <span class="keyword">do</span> <span class="params">|env|</span></span><br><span class="line">  [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'hello rack'</span>]]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">Rack::Handler::WEBrick.run(app)</span><br></pre></td></tr></table></figure>
+<p>如果你已经安装过 Rails、Sinatra，那么 rack 已被默认安装了。还没有？ 赶紧 <code>gem install rack</code> 吧。</p>
+<p>执行 <code>ruby app.rb</code>，访问 localhost:8080 hello rack ~</p>
+<h2 id="Rack-Middleware"><a href="#Rack-Middleware" class="headerlink" title="Rack Middleware"></a>Rack Middleware</h2><p>Rack 真的怎么这么简单么？ 其实从 Rack 应用定义中已经透露了 Rack 无限的可能性(Rack Middleware):</p>
+<blockquote>
+<p>任何能响应 call 方法并接收指定参数，返回特定数组的对象都是 Rack 应用</p>
+</blockquote>
+<p>下面是一个简单的 Rack Middleware</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># timing.rb -v1</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Timing</span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(app)</span></span></span><br><span class="line">    @app = app</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(env)</span></span></span><br><span class="line">    ts = Time.now</span><br><span class="line">    status, headers, body = @app.call(env)</span><br><span class="line">    ts = Time.now - ts</span><br><span class="line">    [status, headers, [<span class="string">"app call <span class="subst">#&#123;ts&#125;</span> s"</span>]]</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>在 Rack app 中使用 Timing Middleware</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.rb -v2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'rack'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./timing'</span></span><br><span class="line"></span><br><span class="line">app = proc <span class="keyword">do</span> <span class="params">|env|</span></span><br><span class="line">  [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'hello rack'</span>]]</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">Rack::Handler::WEBrick.run(Timing.new(app))</span><br></pre></td></tr></table></figure>
+<p>快试试我们 Rack 应用起了什么变化吧～</p>
+<p>在上面例子中, Timing Middleware 包装了原本的 Rack app，其接管了从 Rack Server 发给 Rack app 的请求。当 Timing 接收到 Rack Server 请求后，记录当前时间并调用 Rack app 响应，最后将执行时间显示处理。</p>
+<p>从中我们可发现，Rack Middleware 其实也是一个 Rack 应用，其可以一层层嵌套。最外层的 Middleware 最早接收到 Rack Server 请求，最后作出响应。故在 Rack Middleware 栈中最上的 Middleware 更具有话语权。</p>
+<p>利用 Rack Middleware 我们可以很好地实现用户鉴权等各种各样的业务场景。</p>
+<h2 id="Rack-Builder、rackup"><a href="#Rack-Builder、rackup" class="headerlink" title="Rack::Builder、rackup"></a>Rack::Builder、rackup</h2><p><a href="https://github.com/rack/rack/blob/master/lib/rack/builder.rb" target="_blank" rel="noopener">Rack::Builder</a> 是 Rack 内置的模块，通常与命令 <a href="https://github.com/rack/rack/blob/master/bin/rackup" target="_blank" rel="noopener">rackup</a> 一起使用。</p>
+<p>让我们用 Rack::Builder 改造下之前 rack app</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.rb -v3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'rack'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./timing'</span></span><br><span class="line"></span><br><span class="line">app = Rack::Builder.new <span class="keyword">do</span></span><br><span class="line">  use Timing</span><br><span class="line">  run proc &#123;<span class="params">|env|</span> [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'hello rack'</span>]]&#125;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">Rack::Handler::WEBrick.run(app)</span><br></pre></td></tr></table></figure>
+<p>上面使用 Rack::Builder 去挂载 Timing、 app。</p>
+<p>你说和之前什么差别？接着往下看哈</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.rb -v3</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">call</span><span class="params">(env)</span></span></span><br><span class="line">    [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'hello rack'</span>]]</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># config.ru -v1</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./app'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./timing'</span></span><br><span class="line"></span><br><span class="line">use Timing</span><br><span class="line">run App</span><br></pre></td></tr></table></figure>
+<p>代码结构是不是更清晰了，完美～　赶紧执行 <code>rackup</code> 看看吧</p>
+<p>你还可以在 <code>config.ru</code> 中配置路由!!</p>
+<p>我们先添加下面的 app2</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app2.rb -v1</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App2</span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">call</span><span class="params">(env)</span></span></span><br><span class="line">    [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'Hello App2'</span>]]</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>在 <code>config.ru</code> 中定义路由 <code>/app2</code> 指向 App2</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># config.ru -v2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./app'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./app2'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./timing'</span></span><br><span class="line"></span><br><span class="line">map <span class="string">'/app2'</span> <span class="keyword">do</span></span><br><span class="line">  run App2</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">map <span class="string">'/'</span> <span class="keyword">do</span></span><br><span class="line">  use Timing</span><br><span class="line">  run App</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>这样以 <code>/app2</code> 开头的路由都会去访问 App2，其他路由则访问 App</p>
+<p>另外 Rack Middleware 也可添加参数，下面对 Timing 添加 options 参数</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># timing.rb -v2</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Timing</span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(app, options = &#123;&#125;, &amp;block)</span></span></span><br><span class="line">    @app = app</span><br><span class="line">    @options = options</span><br><span class="line">    <span class="keyword">yield</span> <span class="keyword">if</span> block_given?</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">call</span><span class="params">(env)</span></span></span><br><span class="line">    ts = Time.now</span><br><span class="line">    status, headers, body = @app.call(env)</span><br><span class="line">    ts = Time.now - ts</span><br><span class="line">    [status, headers, [<span class="string">"app run pid <span class="subst">#&#123;Process.pid <span class="keyword">if</span> @options[<span class="symbol">:pid</span>]&#125;</span>, executed time <span class="subst">#&#123;ts&#125;</span> s"</span>]]</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># config.ru -v3</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./app'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./app2'</span></span><br><span class="line"><span class="keyword">require</span> <span class="string">'./timing'</span></span><br><span class="line"></span><br><span class="line">map <span class="string">'/app2'</span> <span class="keyword">do</span></span><br><span class="line">  run App2</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">map <span class="string">'/'</span> <span class="keyword">do</span></span><br><span class="line">  use Timing, <span class="symbol">pid:</span> <span class="literal">true</span> <span class="keyword">do</span></span><br><span class="line">    puts <span class="string">"hello Timing"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line">  run App</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<h2 id="Rails-on-Rack"><a href="#Rails-on-Rack" class="headerlink" title="Rails on Rack"></a>Rails on Rack</h2><p>我们之前提到 Rails 是一个 Rack 应用，在 Rails 项目根目录下你可以发现 <code>config.ru</code> 文件</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This file is used by Rack-based servers to start the application.</span></span><br><span class="line"></span><br><span class="line">require_relative <span class="string">'config/environment'</span></span><br><span class="line"></span><br><span class="line">run Rails.application</span><br></pre></td></tr></table></figure>
+<p>Rails 没有使用 Middleware？ 不存在的</p>
+<p>执行 <code>rails middleware</code>，你会发现 Rails 默认已启用了很多 Middleware</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">use Rack::Sendfile</span><br><span class="line">use ActionDispatch::Static</span><br><span class="line">use ActionDispatch::Executor</span><br><span class="line">use ActiveSupport::Cache::Strategy::LocalCache::Middleware</span><br><span class="line">use Rack::Runtime</span><br><span class="line">use Rack::MethodOverride</span><br><span class="line">use ActionDispatch::RequestId</span><br><span class="line">use Sprockets::Rails::QuietAssets</span><br><span class="line">use Rails::Rack::Logger</span><br><span class="line">use ActionDispatch::ShowExceptions</span><br><span class="line">use WebConsole::Middleware</span><br><span class="line">use ActionDispatch::DebugExceptions</span><br><span class="line">use ActionDispatch::RemoteIp</span><br><span class="line">use ActionDispatch::Reloader</span><br><span class="line">use ActionDispatch::Callbacks</span><br><span class="line">use ActiveRecord::Migration::CheckPending</span><br><span class="line">use ActionDispatch::Cookies</span><br><span class="line">use ActionDispatch::Session::CookieStore</span><br><span class="line">use ActionDispatch::Flash</span><br><span class="line">use Rack::Head</span><br><span class="line">use Rack::ConditionalGet</span><br><span class="line">use Rack::ETag</span><br><span class="line">run Milog::Application.routes</span><br></pre></td></tr></table></figure>
+<h2 id="Rack-Env"><a href="#Rack-Env" class="headerlink" title="Rack Env"></a>Rack Env</h2><p>前面提到 Rack 应用接收了一个 env 变量作为输入。其实这个 env 变量包含了 HTTP 请求的所有信息。</p>
+<p>现在让我们检看下其有什么信息，在 app 中打印 env 信息</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app.rb -v4</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">App</span></span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">self</span>.<span class="title">call</span><span class="params">(env)</span></span></span><br><span class="line">    env.each &#123;<span class="params">|key, value|</span> puts <span class="string">"<span class="subst">#&#123;key&#125;</span>=<span class="subst">#&#123;value&#125;</span>"</span>&#125;</span><br><span class="line">    [<span class="number">200</span>, &#123;<span class="string">'Content-Type'</span> =&gt; <span class="string">'text/plain'</span>&#125;, [<span class="string">'hello rack'</span>]]</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>其包含以下信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">GATEWAY_INTERFACE&#x3D;CGI&#x2F;1.1</span><br><span class="line">PATH_INFO&#x3D;&#x2F;favicon.ico</span><br><span class="line">QUERY_STRING&#x3D;</span><br><span class="line">REMOTE_ADDR&#x3D;::1</span><br><span class="line">REMOTE_HOST&#x3D;::1</span><br><span class="line">REQUEST_METHOD&#x3D;GET</span><br><span class="line">REQUEST_URI&#x3D;http:&#x2F;&#x2F;localhost:9292&#x2F;favicon.ico</span><br><span class="line">SCRIPT_NAME&#x3D;</span><br><span class="line">SERVER_NAME&#x3D;localhost</span><br><span class="line">SERVER_PORT&#x3D;9292</span><br><span class="line">SERVER_PROTOCOL&#x3D;HTTP&#x2F;1.1</span><br><span class="line">SERVER_SOFTWARE&#x3D;WEBrick&#x2F;1.4.2 (Ruby&#x2F;2.6.0&#x2F;2018-08-25)</span><br><span class="line">HTTP_HOST&#x3D;localhost:9292</span><br><span class="line">HTTP_CONNECTION&#x3D;keep-alive</span><br><span class="line">HTTP_USER_AGENT&#x3D;Mozilla&#x2F;5.0 (X11; Linux x86_64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;62.0.3202.89 Safari&#x2F;537.36</span><br><span class="line">HTTP_ACCEPT&#x3D;image&#x2F;webp,image&#x2F;apng,image&#x2F;*,*&#x2F;*;q&#x3D;0.8</span><br><span class="line">HTTP_DNT&#x3D;1</span><br><span class="line">HTTP_REFERER&#x3D;http:&#x2F;&#x2F;localhost:9292&#x2F;</span><br><span class="line">HTTP_ACCEPT_ENCODING&#x3D;gzip, deflate, br</span><br><span class="line">HTTP_ACCEPT_LANGUAGE&#x3D;zh-CN,zh;q&#x3D;0.9,en;q&#x3D;0.8,ja;q&#x3D;0.7</span><br><span class="line">HTTP_COOKIE&#x3D;user_locale&#x3D;zh-CN; Hm_lvt_24f17767262929947cc3631f99bfd274&#x3D;1532421006,1533536332,1533791498,1533867618; oschina_new_user&#x3D;false</span><br><span class="line">rack.version&#x3D;[1, 3]</span><br><span class="line">rack.input&#x3D;#&lt;Rack::Lint::InputWrapper:0x000055b88351bc60&gt;</span><br><span class="line">rack.errors&#x3D;#&lt;Rack::Lint::ErrorWrapper:0x000055b88351bc38&gt;</span><br><span class="line">rack.multithread&#x3D;true</span><br><span class="line">rack.multiprocess&#x3D;false</span><br><span class="line">rack.run_once&#x3D;false</span><br><span class="line">rack.url_scheme&#x3D;http</span><br><span class="line">rack.hijack?&#x3D;true</span><br><span class="line">rack.hijack&#x3D;#&lt;Proc:0x000055b88351bf30@&#x2F;home&#x2F;jinhu&#x2F;.rvm&#x2F;gems&#x2F;ruby-head&#x2F;gems&#x2F;rack-2.0.5&#x2F;lib&#x2F;rack&#x2F;lint.rb:525&gt;</span><br><span class="line">rack.hijack_io&#x3D;</span><br><span class="line">HTTP_VERSION&#x3D;HTTP&#x2F;1.1</span><br><span class="line">REQUEST_PATH&#x3D;&#x2F;favicon.ico</span><br><span class="line">rack.tempfiles&#x3D;[]</span><br></pre></td></tr></table></figure>
+<p>可以发现这些信息分为大写的 <a href="https://getfullstack.com/web_server/server_programming/cgi.html" target="_blank" rel="noopener">CGI 变量</a>以及 <a href="https://www.rubydoc.info/github/rack/rack/master/file/SPEC#label-The+Environment" target="_blank" rel="noopener">rack 变量</a></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><p><a href="http://rack.github.io/" target="_blank" rel="noopener">Rack</a></p>
+</li>
+<li><p><a href="https://ruby-china.org/topics/31592" target="_blank" rel="noopener">Ruby Rack 及其应用 (上)</a></p>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2018/08/24/1_meet_ruby_rack/">https://jinhucheung.github.io/2018/08/24/1_meet_ruby_rack/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Web/"># Web</a>
+                    
+                        <a href="/tags/Ruby/"># Ruby</a>
+                    
+                        <a href="/tags/Rack/"># Rack</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/09/10/2_rails_discover_on_validator/">Rails 发现 - Validator 实例变量的坑</a>
+            
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

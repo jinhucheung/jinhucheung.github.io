@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>DevOps - GitLab CI | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">DevOps - GitLab CI</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">November 24, 2019&nbsp;&nbsp;20:01</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/DevOps/">DevOps</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><a href="https://about.gitlab.com/product/continuous-integration/" target="_blank" rel="noopener">GitLab CI</a> 是 GitLab 8.0 后推出的持续集成工具。用好了它，能大大提高我们软件开发、测试、部署的效率。在本文里，你可以了解到如何搭建 GitLab CI 环境及其使用。</p>
+<a id="more"></a>
+<h2 id="CI"><a href="#CI" class="headerlink" title="CI"></a>CI</h2><p>在了解 GitLab CI 前，我们需要知道持续集成是什么？</p>
+<p>持续集成 (Continuous Integration, CI) 是一种软件工程工作流，指将代码持续集成到一个主线。期间经历如测试、构建等工作，并及时反馈工作结果。只有上一个工作按预期结束后，才进行下一个工作。</p>
+<p>与持续集成相关的概念，还有持续部署 (Continuous Deployment, CD)。持续部署是指代码经过自动化测试、构建、部署的工作流程。</p>
+<p>通过持续集成 / 持续部署，可以让我们产品在快速迭代的同时，也保持高质量。</p>
+<h2 id="GitLab-CI"><a href="#GitLab-CI" class="headerlink" title="GitLab CI"></a>GitLab CI</h2><p>前面我们提到 GitLab CI 是集成到 GitLab 中用于持续集成的工具。我们只有在项目中添加 .gitlab-ci.yml 文件定义 CI 流程， GitLab 将自动调度 GitLab Runner 实例执行流程中的各项工作，并反馈工作结果。</p>
+<p>从上面流程可以看出 GitLab Runner 和 <code>.gitlab-ci.yml</code> 是 GitLab CI 重要的组成部分，下面就让我们了解它们～</p>
+<h2 id="GitLab-Runner"><a href="#GitLab-Runner" class="headerlink" title="GitLab Runner"></a>GitLab Runner</h2><p>GitLab Runner 是一台执行 CI 工作的机器。GitLab 当要处理集成工作时，就会调起一个 Runner 实例进行处理，然后 Runner 执行工作并反馈结果给 GitLab。</p>
+<p>你可能会问为什么不是 GitLab CI 来执行这些工作？一般来说，测试、构建等集成工作都会占用很多系统资源，如果让 GitLab CI 来处理，势必会影响 GitLab 的性能。所以 GitLab 将集成工作下派到 GitLab Runner 来执行，而 GitLab CI 则管理各项目的构建状态。</p>
+<p>搭建一台 GitLab Runner 实例的方式有很多种，可以通过 k8s 或者常规机器，甚至共享他人分享的实例机器，下面以常规机器为例说明搭建流程。</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>GitLab Runner 安装很简单，它同时支持 Linux, macOS, Windows 平台。各平台上的安装教程可看<a href="https://docs.gitlab.com/runner/install/" target="_blank" rel="noopener">官方文档</a>，下面以 Linux 为例进行安装：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载 Linux x86-64 二进制包</span></span><br><span class="line">$ sudo curl -L --output /usr/<span class="built_in">local</span>/bin/gitlab-runner https://gitlab-runner-downloads.s3.amazonaws.com/latest/binaries/gitlab-runner-linux-amd64</span><br><span class="line"><span class="comment"># 设置可执行权限</span></span><br><span class="line">$ sudo chmod +x /usr/<span class="built_in">local</span>/bin/gitlab-runner</span><br><span class="line"><span class="comment"># 创建 gitlab-runner 用户</span></span><br><span class="line">$ sudo useradd --comment <span class="string">'GitLab Runner'</span> --create-home gitlab-runner --shell /bin/bash</span><br><span class="line"><span class="comment"># 安装 gitlab-runner 服务并启动</span></span><br><span class="line">$ sudo gitlab-runner install --user=gitlab-runner --working-directory=/home/gitlab-runner</span><br><span class="line">$ sudo gitlab-runner start</span><br></pre></td></tr></table></figure>
+<h3 id="注册"><a href="#注册" class="headerlink" title="注册"></a>注册</h3><p>在安装完 Runner 后，我们需要进行注册，让将其与 GitLab 进行联通：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo gitlab-runner register</span><br></pre></td></tr></table></figure>
+<p>此时进入注册流程：</p>
+<ol>
+<li>输入 GitLab 服务地址: 可以为你的私有 GitLab</li>
+<li>输入 GitLab CI Token: 可在项目设置或者系统后台 CI 设置页面中获取，系统后台可将此 Runner 设置为共享</li>
+<li>输入 Runner 实例的描述</li>
+<li>输入 Runner 实例的 tags: 默认下 Runner 只执行对应 tag 的工作，<a href="https://docs.gitlab.com/ee/ci/yaml/#tags" target="_blank" rel="noopener">相关说明</a></li>
+<li>选择 Runner 实例的执行服务: 各执行服务的区别可看<a href="https://docs.gitlab.com/runner/executors/" target="_blank" rel="noopener">官方文档</a>, 推荐使用 docker</li>
+<li>上一步选择 docker 后，输入默认的 docker 镜像</li>
+</ol>
+<p>通过上述步骤就完成了 Runner 的注册工作。</p>
+<p><strong>Note</strong>: 前面我们选择了 Runner 实例的执行服务，我们需要确保此服务在实例上正常工作。以 docker 为例，我们需要进行安装并启动 docker 的守护进程。</p>
+<h3 id="设置"><a href="#设置" class="headerlink" title="设置"></a>设置</h3><ol>
+<li><p>项目共享 Runner<br>如果你的 GitLab Runner 不是系统后台设置的共享 Runner, 而是在项目设置添加的 Runner。你可能会想在其他项目中使用此 Runner, 然而在其他项目的设置中并没看到此共享 Runner。如何设置？可进入此 Runner 编辑页面，将 “Lock to current projects” 解锁，然后就可以在其他项目中启用它。</p>
+</li>
+<li><p>让 Runner 执行未打标签的工作<br>辛辛苦苦设置好的 Runner, 发现并没有执行。此时要观察 CI 工作是否未打标签或者标签不一致。如果想让 Runner 执行未打标签的工作，需在 Runner 编辑页面将 “Run untagged jobs” 启用</p>
+</li>
+<li><p>Runner 的高级设置<br>Runner 启动后，会在 <code>/etc/gitlab-runner/config.toml</code> 生成配置文件。我们可通过它对 Runner 进行高级设置。<a href="https://docs.gitlab.com/runner/configuration/advanced-configuration.html" target="_blank" rel="noopener">详细说明</a></p>
+</li>
+</ol>
+<h2 id="gitlab-ci-yml"><a href="#gitlab-ci-yml" class="headerlink" title=".gitlab-ci.yml"></a>.gitlab-ci.yml</h2><p>在本文中，我们提到多次 “流程”, “工作”。那在 GitLab CI 中如何定义这些 “流程”, “工作” 呢？下面先让我们了解 GitLab CI 中的一些概念。</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><ol>
+<li>Pipeline: 一个工作流，里面包含了多个工作，如测试、构建、部署等</li>
+<li>Stages: 定义一个工作流经历的各个阶段，为各个工作归类</li>
+<li>Jobs: 工作单元，一个 Stage 可以并行支持多个 Job</li>
+<li>Artifacts: 一个 Job 完成后，生成的文件或目录，可在下一个 Job 中使用</li>
+</ol>
+<h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>在了解上述概念后，对于我们掌握 <code>.gitlab-ci.yml</code> 的编写有很大的帮助。<code>.gitlab-ci.yml</code> 就是 GitLab 用于编排 CI 工作的配置文件。我们只要将它添加在项目根目录下，GitLab 会检查该文件是否合法，确定合法后就会启用 CI 构建流程。</p>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><p>我们先看看 <code>.gitlab-ci.yml</code> 怎么编写：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">stages:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">test</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line"></span><br><span class="line"><span class="attr">test_app:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">test</span></span><br><span class="line">  <span class="attr">script:</span> <span class="string">echo</span> <span class="string">"testing app"</span></span><br><span class="line"></span><br><span class="line"><span class="attr">build_app:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">  <span class="attr">script:</span> <span class="string">echo</span> <span class="string">"building app"</span></span><br></pre></td></tr></table></figure>
+<p>看起来很简单对吧。我们用 <code>stages</code> 定义了 Pipeline 的各个阶段，然后定义了 <code>test_app</code> 和 <code>build_app</code> 两项工作，其中各个工作的 <code>script</code> 表示了当真正要执行的命令。只有在 <code>test_app</code> 正常结束后，<code>build_app</code> 才会开始执行。</p>
+<p>下面我们使用 GitLab CI 搭建一个 GitLab Pages，你可以在<a href="https://gitlab.com/jimcheung/jimcheung.gitlab.io/" target="_blank" rel="noopener">此仓库</a>获取相关代码。</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># .gitlab-ci.yml</span></span><br><span class="line"><span class="attr">image:</span> <span class="string">node:8</span></span><br><span class="line"></span><br><span class="line"><span class="attr">stages:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">build</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">optimize</span></span><br><span class="line"></span><br><span class="line"><span class="attr">cache:</span></span><br><span class="line">  <span class="attr">paths:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">node_modules/</span></span><br><span class="line"></span><br><span class="line"><span class="attr">before_script:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">-g</span> <span class="string">hexo</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span> <span class="string">-g</span> <span class="string">font-spider</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">npm</span> <span class="string">install</span></span><br><span class="line"></span><br><span class="line"><span class="string">.deploy:</span></span><br><span class="line">  <span class="attr">artifacts:</span></span><br><span class="line">    <span class="attr">paths:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">public</span></span><br><span class="line">  <span class="attr">only:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">source</span></span><br><span class="line"></span><br><span class="line"><span class="attr">build:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">build</span></span><br><span class="line">  <span class="attr">extends:</span> <span class="string">.deploy</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">sed</span> <span class="string">-i</span> <span class="string">"s~https://jinhucheung.github.io~https://jimcheung.gitlab.io~g"</span> <span class="string">_config.yml</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">hexo</span> <span class="string">clean</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">hexo</span> <span class="string">generate</span></span><br><span class="line"></span><br><span class="line"><span class="attr">compress_font:</span></span><br><span class="line">  <span class="attr">stage:</span> <span class="string">optimize</span></span><br><span class="line">  <span class="attr">extends:</span> <span class="string">.deploy</span></span><br><span class="line">  <span class="attr">script:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">sed</span> <span class="string">-i</span> <span class="string">"s~/css/style.css~`pwd`/public/css/style.css~g"</span> <span class="string">./public/**/*.html</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">font-spider</span> <span class="string">./public/**/*.html</span> <span class="string">--debug</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">sed</span> <span class="string">-i</span> <span class="string">"s~`pwd`/public/css/style.css~/css/style.css~g"</span> <span class="string">./public/**/*.html</span></span><br></pre></td></tr></table></figure>
+<p>上面的 <code>.gitlab-ci.yml</code> 定义了使用 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 构建 Pages 的工作流，其中增加了 <a href="http://font-spider.org/" target="_blank" rel="noopener">font-spider</a> 用于压缩字体。</p>
+<p>你可以在<a href="https://docs.gitlab.com/ee/ci/yaml/" target="_blank" rel="noopener">官方文档</a>了解到 <code>.gitlab-ci.yml</code> 更多的配置参数。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>GitLab CI 作为 GitLab 内置的持续集成工具。通过使用它不仅为我们节省大部分时间，也让我们更了解 GitLab 整个生态。GitLab CI 的开发工作仍在持续迭代中，它仍有很多地方待我们发觉，完善。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="http://www.ruanyifeng.com/blog/2015/09/continuous-integration.html" target="_blank" rel="noopener">持续集成是什么？</a></li>
+<li><a href="https://scarletsky.github.io/2016/07/29/use-gitlab-ci-for-continuous-integration/" target="_blank" rel="noopener">用 GitLab CI 进行持续集成</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/11/24/11_devops_gitlab_ci/">https://jinhucheung.github.io/2019/11/24/11_devops_gitlab_ci/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/GitLab/"># GitLab</a>
+                    
+                        <a href="/tags/CI-CD/"># CI/CD</a>
+                    
+                        <a href="/tags/%E8%BF%90%E7%BB%B4/"># 运维</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/01/12_personal_linux_desktop_tools/">个人 Linux 桌面工具清单</a>
+            
+            
+            <a class="next" rel="next" href="/2019/11/16/10_devops_docker_compose/">DevOps - Docker Compose</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

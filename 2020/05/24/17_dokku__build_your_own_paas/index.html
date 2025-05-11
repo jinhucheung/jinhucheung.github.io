@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>Dokku —— 搭建自己的 PaaS 系统 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Dokku —— 搭建自己的 PaaS 系统</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 24, 2020&nbsp;&nbsp;21:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E8%BF%90%E7%BB%B4/">运维</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>背景：如果你对云平台服务 (PaaS) 感兴趣，你应该对 <a href="https://www.heroku.com/" target="_blank" rel="noopener">Heroku</a> 有所耳闻。Heroku 作为最早的云平台之一，深受国外开发者喜爱，其支持多种编程语言及服务，部署应用方式极致简单，开发者推送完代码后，就帮你完成应用构建到上线的工作。</p>
+<p>笔者是在《Ruby on Rails 教程》一书中被作者安利，之后就一直使用 Heroku 部署个人应用。但 Heroku 在使用上也存在一些限制：国内访问应用较慢；免费应用一段时间未访问会休眠，重启过程较慢；未绑定信用卡用户最多只能创建 5 个免费应用…</p>
+<p>考虑到 Heroku 的这些限制，那国内有没可以代替 Heroku 的 PaaS 平台？目前百度云、新浪云等云平台的应用引擎支持语言、插件较少，此外还需要实名备案。</p>
+<p>那有没开源的方案呢？有的。我想起在技术分享群就 Docker 话题讨论时不时冒出的一个名词，那就是 <a href="http://dokku.viewdocs.io/dokku/" target="_blank" rel="noopener">Dokku</a>，一个基于容器的最小 PaaS 实现。</p>
+<p><img src="https://avatars3.githubusercontent.com/u/13455795?s=400&amp;v=4" alt="dokku"></p>
+<a id="more"></a>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><a href="http://dokku.viewdocs.io/dokku/" target="_blank" rel="noopener">Dokku</a> 是一个基于 Docker 实现的 PaaS 系统，助力你构建、管理应用的生命周期。Dokku 会为你的应用创建一个 Git 仓库，在你每次推送到这个仓库后，构建、发布应用的 Docker 容器。</p>
+<p>Dokku 是 Heroku 的最小实现，具有以下一些特点：</p>
+<ul>
+<li>支持多种部署方式：支持 Heroku buildpack 及 Docker 等</li>
+<li>预留部署钩子，支持在部署过程中执行自定义脚本</li>
+<li>拥有丰富的插件：主流数据库及 SSL 证书等</li>
+<li>自动配置 Nginx<br>…</li>
+</ul>
+<p>需要注意的是，Dokku 设计初心用于一台 VM 上，目前其仅支持单机部署，不支持集群。</p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>Dokku 须安装在 Unix 环境，要求至少 1GB 内存。按照官方文档进行安装，使用 bootstrap 脚本安装，发觉走不下去，提示不支持当前系统（Ubuntu 20.4)，仅支持 Ubuntu 16.04/18.04 x64, Debian 9+ x64 或 CentOS 7 x64。我看到官方文档中有提到 Arch Linux 安装，怀疑是 bootstrap 脚本未更新，抱着试试看，尝试使用 apt 方式进行安装：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># install docker</span></span><br><span class="line">wget -nv -O - https://get.docker.com/ | sh</span><br><span class="line"></span><br><span class="line"><span class="comment"># setup dokku apt repository</span></span><br><span class="line">wget -nv -O - https://packagecloud.io/dokku/dokku/gpgkey | apt-key add -</span><br><span class="line"><span class="built_in">export</span> SOURCE=<span class="string">"https://packagecloud.io/dokku/dokku/ubuntu/"</span></span><br><span class="line"><span class="built_in">export</span> OS_ID=<span class="string">"<span class="variable">$(lsb_release -cs 2&gt;/dev/null || echo "bionic")</span>"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"xenial bionic focal"</span> | grep -q <span class="string">"<span class="variable">$OS_ID</span>"</span> || OS_ID=<span class="string">"bionic"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"deb <span class="variable">$SOURCE</span> <span class="variable">$OS_ID</span> main"</span> | tee /etc/apt/sources.list.d/dokku.list</span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line"><span class="comment"># install dokku</span></span><br><span class="line">apt-get install dokku</span><br><span class="line">dokku plugin:install-dependencies --core <span class="comment"># run with root!</span></span><br></pre></td></tr></table></figure>
+<p>最后成功安装上 Dokku。</p>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><p>Dokku 安装成功后会询问是否使用 Web 方式进行配置。确认后在浏览器输入服务器 IP 打开页面，配置本地的 SSH 公钥及服务域名。</p>
+<p><img src="/images/posts/17_dokku__build_your_own_paas/dokku_config_via_web.png" alt="dokku-config-via-web"></p>
+<p>其中域名设置可选择使用子域或者端口方式部署应用。如果选择子域，则需要在域名服务商后台进行泛域名设置。</p>
+<p>如果不使用 Web 方式进行配置，则需要在命令行中进行 SSH 和域名设置。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><h3 id="基本部署"><a href="#基本部署" class="headerlink" title="基本部署"></a>基本部署</h3><p>首次部署应用时，需要登录 Dokku 服务端创建应用：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dokku apps:create <span class="variable">$app_name</span></span><br></pre></td></tr></table></figure>
+<p>Dokku 会在 ~dokku 目录下创建同应用名的目录，并初始一个 git 仓库。</p>
+<p>如果应用中使用到数据库，需提取安装相应插件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dokku plugin:install https://github.com/dokku/dokku-postgres.git</span><br></pre></td></tr></table></figure>
+<p>然后创建数据库实例：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dokku postgres:create <span class="variable">$database_name</span></span><br></pre></td></tr></table></figure>
+<p>最后将数据库关联应用：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dokku postgres:link <span class="variable">$database_name</span> <span class="variable">$app_name</span></span><br></pre></td></tr></table></figure>
+<p>Link 会为应用容器添加 <code>DATABASE_URL</code> 的环境变量指向数据库实例，所以需要我们在应用中引用这个变量。</p>
+<p>回到本地项目，为项目添加 Dokku 远端仓库：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add dokku dokku@xxx.tld:<span class="variable">$app_name</span></span><br></pre></td></tr></table></figure>
+<p>之后推送代码到 Dokku 仓库就会触发部署流程。</p>
+<h3 id="Buildpack-部署"><a href="#Buildpack-部署" class="headerlink" title="Buildpack 部署"></a>Buildpack 部署</h3><p>到这里你可能会有个疑问？为什么 Dokku 会知道应用的部署流程的呢？</p>
+<p>Dokku 默认会使用 <a href="https://devcenter.heroku.com/articles/buildpacks" target="_blank" rel="noopener">Heroku Buildpack</a> 方式部署应用。Buildpack 由一系列脚本组成，会自动完成检测、构建、编译、发布等工作。</p>
+<p>目前已支持 Ruby, Node.js, Java, Python, PHP, Go 等众多类型的应用。</p>
+<h3 id="Docker-部署"><a href="#Docker-部署" class="headerlink" title="Docker 部署"></a>Docker 部署</h3><p>当 Buildpack 方式不能满足你时，你可以使用 Docker 方式进行应用部署。在项目根目录下添加 <code>Dockerfile</code> 后，Dokku 将优先使用 Docker 方式部署应用。Dokku 在构建完容器后，将使用 <code>CMD</code> 或者 <code>ENTRYPOINT</code> 启动容器。</p>
+<p>如果你想使用 Buildpack 代替 Docker 方式部署，此时只需要提交 <code>.buildpacks</code> 文件。</p>
+<h3 id="部署钩子"><a href="#部署钩子" class="headerlink" title="部署钩子"></a>部署钩子</h3><p>有时候你需要在部署完应用前执行一些任务，比如数据库迁移等。Dokku 支持在部署前后及发布后执行自定义的任务。我们可以在 <code>app.json</code> 中设置 <code>scripts.dokku.predeploy</code>、<code>scripts.dokku.postdeploy</code> 属性来定义部署前后须执行的任务，<code>Procfile</code> 则可定义发布后执行的命令。</p>
+<h3 id="HTTPS"><a href="#HTTPS" class="headerlink" title="HTTPS"></a>HTTPS</h3><p>Dokku 官方推出了 Let’s Encrypt 插件 <a href="https://github.com/dokku/dokku-letsencrypt" target="_blank" rel="noopener">dokku-letsencrypt</a>，使用十分方便。</p>
+<p>安装插件：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo dokku plugin:install https://github.com/dokku/dokku-letsencrypt.git</span><br></pre></td></tr></table></figure>
+<p>设置 Let’s Encrypt 通知邮箱：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dokku config:<span class="built_in">set</span> --global DOKKU_LETSENCRYPT_EMAIL=your@email.tld</span><br></pre></td></tr></table></figure>
+<p>之后就可以为应用申请 SSL 证书，过程全自动：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dokku letsencrypt <span class="variable">$app_name</span></span><br></pre></td></tr></table></figure>
+<p>最后注册一个 crontab job 用于自动续期证书：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ dokku letsencrypt:cron-job --add</span><br></pre></td></tr></table></figure>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>Dokku 目前没有官方正式的客户端，如果我们需要在本地环境调用服务端上的 Dokku 命令，我们可以通过 SSH 执行，如：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -t dokku@xxx.tld apps:create demo</span><br></pre></td></tr></table></figure>
+<p>但我们仍能在官方文档中找到一些第三方的客户端，其实现原理大致也是通过 SSH 实现。</p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li>获取应用环境变量：<code>dokku config $app</code></li>
+<li>设置应用环境变量：<code>dokku config:set $app APP_ID=xxx</code></li>
+<li>应用执行命令：<code>dokku run $app $command</code></li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>如果你正在为繁琐的部署工作感到烦恼，那我建议你赶紧找个合适的工具减轻你的工作量。</p>
+<p>Dokku 合适个人或小团队使用。当项目处于初期阶段，需要测试、演示环境，频繁部署更新时，Dokku 是你不错的选择之一。</p>
+<p>但当你需要对部署流程进一步掌控时，这个时候你或许可以选择 <a href="https://www.jenkins.io/" target="_blank" rel="noopener">Jenkins</a>，甚至 <a href="https://kubernetes.io/" target="_blank" rel="noopener">K8s</a>。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://yq.aliyun.com/articles/759721" target="_blank" rel="noopener">国内外公有云对比：功能介绍、性能测试</a></li>
+<li><a href="https://www.zhihu.com/question/19725441" target="_blank" rel="noopener">国内做PaaS最成功的是哪家？为什么？</a></li>
+<li><a href="http://dokku.viewdocs.io/dokku/getting-started/installation/" target="_blank" rel="noopener">Dokku Document</a></li>
+<li><a href="https://ruby-china.org/topics/32525" target="_blank" rel="noopener">使用 dokku 部署你的 Rails 应用</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2020/05/24/17_dokku__build_your_own_paas/">https://jinhucheung.github.io/2020/05/24/17_dokku__build_your_own_paas/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/dokku/"># dokku</a>
+                    
+                        <a href="/tags/docker/"># docker</a>
+                    
+                        <a href="/tags/heroku/"># heroku</a>
+                    
+                        <a href="/tags/paas/"># paas</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/06/22/18_fix_slow_query_on_logs/">记录一次解决日志表的慢查询</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/29/16_deploy_doc_collaboration_by_nextcloud_and_onlyoffice/">Nextcloud + OnlyOffice 搭建企业内部网盘及文档协作系统</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

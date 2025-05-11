@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>JMeter 使用自定义的加密库 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">JMeter 使用自定义的加密库</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">March 21, 2020&nbsp;&nbsp;22:08</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E6%B5%8B%E8%AF%95/">测试</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>之前我们介绍过使用 JMeter 进行接口测试，这让我们专注于接口本身，而省去了很多编码的工作。但当 JMeter 提供的组件不能满足我们需求时，这个时候该怎么办呢？下面我们以一个登录接口为例，展开对这类场景的处理说明。</p>
+<a id="more"></a>
+<h2 id="提出问题"><a href="#提出问题" class="headerlink" title="提出问题"></a>提出问题</h2><p>现在假设我们需要对一个登录接口进行测试，而此接口使用了 JSON Web Key(JWK) 验证(关于 JWK 验证这块可参考<sup><a href="#verifying_jwt">[1]</a></sup>)。根据 JWK 验证，需要客户端进行如下处理：</p>
+<ol>
+<li>获取服务端返回的 JWK</li>
+<li>将 JWK 从 JSON 格式转换成 PEM 格式的公钥 (SSH 的公钥格式)</li>
+<li>根据 JWK 返回加密算法和公钥，对传参进行加密</li>
+</ol>
+<p>通过上述处理，将明文的用户名和密码传递给登录接口进行验证。</p>
+<h2 id="分析问题"><a href="#分析问题" class="headerlink" title="分析问题"></a>分析问题</h2><p>为了解决上面的问题，我们需要对服务端返回的 JWK 进行 PEM 格式转化，并使用公钥进行加密。这就需要我们思考 JMeter 目前提供的前置处理器是否能实现这一处理过程？若不能实现，是否社区已提供此类插件？若没有此类插件，自己该如何实现？</p>
+<p>通过我们对 JMeter 前置处理器的了解，虽然前置处理器支持 Java, JavaScript 等编程语言，但要实现上述的处理，需要一些外部依赖库，目前前置处理器是处理不了。而在 <a href="https://jmeter-plugins.org/" target="_blank" rel="noopener">JMeter Plugins</a> 上也没有找到此类插件。剩下的只能我们自己实现此功能了。</p>
+<p>还记得我们将 JMeter Plugins Manager 这个 jar 导入 JMeter 中，从而实现了插件管理的功能。我们也可以使用此机制， JMeter 支持 jar 包扩展，来实现自己定制的功能。</p>
+<h2 id="解决问题"><a href="#解决问题" class="headerlink" title="解决问题"></a>解决问题</h2><h3 id="实现-JWK-加密库"><a href="#实现-JWK-加密库" class="headerlink" title="实现 JWK 加密库"></a>实现 JWK 加密库</h3><p>要自己从头实现 JWK 加密库是比较困难的。我们先搜索下社区是否有此类工作的项目。这里我在 GitHub 上搜索到 <a href="https://github.com/joelicious/convertJWKSetToPEMSet" target="_blank" rel="noopener">joelicious/convertJWKSetToPEMSet</a> 这个 Java 项目，它会获取 JWK URL 返回的 JSON，并将其转换成 PEM 格式的公钥。</p>
+<p>基于此基础，我们只需要实现对参数的加密即可。以 RSA256 加密算法为例，我们需要实现使用公钥串对参数进行 RSA256 加密，具体加密实现参考：<a href="https://github.com/jinhucheung/convertJWKSetToPEMSet/blob/master/src/main/java/com/redhat/utility/RSA.java" target="_blank" rel="noopener">RSA.java</a></p>
+<p>之后连接转换公钥和加密参数模块，参考文件 <a href="https://github.com/jinhucheung/convertJWKSetToPEMSet/blob/master/src/main/java/com/redhat/utility/JWKSetEncrypt.java" target="_blank" rel="noopener">JWKSetEncrypt.java</a></p>
+<p>最后我们执行 Maven 打包出相应的 jar 包，此 jar 包可以在 <a href="https://github.com/jinhucheung/convertJWKSetToPEMSet" target="_blank" rel="noopener">jinhucheung</a>　获取到。</p>
+<p><strong>Note</strong>: JMeter Java 执行引擎使用 Bean Shell 脚本，不支持部分 Java 特性，如可变长参数。</p>
+<h3 id="使用-JWK-加密库"><a href="#使用-JWK-加密库" class="headerlink" title="使用 JWK 加密库"></a>使用 JWK 加密库</h3><p>打开 JMeter 并载入相应的 <code>Test Plan</code>, 点击 <code>Add directory or jar to classpath</code> 浏览上一步打包出的 jar，如下图：</p>
+<p><img src="/images/posts/14_jmeter_use_custom_encrypt_jar/jmeter_add_custom_jar.png" alt="jmeter-add-custom-jar"></p>
+<p>这里推荐使用相对路径引用 jar 包，避免因不同系统间的路径不同而带来的问题，而使用相应路径需要将 jar 包放在 <code>JMETER_HOME/lib/ext</code> 目录下。执行需要重启下 JMeter 以确保 jar 包被引用。</p>
+<p>最后我们在登录接口中添加 <code>JSR223 PreProcessor</code> 组件，并选择 Java 引擎。之后编写脚本，引用 jar 包并使用，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.redhat.utility.JWKSetEncrypt;</span><br><span class="line"></span><br><span class="line">log.info(JWKSetEncrypt.ping());</span><br><span class="line"></span><br><span class="line">String[] logins = &#123;vars.get(<span class="string">"username"</span>), vars.get(<span class="string">"password"</span>)&#125;;</span><br><span class="line">String[] encryptedTexts = JWKSetEncrypt.encrypt(vars.get(<span class="string">"jkws_url"</span>), logins);</span><br><span class="line"></span><br><span class="line">vars.put(<span class="string">"encrypted_username"</span>, encryptedTexts[<span class="number">0</span>]);</span><br><span class="line">vars.put(<span class="string">"encrypted_password"</span>, encryptedTexts[<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a name='verifying_jwt'></a> <a href="https://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-verifying-a-jwt.html" target="_blank" rel="noopener">验证JSON Web 令牌</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2020/03/21/15_jmeter_use_custom_encrypt_jar/">https://jinhucheung.github.io/2020/03/21/15_jmeter_use_custom_encrypt_jar/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"># Java</a>
+                    
+                        <a href="/tags/JMeter/"># JMeter</a>
+                    
+                        <a href="/tags/JWK/"># JWK</a>
+                    
+                        <a href="/tags/Maven/"># Maven</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/29/16_deploy_doc_collaboration_by_nextcloud_and_onlyoffice/">Nextcloud + OnlyOffice 搭建企业内部网盘及文档协作系统</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/21/14_windows_batch_script/">Windows 批处理脚本初体验</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>

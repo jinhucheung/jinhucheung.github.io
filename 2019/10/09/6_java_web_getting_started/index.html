@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Jim Cheung">
+
+
+
+    <meta name="description" content="Jim's Blog">
+
+
+    <meta name="keywords" content="JimCheung, Jinhu, Blog">
+
+
+<title>Java Web - 搭建开发环境 | Jim&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Jim&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Jim&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/products">Products</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/collection">Collections</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java Web - 搭建开发环境</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Jim Cheung</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 9, 2019&nbsp;&nbsp;21:19</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Web-Backend/">Web Backend</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>出于工作原因，最近开始学习 Java Web，自己也有打算接触些 Ruby 以外的语言。</p>
+<p>俗话说，欲善其事，先利其器～在开始 Java Web 学习前，我们当然要准备好趁手的 “兵器” 啦。</p>
+<a id="more"></a>
+<h2 id="IDE"><a href="#IDE" class="headerlink" title="IDE"></a>IDE</h2><p>Java 社区流行的 IDE 有 <a href="https://www.eclipse.org/" target="_blank" rel="noopener">Eclipse</a>、<a href="https://www.genuitec.com/products/myeclipse/" target="_blank" rel="noopener">MyEclipse</a>、<a href="https://www.jetbrains.com/idea/" target="_blank" rel="noopener">IntelliJ IDEA</a>。考虑到对 Java Web 的集成和工具流行度，我选择了 IDEA。</p>
+<p>IDEA 分为社区版和终极版，其中社区版免费，但比较起终极版，缺少很多实用功能，如 JavaEE 等，下面操作以终极版为例子。</p>
+<h3 id="安装-IDEA"><a href="#安装-IDEA" class="headerlink" title="安装 IDEA"></a>安装 IDEA</h3><p>访问 IDEA 官网地址(<a href="https://www.jetbrains.com/idea/download/" target="_blank" rel="noopener">https://www.jetbrains.com/idea/download/</a>) 进行下载安装， Archlinux 用户可执行下面命令直接安装:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ yaourt -S intellij-idea-ultimate-edition</span><br></pre></td></tr></table></figure>
+<h3 id="激活-IDEA"><a href="#激活-IDEA" class="headerlink" title="激活 IDEA"></a>激活 IDEA</h3><p>终极版 IDEA 需要激活码才能无限制使用，终极版一年的授权费可要 499 刀，表示买不起 TT 好在一些网友无私分享他们购买的激活码，让我们有机会使用，真的十分感谢～ 我使用了下面的激活码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Y9MXSIF79G-eyJsaWNlbnNlSWQiOiJZOU1YU0lGNzlHIiwibGljZW5zZWVOYW1lIjoiSkJGYW1pbHkgQ2hpbmEiLCJhc3NpZ25lZU5hbWUiOiIiLCJhc3NpZ25lZUVtYWlsIjoiIiwibGljZW5zZVJlc3RyaWN0aW9uIjoiIiwiY2hlY2tDb25jdXJyZW50VXNlIjpmYWxzZSwicHJvZHVjdHMiOlt7ImNvZGUiOiJJSSIsImZhbGxiYWNrRGF0ZSI6IjIwMTktMDctMjYiLCJwYWlkVXBUbyI6IjIwMjAtMDctMjUifSx7ImNvZGUiOiJBQyIsImZhbGxiYWNrRGF0ZSI6IjIwMTktMDctMjYiLCJwYWlkVXBUbyI6IjIwMjAtMDctMjUifSx7ImNvZGUiOiJEUE4iLCJmYWxsYmFja0RhdGUiOiIyMDE5LTA3LTI2IiwicGFpZFVwVG8iOiIyMDIwLTA3LTI1In0seyJjb2RlIjoiUFMiLCJmYWxsYmFja0RhdGUiOiIyMDE5LTA3LTI2IiwicGFpZFVwVG8iOiIyMDIwLTA3LTI1In0seyJjb2RlIjoiR08iLCJmYWxsYmFja0RhdGUiOiIyMDE5LTA3LTI2IiwicGFpZFVwVG8iOiIyMDIwLTA3LTI1In0seyJjb2RlIjoiRE0iLCJmYWxsYmFja0RhdGUiOiIyMDE5LTA3LTI2IiwicGFpZFVwVG8iOiIyMDIwLTA3LTI1In0seyJjb2RlIjoiQ0wiLCJmYWxsYmFja0RhdGUiOiIyMDE5LTA3LTI2IiwicGFpZFVwVG8iOiIyMDIwLTA3LTI1In0seyJjb2RlIjoiUlMwIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IlJDIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IlJEIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IlBDIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IlJNIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IldTIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IkRCIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IkRDIiwiZmFsbGJhY2tEYXRlIjoiMjAxOS0wNy0yNiIsInBhaWRVcFRvIjoiMjAyMC0wNy0yNSJ9LHsiY29kZSI6IlJTVSIsImZhbGxiYWNrRGF0ZSI6IjIwMTktMDctMjYiLCJwYWlkVXBUbyI6IjIwMjAtMDctMjUifV0sImhhc2giOiIxMzgzODYyOS8wIiwiZ3JhY2VQZXJpb2REYXlzIjo3LCJhdXRvUHJvbG9uZ2F0ZWQiOmZhbHNlLCJpc0F1dG9Qcm9sb25nYXRlZCI6ZmFsc2V9-rI4et6OSKLA4gvOzxtyp48SCWtjwsOSQBJittaw6BOVJOwVBz0p31wBWDFSdIogdRPKquk2BAou7N694entEn4&#x2F;Db3Ol5uotDtUd2MHuo+BBu9QcwIoX3RTrnYLwJfTlEJfRH&#x2F;3TF3WtkPGQZQQcw&#x2F;23hsZzdC&#x2F;WJY6tmvyTijIBScUsvIOxZ+8REbWbkTQx1KliliFyrMua7hit8LThzfffZloHciaHwUP9BjxEjU0qQi+yFacSXjxEZERJT25hZrMN+bqBxcn59&#x2F;4UJBrITt8YpLIlydt0+6vMSWAMawMzKpeDEDInKy0XomauTIUfxS4sbw&#x2F;dSyVdSrh+IuOc7g&#x3D;&#x3D;-MIIElTCCAn2gAwIBAgIBCTANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBMB4XDTE4MTEwMTEyMjk0NloXDTIwMTEwMjEyMjk0NlowaDELMAkGA1UEBhMCQ1oxDjAMBgNVBAgMBU51c2xlMQ8wDQYDVQQHDAZQcmFndWUxGTAXBgNVBAoMEEpldEJyYWlucyBzLnIuby4xHTAbBgNVBAMMFHByb2QzeS1mcm9tLTIwMTgxMTAxMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxcQkq+zdxlR2mmRYBPzGbUNdMN6OaXiXzxIWtMEkrJMO&#x2F;5oUfQJbLLuMSMK0QHFmaI37WShyxZcfRCidwXjot4zmNBKnlyHodDij&#x2F;78TmVqFl8nOeD5+07B8VEaIu7c3E1N+e1doC6wht4I4+IEmtsPAdoaj5WCQVQbrI8KeT8M9VcBIWX7fD0fhexfg3ZRt0xqwMcXGNp3DdJHiO0rCdU+Itv7EmtnSVq9jBG1usMSFvMowR25mju2JcPFp1+I4ZI+FqgR8gyG8oiNDyNEoAbsR3lOpI7grUYSvkB&#x2F;xVy&#x2F;VoklPCK2h0f0GJxFjnye8NT1PAywoyl7RmiAVRE&#x2F;EKwIDAQABo4GZMIGWMAkGA1UdEwQCMAAwHQYDVR0OBBYEFGEpG9oZGcfLMGNBkY7SgHiMGgTcMEgGA1UdIwRBMD+AFKOetkhnQhI2Qb1t4Lm0oFKLl&#x2F;GzoRykGjAYMRYwFAYDVQQDDA1KZXRQcm9maWxlIENBggkA0myxg7KDeeEwEwYDVR0lBAwwCgYIKwYBBQUHAwEwCwYDVR0PBAQDAgWgMA0GCSqGSIb3DQEBCwUAA4ICAQAF8uc+YJOHHwOFcPzmbjcxNDuGoOUIP+2h1R75Lecswb7ru2LWWSUMtXVKQzChLNPn&#x2F;72W0k+oI056tgiwuG7M49LXp4zQVlQnFmWU1wwGvVhq5R63Rpjx1zjGUhcXgayu7+9zMUW596Lbomsg8qVve6euqsrFicYkIIuUu4zYPndJwfe0YkS5nY72SHnNdbPhEnN8wcB2Kz+OIG0lih3yz5EqFhld03bGp222ZQCIghCTVL6QBNadGsiN&#x2F;lWLl4JdR3lJkZzlpFdiHijoVRdWeSWqM4y0t23c92HXKrgppoSV18XMxrWVdoSM3nuMHwxGhFyde05OdDtLpCv+jlWf5REAHHA201pAU6bJSZINyHDUTB+Beo28rRXSwSh3OUIvYwKNVeoBY+KwOJ7WnuTCUq1meE6GkKc4D&#x2F;cXmgpOyW&#x2F;1SmBz3XjVIi&#x2F;zprZ0zf3qH5mkphtg6ksjKgKjmx1cXfZAAX6wcDBNaCL+Ortep1Dh8xDUbqbBVNBL4jbiL3i3xsfNiyJgaZ5sX7i8tmStEpLbPwvHcByuf59qJhV&#x2F;bZOl8KqJBETCDJcY6O2aqhTUy+9x93ThKs1GKrRPePrWPluud7ttlgtRveit&#x2F;pcBrnQcXOl1rHq7ByB8CFAxNotRUYL9IF5n3wJOgkPojMy6jetQA5Ogc8Sm7RG6vg1yow&#x3D;&#x3D;</span><br></pre></td></tr></table></figure>
+<h2 id="Web-容器"><a href="#Web-容器" class="headerlink" title="Web 容器"></a>Web 容器</h2><p>在 Java 中， Web 容器也称为 Servlet 容器，主要用于加载、管理 Servlet。下面我们以 Tomcat 为例，安装一个 Web 容器。</p>
+<h3 id="安装-Tomcat"><a href="#安装-Tomcat" class="headerlink" title="安装 Tomcat"></a>安装 Tomcat</h3><p>下载并解压 Tomcat:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ wget http:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;apache&#x2F;tomcat&#x2F;tomcat-9&#x2F;v9.0.26&#x2F;bin&#x2F;apache-tomcat-9.0.26.zip</span><br><span class="line">$ unzip apache-tomcat-9.0.26.zip</span><br></pre></td></tr></table></figure>
+<p>将 Tomcat 移动到 ~/.local/shared 目录下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir -p ~&#x2F;.local&#x2F;shared</span><br><span class="line">$ mv apache-tomcat-9.0.26.zip ~&#x2F;.local&#x2F;share</span><br></pre></td></tr></table></figure>
+<p>变更 <code>catalina.sh</code> 为可执行:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$  chmod a+x ~&#x2F;.local&#x2F;share&#x2F;apache-tomcat-9.0.26&#x2F;bin&#x2F;catalina.sh</span><br></pre></td></tr></table></figure>
+<p>然后启动 Tomcat:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ~&#x2F;.local&#x2F;share&#x2F;apache-tomcat-9.0.26&#x2F;bin&#x2F;catalina.sh start</span><br></pre></td></tr></table></figure>
+<p>最后访问 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> 查看 Tomcat 是否启动成功。</p>
+<p>关闭 Tomcat:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ~&#x2F;.local&#x2F;share&#x2F;apache-tomcat-9.0.26&#x2F;bin&#x2F;catalina.sh stop</span><br></pre></td></tr></table></figure>
+<p>当然我们也可以使用 linux 的包管理器安装 Tomcat ～</p>
+<h3 id="IDEA-配置-Tomcat"><a href="#IDEA-配置-Tomcat" class="headerlink" title="IDEA 配置 Tomcat"></a>IDEA 配置 Tomcat</h3><p>首先打开 IDEA，在工具栏中添加运行配置，如下图所示:</p>
+<p><img src="/images/posts/6_java_web_getting_started/idea_add_run_configurations.png" alt="IDEA 添加运行配置"></p>
+<p>然后在弹窗中添加 <code>Tomcat Server</code>，并配置前面安装的 Tomcat 路径，如下图所示:</p>
+<p><img src="/images/posts/6_java_web_getting_started/idea_configure_tomcat_path.png" alt="IDEA 添加 Tomcat Home"></p>
+<p>如果是包管理器安装，可以通过 <code>systemctl status tomcat${tomcat_version}</code> 查看 Tomcat 所在。</p>
+<p>配置完 Tomcat 后点击工具栏的绿色箭头运行，然后访问 <a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> 查看 Tomcat 是否正常。</p>
+<p><strong>Note</strong>: 如果运行 Tomcat 时出现权限问题，须确保运行 Tomcat 进程的用户拥有写入 IDEA 启动用户目录的权限。</p>
+<h2 id="项目构建工具"><a href="#项目构建工具" class="headerlink" title="项目构建工具"></a>项目构建工具</h2><p>Java 项目构建工具有 <a href="https://ant.apache.org/" target="_blank" rel="noopener">Ant</a>, <a href="https://maven.apache.org/what-is-maven.html" target="_blank" rel="noopener">Maven</a>, <a href="https://gradle.org/" target="_blank" rel="noopener">Gradle</a>。 Ant 已经销声匿迹，Maven 至今在社区中还相当流行，Gradle 作为后起之秀，凭借其简约的配置文件，受到大多数用户的拥戴。</p>
+<p>考虑到现在国内大部分项目仍使用 Maven 作为构建工具，我选择使用 Maven 构建项目。</p>
+<h3 id="安装-Maven"><a href="#安装-Maven" class="headerlink" title="安装 Maven"></a>安装 Maven</h3><p>我直接使用 linux 包管理工具进行安装，以 Archlinux 为例:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ pacman -S maven</span><br></pre></td></tr></table></figure>
+<p>当然也可以直接下载 Maven 官网提供的压缩包进行安装(<a href="https://maven.apache.org/install.html)。" target="_blank" rel="noopener">https://maven.apache.org/install.html)。</a></p>
+<p>查看 maven 是否安装成功:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mvn -v</span><br></pre></td></tr></table></figure>
+<h3 id="配置阿里云镜像"><a href="#配置阿里云镜像" class="headerlink" title="配置阿里云镜像"></a>配置阿里云镜像</h3><p>Maven 的配置文件分为用户级与全局配置，它们分别是 <code>~/.m2/settings.xml</code> 和 <code>${MAVEN_HOME}/conf/settings.xml</code>。</p>
+<p>在上面两个配置文件中一个加入以下配置，设置阿里云镜像:</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mirrors</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">mirror</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">     <span class="tag">&lt;<span class="name">mirrorOf</span>&gt;</span>central<span class="tag">&lt;/<span class="name">mirrorOf</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">mirror</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mirrors</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h3 id="IDEA-配置-Maven"><a href="#IDEA-配置-Maven" class="headerlink" title="IDEA 配置 Maven"></a>IDEA 配置 Maven</h3><p>在 IDEA 全局设置中搜索 Maven 设置，如果 IDEA 能找到 Maven Home，它会默认配置，没有的需要我们自己填入。Maven 设置如下图:</p>
+<p><img src="/images/posts/6_java_web_getting_started/idea_maven_configuration.png" alt="IDEA Maven 配置"></p>
+<h3 id="IDEA-使用-Maven"><a href="#IDEA-使用-Maven" class="headerlink" title="IDEA 使用 Maven"></a>IDEA 使用 Maven</h3><p>在 IDEA 中我们可以选择使用 Maven 搭建新项目的骨架，也可以通过右键项目选择 <code>Add Frameworks Support</code> 来对已有的非 Maven 项目导入 Maven 骨架。</p>
+<p>Maven 中依赖管理是一个很重要的模块，IDEA 在上给我们带来很大便利。只要我们打开依赖文件 <code>pom.xml</code>，按下 <code>ALT</code> + <code>Insert</code> 后，在弹窗中选择 <code>Dependency</code> 搜索要添加的依赖包，IDEA 会在添加后提示我们要下载依赖。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://www.jiweichengzhu.com/article/eb340e382d1d456c84a1d190db12755c" target="_blank" rel="noopener">分享几个IntelliJ IDEA 2019激活码（破解码、注册码），亲测可用</a></li>
+<li><a href="https://www.cnblogs.com/vipyoumay/p/7455431.html" target="_blank" rel="noopener">一文看懂web服务器、应用服务器、web容器、反向代理服务器区别与联系</a></li>
+<li><a href="https://blog.csdn.net/u010221213/article/details/51361641" target="_blank" rel="noopener">IntelliJ IDEA 普通java工程如何转为maven工程</a></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Jim Cheung</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://jinhucheung.github.io/2019/10/09/6_java_web_getting_started/">https://jinhucheung.github.io/2019/10/09/6_java_web_getting_started/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2020 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Java/"># Java</a>
+                    
+                        <a href="/tags/Maven/"># Maven</a>
+                    
+                        <a href="/tags/Web/"># Web</a>
+                    
+                        <a href="/tags/IDEA/"># IDEA</a>
+                    
+                        <a href="/tags/Tomcat/"># Tomcat</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/10/11/7_servlet_and_jsp/">Java Web - Servlet and JSP</a>
+            
+            
+            <a class="next" rel="next" href="/2019/09/28/5_how_to_deploy_rails_app_by_capistrano/">使用 Capistrano 部署 Rails 应用</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Jim Cheung | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+    </div>
+    <script type="text/javascript" src="/js/canvas-nest.js" color="0,0,0" opacity="0.3" zindex="-2" count="99"></script>
+</body>
+</html>
